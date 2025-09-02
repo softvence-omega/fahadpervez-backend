@@ -1,0 +1,22 @@
+import { Account_Model } from "../modules/auth/auth.schema"
+import { AppError } from "./app_error"
+import httpStatus from 'http-status';
+
+export const isAccountExist = async (email: string) => {
+    const isExistAccount = await Account_Model.findOne({ email })
+    // check account
+    if (!isExistAccount) {
+        throw new AppError("Account not found!!", httpStatus.NOT_FOUND)
+    }
+    if (isExistAccount.isDeleted) {
+        throw new AppError("Account deleted !!", httpStatus.BAD_REQUEST)
+    }
+    if (isExistAccount.accountStatus == "BLOCK") {
+        throw new AppError("Account is blocked !!", httpStatus.BAD_REQUEST)
+    }
+    if (isExistAccount.accountStatus == "SUSPENDED") {
+        throw new AppError("Account is suspended !!", httpStatus.BAD_REQUEST)
+    }
+
+    return isExistAccount
+}
