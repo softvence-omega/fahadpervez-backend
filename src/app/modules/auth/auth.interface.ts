@@ -1,22 +1,25 @@
 import { Types } from "mongoose";
 
-type ProfileType = "student_profile" | "teacher_profile" | "guard_profile";
+type ProfileType = "student_profile" | "mentor_profile" | "admin_profile";
 
 export type TAccount = {
     email: string;
+    role: "ADMIN" | "STUDENT" | "MENTOR"
     password: string;
-    lastPasswordChange?: Date;
+    profile_id: Types.ObjectId;
     isDeleted?: boolean;
-    status?: "ACTIVE" | "BLOCK";
-    role: "ADMIN" | "MENTOR" | "MEDICAL_STUDENT" | "NURSING_STUDENT",
+    accountStatus?: "ACTIVE" | "BLOCK" | "SUSPENDED";
+    studentType?: "MEDICAL_STUDENT" | "NURSING_STUDENT" | "DENTAL_STUDENT",
+    isSubscribed?: boolean;
+    lastOTP?: string;
     isVerified?: boolean,
     profile_type: ProfileType;
-    profile_id: Types.ObjectId;
+    authType?: "GOOGLE" | "CUSTOM"
 }
 
 
-export interface TRegisterPayload extends TAccount {
-    name: string
+export type TRegisterPayload = {
+    email: string;
 }
 
 export type TLoginPayload = {

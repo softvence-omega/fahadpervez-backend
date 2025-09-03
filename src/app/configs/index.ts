@@ -16,7 +16,7 @@ export const configs = {
     },
     db_url: process.env.DB_URL,
     email: {
-        app_email: process.env.APP_USER_EMAIL,
+        app_email: process.env.APP_USER,
         app_password: process.env.APP_PASSWORD
     },
     cloudinary: {

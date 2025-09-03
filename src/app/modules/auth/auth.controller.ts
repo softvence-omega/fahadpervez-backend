@@ -14,6 +14,27 @@ const register_user = catchAsync(async (req, res) => {
     })
 })
 
+const verified_account = catchAsync(async (req, res) => {
+    const result = await auth_services.verified_account_into_db(req?.body)
+    manageResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Account Verification successful.",
+        data: result
+    })
+})
+
+const get_new_verification_otp = catchAsync(async (req, res) => {
+    const result = await auth_services.get_new_verification_otp_from_db(req?.body?.email)
+    manageResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "New OTP is sent to email.",
+        data: result
+    })
+})
+
+
 const login_user = catchAsync(async (req, res) => {
     const result = await auth_services.login_user_from_db(req.body);
 
@@ -92,26 +113,9 @@ const reset_password = catchAsync(async (req, res) => {
     });
 });
 
-const verified_account = catchAsync(async (req, res) => {
-    const result = await auth_services.verified_account_into_db(req?.body?.token)
 
-    manageResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: "Account Verification successful.",
-        data: result
-    })
-})
 
-const get_new_verification_link = catchAsync(async (req, res) => {
-    const result = await auth_services.get_new_verification_link_from_db(req?.body?.email)
-    manageResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: "New Verification link is send on email.",
-        data: result
-    })
-})
+
 
 export const auth_controllers = {
     register_user,
@@ -122,5 +126,5 @@ export const auth_controllers = {
     reset_password,
     forget_password,
     verified_account,
-    get_new_verification_link
+    get_new_verification_otp
 }

@@ -3,8 +3,6 @@ import { z } from "zod";
 // Zod schema matching TAccount / authSchema
 const register_validation = z.object({
     email: z.string({ message: "Email is required" }).email(),
-    password: z.string({ message: "Password is required" }),
-    name: z.string({ message: "Name is required" })
 });
 
 const login_validation = z.object({
@@ -24,7 +22,12 @@ const resetPassword = z.object({
     email: z.string()
 })
 const verified_account = z.object({
-    token: z.string({ error: "Token is required" })
+    email: z.string({ message: "Email is required" }),
+    otp: z.string({ message: "OTP is required" })
+})
+
+const newVerificationOtp = z.object({
+    email: z.string({ message: "Email is required" }),
 })
 
 export const auth_validation = {
@@ -33,5 +36,6 @@ export const auth_validation = {
     changePassword,
     forgotPassword,
     resetPassword,
-    verified_account
+    verified_account,
+    newVerificationOtp
 }
