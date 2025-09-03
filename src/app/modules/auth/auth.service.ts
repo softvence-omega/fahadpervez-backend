@@ -272,10 +272,11 @@ const update_student_profile_into_db = async (req: Request) => {
 };
 const get_my_profile_from_db = async (email: string) => {
   const isExistAccount = await isAccountExist(email)
+  const profile = await Student_Model.findOne({ accountId: isExistAccount._id }).lean();
   isExistAccount.password = ""
   return {
     account: isExistAccount,
-    profile: ""
+    profile: profile || ""
   };
 };
 

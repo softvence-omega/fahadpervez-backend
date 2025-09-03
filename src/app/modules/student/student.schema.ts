@@ -18,6 +18,6 @@ const studentSchema = new Schema<TStudent>({
     completedCase: [{ type: Schema.Types.ObjectId, ref: 'case', required: false }],
     badges: [{ type: Schema.Types.ObjectId, ref: 'badge', required: false }],
     connectedMentor: [{ type: Schema.Types.ObjectId, ref: 'mentor', required: false }],
-});
+}, { timestamps: true, versionKey: false });
 
 export const Student_Model = model<TStudent>('student_profile', studentSchema);

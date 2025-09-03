@@ -51,6 +51,10 @@ const login_user = catchAsync(async (req, res) => {
         secure: configs.env == 'production',
         httpOnly: true,
     });
+    res.cookie('accessToken', result.accessToken, {
+        secure: configs.env == 'production',
+        httpOnly: true,
+    });
     manageResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -77,7 +81,7 @@ const get_my_profile = catchAsync(async (req, res) => {
     manageResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'User profile fetched successfully!',
+        message: 'Profile info fetched successfully!',
         data: result,
     });
 });
