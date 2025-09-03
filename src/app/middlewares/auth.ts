@@ -5,7 +5,7 @@ import { jwtHelpers, JwtPayloadType } from '../utils/JWT';
 import { Account_Model } from '../modules/auth/auth.schema';
 
 
-type Role = "ADMIN" | "USER"
+type Role = "ADMIN" | "STUDENT" | "MENTOR"
 
 
 const auth = (...roles: Role[]) => {
@@ -27,7 +27,7 @@ const auth = (...roles: Role[]) => {
             if (!isUserExist) {
                 throw new AppError("Account not found !", 404)
             }
-            if (isUserExist?.status == "BLOCK") {
+            if (isUserExist?.accountStatus == "BLOCK") {
                 throw new AppError("This Account is blocked !", 401)
             }
             if (isUserExist?.isDeleted) {

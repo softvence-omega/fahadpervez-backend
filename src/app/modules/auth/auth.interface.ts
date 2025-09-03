@@ -1,4 +1,5 @@
 import { Types } from "mongoose";
+import { AUTH_CONSTANTS } from './auth.constant';
 
 type ProfileType = "student_profile" | "mentor_profile" | "admin_profile";
 
@@ -9,7 +10,7 @@ export type TAccount = {
     profile_id: Types.ObjectId;
     isDeleted?: boolean;
     accountStatus?: "ACTIVE" | "BLOCK" | "SUSPENDED";
-    studentType?: "MEDICAL_STUDENT" | "NURSING_STUDENT" | "DENTAL_STUDENT",
+    studentType?: keyof typeof AUTH_CONSTANTS.STUDENT_TYPES,
     isSubscribed?: boolean;
     lastOTP?: string;
     isVerified?: boolean,
