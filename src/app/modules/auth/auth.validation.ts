@@ -22,7 +22,12 @@ const resetPassword = z.object({
     email: z.string()
 })
 const verified_account = z.object({
-    otp: z.string({ error: "OTP is required" })
+    email: z.string({ message: "Email is required" }),
+    otp: z.string({ message: "OTP is required" })
+})
+
+const newVerificationOtp = z.object({
+    email: z.string({ message: "Email is required" }),
 })
 
 export const auth_validation = {
@@ -31,5 +36,6 @@ export const auth_validation = {
     changePassword,
     forgotPassword,
     resetPassword,
-    verified_account
+    verified_account,
+    newVerificationOtp
 }

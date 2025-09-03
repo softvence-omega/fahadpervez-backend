@@ -4,7 +4,7 @@ import { TAccount } from "./auth.interface";
 
 const authSchema = new Schema<TAccount>({
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String, required: false },
     isDeleted: { type: Boolean, default: false },
     accountStatus: { type: String, default: "ACTIVE" },
     role: { type: String, enum: ["ADMIN", "MENTOR", "STUDENT"], required: true },
@@ -17,7 +17,7 @@ const authSchema = new Schema<TAccount>({
     },
     profile_id: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        required: false,
         refPath: "profile_type",
     },
     authType: { type: String, enum: ["GOOGLE", "CUSTOM"], default: "CUSTOM" },
