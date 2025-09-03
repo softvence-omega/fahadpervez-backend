@@ -110,7 +110,7 @@
     "authType": "CUSTOM",
     "isSubscribed": false,
     "createdAt": "2025-09-03T02:36:28.234Z",
-    "updatedAt": "2025-09-03T05:16:26.338Z",
+    "updatedAt": "2025-09-03T05:22:42.656Z",
     "profile_type": "student_profile",
     "studentType": "MEDICAL_STUDENT",
     "profile": {
@@ -127,7 +127,55 @@
       "completedCase": [],
       "badges": [],
       "connectedMentor": [],
-      "__v": 0
+      "updatedAt": "2025-09-03T05:22:42.572Z",
+      "createdAt": "2025-09-03T05:22:42.572Z"
+    }
+  },
+  "meta": null
+}
+```
+####    Get my profile (GET) */auth/me*
+`also need Authorization headers`
+
+*response*
+```json
+{
+  "success": true,
+  "message": "Profile info fetched successfully!",
+  "data": {
+    "account": {
+      "_id": "68b7a9acd0ce36ed899015e4",
+      "email": "softvence.abumahid@gmail.com",
+      "isDeleted": false,
+      "accountStatus": "ACTIVE",
+      "role": "STUDENT",
+      "isVerified": true,
+      "authType": "CUSTOM",
+      "lastOTP": "",
+      "isSubscribed": false,
+      "createdAt": "2025-09-03T02:36:28.234Z",
+      "updatedAt": "2025-09-03T05:22:42.656Z",
+      "password": "",
+      "profile_id": "68b7cdbaa6de6969f409dc0c",
+      "profile_type": "student_profile",
+      "studentType": "MEDICAL_STUDENT"
+    },
+    "profile": {
+      "_id": "68b7cdbaa6de6969f409dc0c",
+      "accountId": "68b7a9acd0ce36ed899015e4",
+      "country": "United States",
+      "university": "Harvard University",
+      "preparingFor": "MCAT",
+      "year_of_study": "2005",
+      "dailyStreak": 0,
+      "point": 0,
+      "completedQuiz": [],
+      "completedFlashCard": [],
+      "completedCase": [],
+      "badges": [],
+      "connectedMentor": [],
+      "__v": 0,
+      "updatedAt": "2025-09-03T05:22:42.572Z"
     }
   },
   "meta": null
