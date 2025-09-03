@@ -18,13 +18,17 @@ const changePassword = z.object({
 
 const forgotPassword = z.object({ email: z.string({ message: "Email is required" }) })
 const resetPassword = z.object({
-    token: z.string(),
+    otp: z.string(),
     newPassword: z.string(),
     email: z.string()
 })
 const verified_account = z.object({
     email: z.string({ message: "Email is required" }),
     otp: z.string({ message: "OTP is required" })
+})
+const change_profile_status = z.object({
+    email: z.string({ message: "Email is required" }),
+    status: z.enum(["ACTIVE", "INACTIVE", "SUSPENDED"])
 })
 
 const newVerificationOtp = z.object({
@@ -48,5 +52,6 @@ export const auth_validation = {
     resetPassword,
     verified_account,
     newVerificationOtp,
-    updateProfile
+    updateProfile,
+    change_profile_status
 }

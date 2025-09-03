@@ -1,5 +1,5 @@
 import { AppError } from "../../utils/app_error";
-import { TAccount, TLoginPayload, TRegisterPayload } from "./auth.interface";
+import { TAccount, TLoginPayload, TRegisterPayload, TStatus } from "./auth.interface";
 import { Account_Model } from "./auth.schema";
 import httpStatus from 'http-status';
 import bcrypt from "bcrypt";
@@ -203,6 +203,12 @@ const set_new_password_into_db = async (payload: { email: string, password: stri
 const login_user_from_db = async (payload: TLoginPayload) => {
   // check account info 
   const isExistAccount = await isAccountExist(payload?.email)
+  if (isExistAccount.accountStatus === "INACTIVE") {
+    throw new AppError('Account is not active, contact us on support', httpStatus.UNAUTHORIZED);
+  }
+  if (isExistAccount.accountStatus === "SUSPENDED") {
+    throw new AppError('Account is suspended, contact us on support', httpStatus.UNAUTHORIZED);
+  }
   const isPasswordMatch = await bcrypt.compare(
     payload.password,
     isExistAccount.password,
@@ -332,57 +338,107 @@ const change_password_from_db = async (
 
 const forget_password_from_db = async (email: string) => {
   const isAccountExists = await isAccountExist(email)
-  const resetToken = jwtHelpers.generateToken(
-    {
-      email: isAccountExists.email,
-      role: isAccountExists.role,
-    },
-    configs.jwt.reset_secret as Secret,
-    configs.jwt.reset_expires as string,
-  );
+  const otp = OTPMaker()
+  await Account_Model.findOneAndUpdate({ email: isAccountExists.email }, { lastOTP: otp })
+  const otpDigits = otp.split("");
+  const emailTemp = `
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f6f7fb; margin:0; padding:0;">
+    <tr>
+      <td align="center" style="padding:80px 5px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+          style="max-width:640px; background-color:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 4px 16px rgba(17,24,39,0.08); padding: 40px;">
 
-  const resetPasswordLink = `${configs.jwt.front_end_url}/reset?token=${resetToken}&email=${isAccountExists.email}`;
-  const emailTemplate = `<p>Click the link below to reset your password:</p><a href="${resetPasswordLink}">Reset Password</a>`;
+          <tr>
+            <td align="left" style="padding:0 24px 4px 24px;">
+              <h1 style="margin:0; font-size:24px; line-height:32px; color:#111827; font-weight:800; font-family:Arial, sans-serif;">
+                Hi,
+              </h1>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="left" style="padding:8px 24px 0 24px;">
+              <p style="margin:0; font-size:15px; line-height:24px; color:#374151; font-family:Arial, sans-serif;">
+                Here is your reset One Time Password (OTP). Please enter this code to verify your email address for MSH.
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" style="padding:20px 24px 8px 24px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+                <tr>
+                  ${otpDigits
+      .map(
+        (digit) => `
+                    <td align="center" valign="middle"
+                      style="background:#f5f3ff; border-radius:12px; width:56px; height:56px;">
+                      <div style="font-size:22px; line-height:56px; color:#111827; font-weight:700; font-family:Arial, sans-serif; text-align:center;">
+                        ${digit}
+                      </div>
+                    </td>
+                    <td style="width:12px;">&nbsp;</td>
+                  `
+      )
+      .join("")}
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="left" style="padding:8px 24px 4px 24px;">
+              <p style="margin:0; font-size:14px; line-height:22px; color:#6b7280; font-family:Arial, sans-serif;">
+                OTP will expire in <span style="font-weight:700; color:#111827;">5 minutes</span>.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  `;
 
   await sendMail({
     to: email,
     subject: "Password reset successful!",
     textBody: "Your password is successfully reset.",
-    htmlBody: emailTemplate
+    htmlBody: emailTemp
   });
 
   return 'Check your email for reset link';
 };
 
 const reset_password_into_db = async (
-  token: string,
+  otp: string,
   email: string,
   newPassword: string,
 ) => {
-  let decodedData: JwtPayload;
-  try {
-    decodedData = jwtHelpers.verifyToken(
-      token,
-      configs.jwt.reset_secret as Secret,
-    );
-  } catch (err) {
-    throw new AppError(
-      'Your reset link is expire. Submit new link request!!',
-      httpStatus.UNAUTHORIZED,
-    );
-  }
 
   const isAccountExists = await isAccountExist(email)
   if (isAccountExists.email !== email) {
     throw new AppError('Invalid email', httpStatus.UNAUTHORIZED);
   }
+  if (isAccountExists.lastOTP !== otp) {
+    throw new AppError('Invalid OTP', httpStatus.UNAUTHORIZED);
+  }
   const hashedPassword: string = await bcrypt.hash(newPassword, 10);
 
   await Account_Model.findOneAndUpdate({ email: isAccountExists.email }, {
     password: hashedPassword,
-    lastPasswordChange: Date()
   })
   return 'Password reset successfully!';
+};
+
+const change_profile_status_from_db = async (
+  status: TStatus,
+  email: string,
+) => {
+  const isAccountExists = await isAccountExist(email)
+  await Account_Model.findOneAndUpdate({ email: isAccountExists.email }, {
+    accountStatus: status,
+  })
+  return null;
 };
 
 
@@ -399,5 +455,6 @@ export const auth_services = {
   verified_account_into_db,
   get_new_verification_otp_from_db,
   set_new_password_into_db,
-  update_student_profile_into_db
+  update_student_profile_into_db,
+  change_profile_status_from_db
 }

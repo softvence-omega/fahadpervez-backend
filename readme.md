@@ -181,3 +181,91 @@
   "meta": null
 }
 ```
+####    Get new refreshToken (POST) */auth/refresh-token*
+`also need cookie headers`
+
+*response*
+```json
+{
+  "success": true,
+  "message": "Access token generated successfully!",
+  "data": {
+    "accessToken": "string"
+  },
+  "meta": null
+}
+```
+####    Change Password (POST) */auth/change-password*
+`also need authorization header`
+*body*
+```json
+  {
+    "oldPassword":"string",
+    "newPassword":"string"
+  }
+```
+*response*
+```json
+{
+  "success": true,
+  "message": "Password changed successfully!",
+  "data": "Password changed successful.",
+  "meta": null
+}
+```
+####    Forgot Password (POST) */auth/forgot-password*
+*body*
+```json
+  {
+    "email":"string",
+  }
+```
+*response*
+```json
+{
+  "success": true,
+  "message": "We sent a OTP to your email!",
+  "data": null,
+  "meta": null
+}
+```
+####    Reset Password (POST) */auth/reset-password*
+*body*
+```json
+  {
+    "email":"string",
+    "otp":"string",
+    "newPassword":"string"
+    
+}
+```
+*response*
+```json
+{
+  "success": true,
+  "message": "Password reset successfully!",
+  "data": "Password reset successfully!",
+  "meta": null
+}
+```
+####    Change account status (POST) */auth//change-status*
+*only admin can access this*
+*also need authorization header / cookie*
+*body*
+```json
+{
+    {
+  "email":"string",
+  "status":"SUSPENDED" // INACTIVE, SUSPENDED, ACTIVE
+}
+}
+```
+*response*
+```json
+{
+  "success": true,
+  "message": "Now this account is SUSPENDED",
+  "data": null,
+  "meta": null
+}
+```
