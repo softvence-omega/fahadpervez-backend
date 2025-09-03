@@ -34,6 +34,15 @@ const get_new_verification_otp = catchAsync(async (req, res) => {
     })
 })
 
+const set_new_password = catchAsync(async (req, res) => {
+    const result = await auth_services.set_new_password_into_db(req?.body)
+    manageResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Password has been reset successfully.",
+        data: result
+    })
+})
 
 const login_user = catchAsync(async (req, res) => {
     const result = await auth_services.login_user_from_db(req.body);
@@ -53,6 +62,15 @@ const login_user = catchAsync(async (req, res) => {
     });
 });
 
+const update_student_profile = catchAsync(async (req, res) => {
+    const result = await auth_services.update_student_profile_into_db(req);
+    manageResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Profile updated successfully!',
+        data: result,
+    });
+});
 const get_my_profile = catchAsync(async (req, res) => {
     const { email } = req.user!;
     const result = await auth_services.get_my_profile_from_db(email);
@@ -126,5 +144,7 @@ export const auth_controllers = {
     reset_password,
     forget_password,
     verified_account,
-    get_new_verification_otp
+    get_new_verification_otp,
+    set_new_password,
+    update_student_profile
 }
