@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 import { AUTH_CONSTANTS } from './auth.constant';
 
 type ProfileType = "student_profile" | "mentor_profile" | "admin_profile";
+export type TStatus = "ACTIVE" | "INACTIVE" | "SUSPENDED"
 
 export type TAccount = {
     email: string;
@@ -9,7 +10,7 @@ export type TAccount = {
     password: string;
     profile_id: Types.ObjectId;
     isDeleted?: boolean;
-    accountStatus?: "ACTIVE" | "BLOCK" | "SUSPENDED";
+    accountStatus?: TStatus;
     studentType?: keyof typeof AUTH_CONSTANTS.STUDENT_TYPES,
     isSubscribed?: boolean;
     lastOTP?: string;

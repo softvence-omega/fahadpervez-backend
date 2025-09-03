@@ -12,24 +12,12 @@ authRoute.post("/new-verification-otp", RequestValidator(auth_validation.newVeri
 authRoute.post("/set-new-password", RequestValidator(auth_validation.login_validation), auth_controllers.set_new_password)
 authRoute.post("/login", RequestValidator(auth_validation.login_validation), auth_controllers.login_user)
 authRoute.post("/update-student-profile", auth("STUDENT"), RequestValidator(auth_validation.updateProfile), auth_controllers.update_student_profile)
-authRoute.get('/me', auth("ADMIN","MENTOR","STUDENT"), auth_controllers.get_my_profile);
+authRoute.get('/me', auth("ADMIN", "MENTOR", "STUDENT"), auth_controllers.get_my_profile);
 authRoute.post('/refresh-token', auth_controllers.refresh_token);
-authRoute.post(
-    '/change-password',
-    auth("ADMIN"),
-    RequestValidator(auth_validation.changePassword),
-    auth_controllers.change_password,
-);
-authRoute.post(
-    '/forgot-password',
-    RequestValidator(auth_validation.forgotPassword),
-    auth_controllers.forget_password,
-);
-authRoute.post(
-    '/reset-password',
-    RequestValidator(auth_validation.resetPassword),
-    auth_controllers.reset_password,
-);
+authRoute.post('/change-password', auth("ADMIN", "MENTOR", "STUDENT"), RequestValidator(auth_validation.changePassword), auth_controllers.change_password);
+authRoute.post('/forgot-password', RequestValidator(auth_validation.forgotPassword), auth_controllers.forget_password);
+authRoute.post('/reset-password', RequestValidator(auth_validation.resetPassword), auth_controllers.reset_password,);
+authRoute.post('/change-status', auth("ADMIN"), RequestValidator(auth_validation.change_profile_status), auth_controllers.change_profile_status,);
 
 
 

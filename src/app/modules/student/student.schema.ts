@@ -3,7 +3,8 @@ import { TStudent } from './student.interface';
 
 const studentSchema = new Schema<TStudent>({
     accountId: { type: Schema.Types.ObjectId, required: true, ref: "account" },
-    name: { type: String, required: false },
+    firstName: { type: String, required: false },
+    lastName: { type: String, required: false },
     phone: { type: String, required: false },
     country: { type: String, required: false },
     university: { type: String, required: false },

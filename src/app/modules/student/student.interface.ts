@@ -2,7 +2,8 @@ import { Types } from "mongoose"
 
 export type TStudent = {
     accountId: Types.ObjectId,
-    name?: string,
+    firstName?: string,
+    lastName?: string,
     phone?: string,
     country?: string,
     university?: string,

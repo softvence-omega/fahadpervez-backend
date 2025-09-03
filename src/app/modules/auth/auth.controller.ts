@@ -89,18 +89,21 @@ const get_my_profile = catchAsync(async (req, res) => {
 const refresh_token = catchAsync(async (req, res) => {
     const { refreshToken } = req.cookies;
     const result = await auth_services.refresh_token_from_db(refreshToken);
+    res.cookie("accessToken", result, {
+        secure: configs.env == 'production',
+        httpOnly: true,
+    });
     manageResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'Refresh token generated successfully!',
-        data: result,
+        message: 'Access token generated successfully!',
+        data: { accessToken: result },
     });
 });
 
 const change_password = catchAsync(async (req, res) => {
     const user = req?.user;
     const result = await auth_services.change_password_from_db(user!, req.body);
-
     manageResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -115,15 +118,15 @@ const forget_password = catchAsync(async (req, res) => {
     manageResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'Reset password link sent to your email!',
+        message: 'We sent a OTP to your email!',
         data: null,
     });
 });
 
 const reset_password = catchAsync(async (req, res) => {
-    const { token, newPassword, email } = req.body;
+    const { otp, newPassword, email } = req.body;
     const result = await auth_services.reset_password_into_db(
-        token,
+        otp,
         email,
         newPassword,
     );
@@ -132,6 +135,17 @@ const reset_password = catchAsync(async (req, res) => {
         success: true,
         message: 'Password reset successfully!',
         data: result,
+    });
+});
+
+const change_profile_status = catchAsync(async (req, res) => {
+    const { status, email } = req.body;
+    await auth_services.change_profile_status_from_db(status, email);
+    manageResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: `Now this account is ${status}`,
+        data: null,
     });
 });
 
@@ -150,5 +164,6 @@ export const auth_controllers = {
     verified_account,
     get_new_verification_otp,
     set_new_password,
-    update_student_profile
+    update_student_profile,
+    change_profile_status
 }
