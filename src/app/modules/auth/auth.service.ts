@@ -114,7 +114,6 @@ const verified_account_into_db = async (payload: { email: string, otp: string })
     return 'Account verified successfully!';
 }
 
-
 const get_new_verification_otp_from_db = async (email: string) => {
     await isAccountExist(email)
     const otp = OTPMaker();
@@ -187,7 +186,19 @@ const get_new_verification_otp_from_db = async (email: string) => {
 
     return null
 }
-// login user
+
+const set_new_password_into_db = async (payload: { email: string, password: string }) => {
+    const isExistAccount = await isAccountExist(payload.email)
+    if (!isExistAccount.isVerified) {
+        throw new AppError('Account is not verified', httpStatus.UNAUTHORIZED);
+    }
+    const hashedPassword: string = await bcrypt.hash(payload.password, 10);
+    await Account_Model.findOneAndUpdate({ email: isExistAccount.email }, {
+        password: hashedPassword,
+    })
+    return 'Password changed successful.';
+}
+
 const login_user_from_db = async (payload: TLoginPayload) => {
     // check account info 
     const isExistAccount = await isAccountExist(payload?.email)
@@ -351,5 +362,6 @@ export const auth_services = {
     forget_password_from_db,
     reset_password_into_db,
     verified_account_into_db,
-    get_new_verification_otp_from_db
+    get_new_verification_otp_from_db,
+    set_new_password_into_db
 }

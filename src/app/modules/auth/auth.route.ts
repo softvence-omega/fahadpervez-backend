@@ -7,8 +7,9 @@ import auth from "../../middlewares/auth";
 const authRoute = Router()
 
 authRoute.post("/register", RequestValidator(auth_validation.register_validation), auth_controllers.register_user)
-authRoute.post("/verified-account",RequestValidator(auth_validation.verified_account),auth_controllers.verified_account)
+authRoute.post("/verified-account", RequestValidator(auth_validation.verified_account), auth_controllers.verified_account)
 authRoute.post("/new-verification-otp", RequestValidator(auth_validation.newVerificationOtp), auth_controllers.get_new_verification_otp)
+authRoute.post("/set-new-password", RequestValidator(auth_validation.login_validation), auth_controllers.set_new_password)
 authRoute.post("/login", RequestValidator(auth_validation.login_validation), auth_controllers.login_user)
 authRoute.get(
     '/me',

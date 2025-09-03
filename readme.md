@@ -5,7 +5,7 @@
 ####    Register (POST) */auth/register*
 *body*
 ```json
-    "email":string
+    "email":"string"
 ```
 *response*
 ```json
@@ -20,8 +20,8 @@
 ####    Verify Account (POST) */auth/verified-account*
 *body*
 ```json
-    "email":string,
-    "otp":string
+    "email":"string",
+    "otp":"string"
 ```
 *response*
 ```json
@@ -36,7 +36,7 @@
 ####    New OTP request (POST) */auth/new-verification-otp*
 *body*
 ```json
-    "email":string,
+    "email":"string",
 ```
 *response*
 ```json
@@ -44,6 +44,41 @@
   "success": true,
   "message": "New OTP is sent to email.",
   "data": null,
+  "meta": null
+}
+```
+
+####    Set New Password (POST) */auth/set-new-password*
+*body*
+```json
+    "email":"string",
+    "password":"string"
+```
+*response*
+```json
+{
+  "success": true,
+  "message": "Password has been reset successfully.",
+  "data": "Password changed successful.",
+  "meta": null
+}
+```
+
+####    Login User (POST) */auth/login*
+*body*
+```json
+    "email":"string",
+    "password":"string"
+```
+*response*
+```json
+{
+  "success": true,
+  "message": "User is logged in successful !",
+  "data": {
+    "accessToken": "string",
+    "role": "STUDENT" // ADMIN, MENTOR, STUDENT
+  },
   "meta": null
 }
 ```
