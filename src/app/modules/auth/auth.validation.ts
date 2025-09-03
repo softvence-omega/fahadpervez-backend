@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { AUTH_CONSTANTS } from "./auth.constant";
 
 // Zod schema matching TAccount / authSchema
 const register_validation = z.object({
@@ -30,6 +31,15 @@ const newVerificationOtp = z.object({
     email: z.string({ message: "Email is required" }),
 })
 
+const updateProfile = z.object({
+    studentType: z.enum(Object.values(AUTH_CONSTANTS.STUDENT_TYPES)),
+    university: z.string(),
+    country: z.string(),
+    year_of_study: z.string(),
+    preparingFor: z.string(),
+})
+
+
 export const auth_validation = {
     register_validation,
     login_validation,
@@ -37,5 +47,6 @@ export const auth_validation = {
     forgotPassword,
     resetPassword,
     verified_account,
-    newVerificationOtp
+    newVerificationOtp,
+    updateProfile
 }

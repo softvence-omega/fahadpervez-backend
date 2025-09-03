@@ -62,6 +62,15 @@ const login_user = catchAsync(async (req, res) => {
     });
 });
 
+const update_student_profile = catchAsync(async (req, res) => {
+    const result = await auth_services.update_student_profile_into_db(req);
+    manageResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Profile updated successfully!',
+        data: result,
+    });
+});
 const get_my_profile = catchAsync(async (req, res) => {
     const { email } = req.user!;
     const result = await auth_services.get_my_profile_from_db(email);
@@ -136,5 +145,6 @@ export const auth_controllers = {
     forget_password,
     verified_account,
     get_new_verification_otp,
-    set_new_password
+    set_new_password,
+    update_student_profile
 }

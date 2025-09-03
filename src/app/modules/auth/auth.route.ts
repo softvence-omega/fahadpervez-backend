@@ -11,16 +11,17 @@ authRoute.post("/verified-account", RequestValidator(auth_validation.verified_ac
 authRoute.post("/new-verification-otp", RequestValidator(auth_validation.newVerificationOtp), auth_controllers.get_new_verification_otp)
 authRoute.post("/set-new-password", RequestValidator(auth_validation.login_validation), auth_controllers.set_new_password)
 authRoute.post("/login", RequestValidator(auth_validation.login_validation), auth_controllers.login_user)
+authRoute.post("/update-student-profile", auth("STUDENT"), RequestValidator(auth_validation.updateProfile), auth_controllers.update_student_profile)
 authRoute.get(
     '/me',
-    auth("ADMIN", "USER"),
+    auth("ADMIN"),
     auth_controllers.get_my_profile,
 );
 
 authRoute.post('/refresh-token', auth_controllers.refresh_token);
 authRoute.post(
     '/change-password',
-    auth("ADMIN", "USER"),
+    auth("ADMIN"),
     RequestValidator(auth_validation.changePassword),
     auth_controllers.change_password,
 );

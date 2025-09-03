@@ -1,5 +1,6 @@
 import mongoose, { model, Schema, Types } from "mongoose";
 import { TAccount } from "./auth.interface";
+import { AUTH_CONSTANTS } from "./auth.constant";
 
 
 const authSchema = new Schema<TAccount>({
@@ -8,7 +9,7 @@ const authSchema = new Schema<TAccount>({
     isDeleted: { type: Boolean, default: false },
     accountStatus: { type: String, default: "ACTIVE" },
     role: { type: String, enum: ["ADMIN", "MENTOR", "STUDENT"], required: true },
-    studentType: { type: String, enum: ["MEDICAL_STUDENT", "NURSING_STUDENT", "DENTAL_STUDENT"], required: false },
+    studentType: { type: String, enum: Object.values(AUTH_CONSTANTS.STUDENT_TYPES), required: false },
     isVerified: { type: Boolean, default: false },
     profile_type: {
         type: String,
