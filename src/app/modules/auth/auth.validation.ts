@@ -12,6 +12,8 @@ const login_validation = z.object({
 })
 const sign_in_with_google = z.object({
     email: z.string({ message: "Email is required" }),
+    name: z.string().optional(),
+    photo: z.string().optional(),
 })
 
 const changePassword = z.object({

@@ -149,12 +149,23 @@ const change_profile_status = catchAsync(async (req, res) => {
     });
 });
 const sign_in_with_google = catchAsync(async (req, res) => {
-    await auth_services.sign_in_with_google_and_save_in_db();
+    const result = await auth_services.sign_in_with_google_and_save_in_db(req?.body);
+    res.cookie('refreshToken', result.refreshToken, {
+        secure: configs.env == 'production',
+        httpOnly: true,
+    });
+    res.cookie('accessToken', result.accessToken, {
+        secure: configs.env == 'production',
+        httpOnly: true,
+    });
     manageResponse(res, {
-        statusCode: httpStatus.CREATED,
+        statusCode: httpStatus.OK,
         success: true,
-        message: `Student registration successful`,
-        data: null,
+        message: 'User is logged in successful !',
+        data: {
+            accessToken: result.accessToken,
+            role: result?.role
+        },
     });
 });
 

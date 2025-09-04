@@ -11,6 +11,7 @@ import { isAccountExist } from './../../utils/isAccountExist';
 import { OTPMaker } from "../../utils/otpMaker";
 import { Request } from "express";
 import { Student_Model } from "../student/student.schema";
+import { TStudent } from "../student/student.interface";
 // register user
 const register_user_into_db = async (payload: TRegisterPayload) => {
   const isExistAccount = await Account_Model.findOne({ email: payload?.email });
@@ -442,9 +443,52 @@ const change_profile_status_from_db = async (
   return null;
 };
 
-const sign_in_with_google_and_save_in_db = async () => {
+const sign_in_with_google_and_save_in_db = async (payload: any) => {
+  // Try to find account and create if not exists in one step
+  let account = await Account_Model.findOneAndUpdate(
+    { email: payload.email },
+    {
+      $setOnInsert: {
+        email: payload.email,
+        authType: "GOOGLE",
+        accountStatus: "ACTIVE",
+        isVerified: true,
+        role: "STUDENT",
+        profile_type: "student_profile",
+      },
+    },
+    { upsert: true, new: true }
+  ).lean();
 
-}
+  // If account was newly created and profile not yet set
+  if (!account.profile_id) {
+    const profilePromise = Student_Model.create({
+      firstName: payload.name,
+      profile_photo: payload.photo,
+      accountId: account._id,
+    });
+
+    const [profile] = await Promise.all([profilePromise]);
+
+    // Update account with profile_id
+    await Account_Model.findByIdAndUpdate(account._id, { profile_id: profile._id });
+
+    account.profile_id = profile._id; // update local object
+  }
+
+  // Generate tokens
+  const tokenPayload = { email: account.email, role: account.role };
+  const [accessToken, refreshToken] = await Promise.all([
+    jwtHelpers.generateToken(tokenPayload, configs.jwt.access_token as Secret, configs.jwt.access_expires as string),
+    jwtHelpers.generateToken(tokenPayload, configs.jwt.refresh_token as Secret, configs.jwt.refresh_expires as string),
+  ]);
+
+  return {
+    accessToken,
+    refreshToken,
+    role: account.role,
+  };
+};
 
 
 export const auth_services = {

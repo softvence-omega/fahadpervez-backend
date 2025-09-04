@@ -9,8 +9,8 @@ Base URL: http://localhost:5000/api
 - [Account Data Types](#account-data-types)
 - [Student Data Types](#student-data-types)
 - [Clinical Case Data Types](#clinical-case-data-types)
-- [Dummy Response](#dummy-response)
-  - [Quiz Data Types](#quiz-data-types)
+- [Dummy Response For AI](#dummy-response-for-ai)
+  - [Case Data Types](#case-data-types)
 - [Auth Endpoints](#auth-endpoints)
   - [Register](#register-post-authregister)
   - [Verify Account](#verify-account-post-authverified-account)
@@ -280,7 +280,8 @@ type TStudentDecision = {
 ```json
 {
   "email": "string",
-  "password": "string"
+  "name": "string", // optional from google
+  "photo":"string" // optional from google
 }
 ```
 
@@ -535,9 +536,9 @@ type TStudentDecision = {
 
 
 
-## Dummy Response
+## Dummy Response For AI
 
-### Quiz Data Types
+### Case Data Types
 ```json
 {
     "caseName": "Acute Appendicitis",
