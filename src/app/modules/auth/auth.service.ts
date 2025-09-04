@@ -442,7 +442,9 @@ const change_profile_status_from_db = async (
   return null;
 };
 
+const sign_in_with_google_and_save_in_db = async () => {
 
+}
 
 
 export const auth_services = {
@@ -457,5 +459,6 @@ export const auth_services = {
   get_new_verification_otp_from_db,
   set_new_password_into_db,
   update_student_profile_into_db,
-  change_profile_status_from_db
+  change_profile_status_from_db,
+  sign_in_with_google_and_save_in_db
 }

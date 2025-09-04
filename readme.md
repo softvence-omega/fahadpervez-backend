@@ -8,20 +8,21 @@ Base URL: http://localhost:5000/api
 
 - [Account Data Types](#account-data-types)
 - [Auth Endpoints](#auth-endpoints)
-  - [Register](#️register-post-authregister)
-  - [Verify Account](#️verify-account-post-authverified-account)
-  - [New OTP Request](#️new-otp-request-post-authnew-verification-otp)
-  - [Set New Password](#️set-new-password-post-authset-new-password)
-  - [Login User](#️login-user-post-authlogin)
-  - [Update Account Information](#️update-account-information-post-authupdate-account-info)
-  - [Get My Profile](#️get-my-profile-get-authme)
-  - [Get New Refresh Token](#️get-new-refreshtoken-post-authrefresh-token)
-  - [Change Password](#️change-password-post-authchange-password)
-  - [Forgot Password](#️forgot-password-post-authforgot-password)
-  - [Reset Password](#️reset-password-post-authreset-password)
-  - [Change Account Status (Admin)](#️change-account-status-post-authchange-status)
+  - [Register](#register-post-authregister)
+  - [Verify Account](#verify-account-post-authverified-account)
+  - [New OTP Request](#new-otp-request-post-authnew-verification-otp)
+  - [Set New Password](#set-new-password-post-authset-new-password)
+  - [Login User](#login-user-post-authlogin)
+  - [Login with google](#login-with-google-post-authsign-in-with-google)
+  - [Update Account Information](#update-account-information-post-authupdate-account-info)
+  - [Get My Profile](#get-my-profile-get-authme)
+  - [Get New Refresh Token](#get-new-refreshtoken-post-authrefresh-token)
+  - [Change Password](#change-password-post-authchange-password)
+  - [Forgot Password](#forgot-password-post-authforgot-password)
+  - [Reset Password](#reset-password-post-authreset-password)
+  - [Change Account Status (Admin)](#change-account-status-post-authchange-status)
 - [Student Profile](#student-profile)
-  - [Update Student Profile](#️update-student-profile-patch-studentupdate)
+  - [Update Student Profile](#update-student-profile-patch-studentupdate)
 
 ---
 
@@ -63,8 +64,8 @@ export type TAccount = {
 ---
 
 ## Auth Endpoints
+### Register (POST) /auth/register
 
-### ➡️ Register (POST) /auth/register
 
 `Request Body`
 ```json
@@ -86,7 +87,8 @@ export type TAccount = {
 
 ---
 
-### ➡️ Verify Account (POST) /auth/verified-account
+### Verify Account (POST) /auth/verified-account
+
 
 `Request Body`
 
@@ -108,7 +110,9 @@ export type TAccount = {
 ```
 ---
 
-### ➡️ New OTP Request (POST) /auth/new-verification-otp
+
+### New OTP Request (POST) /auth/new-verification-otp
+
 
 `Request Body`
 
@@ -130,7 +134,8 @@ export type TAccount = {
 
 ---
 
-### ➡️ Set New Password (POST) /auth/set-new-password
+### Set New Password (POST) /auth/set-new-password
+
 
 `Request Body`
 ```json
@@ -152,7 +157,34 @@ export type TAccount = {
 
 ---
 
-### ➡️ Login User (POST) /auth/login
+### Login User (POST) /auth/login
+
+
+`Request Body`
+
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+`Response`
+
+```json
+{
+  "success": true,
+  "message": "User is logged in successful !",
+  "data": {
+    "accessToken": "string",
+    "role": "STUDENT" // ADMIN, MENTOR, STUDENT
+  },
+  "meta": null
+}
+```
+---
+
+### Login with google (POST) /auth/sign-in-with-google
 
 `Request Body`
 
@@ -179,7 +211,7 @@ export type TAccount = {
 
 ---
 
-### ➡️ Update Account Information (POST) /auth/update-account-info
+### Update Account Information (POST) /auth/update-account-info
 
 *🔑 Requires Authorization Header*
 
@@ -217,7 +249,8 @@ export type TAccount = {
 
 ---
 
-### ➡️ Get My Profile (GET) /auth/me
+### Get My Profile (GET) /auth/me
+
 
 *🔑 Requires Authorization Header*
 
@@ -237,7 +270,8 @@ export type TAccount = {
 
 ---
 
-### ➡️ Get New RefreshToken (POST) /auth/refresh-token
+### Get New RefreshToken (POST) /auth/refresh-token
+
 
 *🔑 Requires Cookie Header*
 
@@ -257,7 +291,8 @@ export type TAccount = {
 
 ---
 
-### ➡️ Change Password (POST) /auth/change-password
+### Change Password (POST) /auth/change-password
+
 
 *🔑 Requires Authorization Header*
 
@@ -282,7 +317,8 @@ export type TAccount = {
 
 ---
 
-### ➡️ Forgot Password (POST) /auth/forgot-password
+### Forgot Password (POST) /auth/forgot-password
+
 
 `Request Body`
 
@@ -304,7 +340,8 @@ export type TAccount = {
 
 ---
 
-### ➡️ Reset Password (POST) /auth/reset-password
+### Reset Password (POST) /auth/reset-password
+
 
 `Request Body`
 
@@ -329,7 +366,8 @@ export type TAccount = {
 
 ---
 
-### ➡️ Change Account Status (POST) /auth/change-status
+### Change Account Status (POST) /auth/change-status
+
 
 *⚠️ Only Admin Can Access*
 *🔑 Requires Authorization Header / Cookie*
@@ -357,7 +395,8 @@ export type TAccount = {
 
 ## Student Profile
 
-### ➡️ Update Student Profile (PATCH) /student/update
+### Update Student Profile (PATCH) /student/update
+
 
 *⚠️ Only Student Can Access*
 *🔑 Requires Authorization Header / Cookie*

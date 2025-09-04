@@ -18,7 +18,7 @@ authRoute.post('/change-password', auth("ADMIN", "MENTOR", "STUDENT"), RequestVa
 authRoute.post('/forgot-password', RequestValidator(auth_validation.forgotPassword), auth_controllers.forget_password);
 authRoute.post('/reset-password', RequestValidator(auth_validation.resetPassword), auth_controllers.reset_password,);
 authRoute.post('/change-status', auth("ADMIN"), RequestValidator(auth_validation.change_profile_status), auth_controllers.change_profile_status,);
-
+authRoute.post("/sign-in-with-google", RequestValidator(auth_validation.sign_in_with_google), auth_controllers.sign_in_with_google)
 
 
 export default authRoute;
