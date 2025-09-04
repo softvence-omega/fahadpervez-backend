@@ -27,7 +27,8 @@ Base URL: http://localhost:5000/api
   - [Change Account Status (Admin)](#change-account-status-post-authchange-status)
 - [Student Profile](#student-profile)
   - [Update Student Profile](#update-student-profile-patch-studentupdate)
-
+- [Clinical Case Endpoints](#clinical-case-endpoints)
+  - [Create new Case](#create-new-case-post-clinical-casecreate-new)
 ---
 
 ## Account Data Types
@@ -534,6 +535,73 @@ type TStudentDecision = {
 ```
 
 
+## Clinical Case Endpoints
+
+### Create new Case (POST) /clinical-case/create-new
+
+*⚠️ Only Admin and Mentor Can Access*
+*🔑 Requires Authorization Header / Cookie*
+
+`Request Body`
+
+```ts
+  {
+    publishedBy?: string;
+    caseName: string;
+    topic: string;
+    patientDetails?: {
+      age: number;
+      sex: "MALE" | "FEMALE" | "OTHER";
+      ethnicity: string;
+      occupation: string;
+      remark: string;
+  };
+  caseHistory?: string;
+  vital_signs?: {
+    temperature: string;
+    heartRate: string;
+    bloodPressure: string;
+    respiratoryRate: string;
+    generalAppearance: string[];
+    abdominalExamination: string[];
+  };
+  laboratory_result?: {
+    testName: string;
+    testResult: string;
+    subTest?: {
+      testName: string;
+      testResult: string;
+      refValue: string;
+    }[];
+  };
+  imaging_studies?: string[];
+  caseTips?: string[];
+  studentDecision?: {
+    question: string;
+    supportingEvidence: string[];
+    refutingEvidence: string[];
+    isCorrect: boolean;
+  }[];
+  detailedExplanation?: {
+    explanation: string;
+    keyFeatures: string[];
+  };
+  isDeleted?: boolean;
+}
+```
+`Response`
+
+```json
+{
+  "success": true,
+  "message": "Clinical case created!",
+  "data": {....}
+  "meta": null
+}
+```
+
+---
+
 
 
 ## Dummy Response For AI
@@ -610,7 +678,7 @@ type TStudentDecision = {
         "refutingEvidence": [
           "Patient is hemodynamically stable"
         ],
-        "isCorrect": true
+        "isCorrect": false
       }
     ],
     "detailedExplanation": {

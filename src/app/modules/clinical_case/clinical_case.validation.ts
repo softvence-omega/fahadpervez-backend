@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const create = z.object({
-    publishedBy: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ObjectId"),
+    publishedBy: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ObjectId").optional(),
     caseName: z.string(),
     topic: z.string(),
 
