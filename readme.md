@@ -82,7 +82,7 @@
   "meta": null
 }
 ```
-####    Update initial profile (POST) */auth/update-account-info*
+####    Update account information (POST) */auth/update-account-info*
 `also need Authorization headers`
 
 *body*
@@ -248,7 +248,7 @@
   "meta": null
 }
 ```
-####    Change account status (POST) */auth//change-status*
+####    Change account status (POST) */auth/change-status*
 *only admin can access this*
 *also need authorization header / cookie*
 *body*
@@ -266,6 +266,58 @@
   "success": true,
   "message": "Now this account is SUSPENDED",
   "data": null,
+  "meta": null
+}
+```
+####    Update Student Profile (PATCH) */student/update*
+*only student can access this*
+*also need authorization header / cookie*
+
+*body- multipart/form-data*
+
+| Name  | Type  | Value             |
+|-------|-------|-------------------|
+| image | File  | any type of image |
+| data  | string| stringify         |
+
+`data contain this type of value`
+```ts
+    firstName?: string,
+    lastName?: string,
+    phone?: string,
+    country?: string,
+    university?: string,
+    preparingFor?: string,
+    bio?: string,
+    year_of_study?: string,
+```
+
+*response*
+```json
+{
+  "success": true,
+  "message": "Profile update successful",
+  "data": {
+    "_id": "68b7cdbaa6de6969f409dc0c",
+    "accountId": "68b7a9acd0ce36ed899015e4",
+    "country": "United States",
+    "university": "Harvard University",
+    "preparingFor": "MCAT",
+    "year_of_study": "2005",
+    "dailyStreak": 0,
+    "point": 2,
+    "completedQuiz": [],
+    "completedFlashCard": [],
+    "completedCase": [],
+    "badges": [],
+    "connectedMentor": [],
+    "__v": 0,
+    "updatedAt": "2025-09-04T04:16:06.388Z",
+    "firstName": "Abumahid Islam",
+    "lastName": "Islam Maruf",
+    "phone": "01111111",
+    "profile_photo": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1756959366/b1zuh1sfrhfrfeairhdn.png"
+  },
   "meta": null
 }
 ```

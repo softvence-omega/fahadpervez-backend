@@ -436,8 +436,7 @@ const change_profile_status_from_db = async (
   status: TStatus,
   email: string,
 ) => {
-  const isAccountExists = await isAccountExist(email)
-  await Account_Model.findOneAndUpdate({ email: isAccountExists.email }, {
+  await Account_Model.findOneAndUpdate({ email: email }, {
     accountStatus: status,
   })
   return null;
