@@ -16,6 +16,7 @@ export interface TClinicalCase {
         keyFeatures: string[]
     };
     isDeleted: boolean;
+    isAIGenerated:boolean;
 }
 
 
