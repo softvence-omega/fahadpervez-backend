@@ -77,8 +77,9 @@ const ClinicalCaseSchema = new Schema<TClinicalCase & Document>(
         studentDecision: { type: [StudentDecisionSchema], required: false },
         detailedExplanation: { type: DetailedExplanationSchema, required: false },
         isDeleted: { type: Boolean, default: false },
+        isAIGenerated: { type: Boolean, default: false },
     },
-    { timestamps: true }
+    { timestamps: true, versionKey: false }
 );
 
 export const ClinicalCaseModel = model<TClinicalCase & Document>("clinical_case", ClinicalCaseSchema);
