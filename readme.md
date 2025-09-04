@@ -7,6 +7,10 @@ Base URL: http://localhost:5000/api
 ## 📑 Table of Contents
 
 - [Account Data Types](#account-data-types)
+- [Student Data Types](#student-data-types)
+- [Clinical Case Data Types](#clinical-case-data-types)
+- [Dummy Response](#dummy-response)
+  - [Quiz Data Types](#quiz-data-types)
 - [Auth Endpoints](#auth-endpoints)
   - [Register](#register-post-authregister)
   - [Verify Account](#verify-account-post-authverified-account)
@@ -62,6 +66,91 @@ export type TAccount = {
 };
 ```
 ---
+
+## Student Data Types
+
+```ts
+type TStudent = {
+    accountId: Types.ObjectId,
+    firstName?: string,
+    lastName?: string,
+    phone?: string,
+    country?: string,
+    university?: string,
+    preparingFor?: string,
+    bio?: string,
+    year_of_study?: string,
+    profile_photo?: string,
+    dailyStreak?: number,
+    point?: number,
+    completedQuiz?: Types.ObjectId[],
+    completedFlashCard?: Types.ObjectId[],
+    completedCase?: Types.ObjectId[],
+    badges?: Types.ObjectId[],
+    connectedMentor?: Types.ObjectId[],
+}
+
+```
+---
+
+## Clinical Case Data Types
+
+```ts
+interface TClinicalCase {
+    publishedBy: Types.ObjectId;
+    caseName: string;
+    topic: string;
+    patientDetails?: TPatientDetails;
+    caseHistory?: string;
+    vital_signs?: TVitalSigns;
+    laboratory_result?: TLaboratoryResult;
+    imaging_studies?: string[];
+    caseTips?: string[];
+    studentDecision?: TStudentDecision[];
+    detailedExplanation?: {
+        explanation: string;
+        keyFeatures: string[]
+    };
+    isDeleted: boolean;
+}
+
+type TPatientDetails = {
+    age: number;
+    sex: TSex;
+    ethnicity: string;
+    occupation: string;
+    remark: string;
+}
+
+type TSex = 'MALE' | 'FEMALE' | 'OTHER';
+
+type TVitalSigns = {
+    temperature: string;
+    heartRate: string;
+    bloodPressure: string;
+    respiratoryRate: string;
+    generalAppearance: string[];
+    abdominalExamination: string[];
+}
+
+type TLaboratoryResult = {
+    testName: string;
+    testResult: string;
+    subTest?: {
+        testName: string;
+        testResult: string;
+        refValue: string;
+    }[];
+}
+
+type TStudentDecision = {
+    question: string;
+    supportingEvidence: string[];
+    refutingEvidence: string[];
+    isCorrect: boolean;
+}
+```
+
 
 ## Auth Endpoints
 ### Register (POST) /auth/register
@@ -441,4 +530,96 @@ export type TAccount = {
   },
   "meta": null
 }
+```
+
+
+
+
+## Dummy Response
+
+### Quiz Data Types
+```json
+{
+    "caseName": "Acute Appendicitis",
+    "patientDetails": {
+      "age": 23,
+      "sex": "MALE",
+      "ethnicity": "Asian",
+      "occupation": "Student",
+      "remark": "No significant past medical history"
+    },
+    "caseHistory": "Patient presents with 2-day history of right lower quadrant abdominal pain, nausea, and mild fever.",
+    "vital_signs": {
+      "temperature": "38.2°C",
+      "heartRate": "102 bpm",
+      "bloodPressure": "118/76 mmHg",
+      "respiratoryRate": "20 breaths/min",
+      "generalAppearance": [
+        "Mildly ill-looking",
+        "Guarding abdomen"
+      ],
+      "abdominalExamination": [
+        "Tenderness in right iliac fossa",
+        "Rebound tenderness present"
+      ]
+    },
+    "laboratory_result": {
+      "testName": "CBC",
+      "testResult": "Elevated WBC count",
+      "subTest": [
+        {
+          "testName": "WBC",
+          "testResult": "14,500 /µL",
+          "refValue": "4,000 - 11,000 /µL"
+        },
+        {
+          "testName": "Neutrophils",
+          "testResult": "82%",
+          "refValue": "40 - 70%"
+        }
+      ]
+    },
+    "imaging_studies": [
+      "Ultrasound abdomen showing inflamed appendix"
+    ],
+    "caseTips": [
+      "Always rule out gynecological causes in females",
+      "Pain migration is a key feature"
+    ],
+    "studentDecision": [
+      {
+        "question": "Is this appendicitis?",
+        "supportingEvidence": [
+          "Right lower quadrant tenderness",
+          "Fever",
+          "Elevated WBC"
+        ],
+        "refutingEvidence": [
+          "No diarrhea",
+          "No urinary symptoms"
+        ],
+        "isCorrect": true
+      },
+      {
+        "question": "Should immediate surgery be done?",
+        "supportingEvidence": [
+          "Typical clinical presentation",
+          "Positive ultrasound findings"
+        ],
+        "refutingEvidence": [
+          "Patient is hemodynamically stable"
+        ],
+        "isCorrect": true
+      }
+    ],
+    "detailedExplanation": {
+      "explanation": "Acute appendicitis is inflammation of the appendix due to obstruction, commonly by a fecolith.",
+      "keyFeatures": [
+        "Right iliac fossa pain",
+        "Fever",
+        "Leukocytosis",
+        "Rebound tenderness"
+      ]
+    }
+  }
 ```
