@@ -1,14 +1,80 @@
-# Base URL - http://localhost:5000/api
+# API Documentation
 
+Base URL: http://localhost:5000/api
 
-## Auth
-####    Register (POST) */auth/register*
-*body*
-```json
-    "email":"string"
+---
+
+## 📑 Table of Contents
+
+- [Account Data Types](#account-data-types)
+- [Auth Endpoints](#auth-endpoints)
+  - [Register](#️register-post-authregister)
+  - [Verify Account](#️verify-account-post-authverified-account)
+  - [New OTP Request](#️new-otp-request-post-authnew-verification-otp)
+  - [Set New Password](#️set-new-password-post-authset-new-password)
+  - [Login User](#️login-user-post-authlogin)
+  - [Update Account Information](#️update-account-information-post-authupdate-account-info)
+  - [Get My Profile](#️get-my-profile-get-authme)
+  - [Get New Refresh Token](#️get-new-refreshtoken-post-authrefresh-token)
+  - [Change Password](#️change-password-post-authchange-password)
+  - [Forgot Password](#️forgot-password-post-authforgot-password)
+  - [Reset Password](#️reset-password-post-authreset-password)
+  - [Change Account Status (Admin)](#️change-account-status-post-authchange-status)
+- [Student Profile](#student-profile)
+  - [Update Student Profile](#️update-student-profile-patch-studentupdate)
+
+---
+
+## Account Data Types
+
+```ts
+const AUTH_CONSTANTS = {
+  STUDENT_TYPES: {
+    MEDICAL_STUDENT: "MEDICAL_STUDENT",
+    NURSING_STUDENT: "NURSING_STUDENT",
+    DENTAL_STUDENT: "DENTAL_STUDENT",
+    PHARMACY_STUDENT: "PHARMACY_STUDENT",
+    PUBLIC_HEALTH_STUDENT: "PUBLIC_HEALTH_STUDENT",
+    DENTAL_HYGIENE_STUDENT: "DENTAL_HYGIENE_STUDENT",
+    MEDICAL_LAB_TECHNOLOGY_STUDENT: "MEDICAL_LAB_TECHNOLOGY_STUDENT",
+    RADIOLOGY_STUDENT: "RADIOLOGY_STUDENT",
+    PHYSIOTHERAPY_STUDENT: "PHYSIOTHERAPY_STUDENT",
+  },
+};
+
+type ProfileType = "student_profile" | "mentor_profile" | "admin_profile";
+export type TStatus = "ACTIVE" | "INACTIVE" | "SUSPENDED";
+
+export type TAccount = {
+  email: string;
+  role: "ADMIN" | "STUDENT" | "MENTOR";
+  password: string;
+  profile_id: Types.ObjectId;
+  isDeleted?: boolean;
+  accountStatus?: TStatus;
+  studentType?: keyof typeof AUTH_CONSTANTS.STUDENT_TYPES;
+  isSubscribed?: boolean;
+  lastOTP?: string;
+  isVerified?: boolean;
+  profile_type: ProfileType;
+  authType?: "GOOGLE" | "CUSTOM";
+};
 ```
-*response*
+---
+
+## Auth Endpoints
+
+### ➡️ Register (POST) /auth/register
+
+`Request Body`
 ```json
+{
+  "email": "string"
+}
+```
+`Response`
+
+``` json
 {
   "success": true,
   "message": "Account created successful",
@@ -17,13 +83,21 @@
 }
 ```
 
-####    Verify Account (POST) */auth/verified-account*
-*body*
+
+---
+
+### ➡️ Verify Account (POST) /auth/verified-account
+
+`Request Body`
+
 ```json
-    "email":"string",
-    "otp":"string"
+{
+  "email": "string",
+  "otp": "string"
+}
 ```
-*response*
+`Response`
+
 ```json
 {
   "success": true,
@@ -32,13 +106,19 @@
   "meta": null
 }
 ```
+---
 
-####    New OTP request (POST) */auth/new-verification-otp*
-*body*
+### ➡️ New OTP Request (POST) /auth/new-verification-otp
+
+`Request Body`
+
 ```json
-    "email":"string",
+{
+  "email": "string"
+}
 ```
-*response*
+`Response`
+
 ```json
 {
   "success": true,
@@ -48,13 +128,19 @@
 }
 ```
 
-####    Set New Password (POST) */auth/set-new-password*
-*body*
+---
+
+### ➡️ Set New Password (POST) /auth/set-new-password
+
+`Request Body`
 ```json
-    "email":"string",
-    "password":"string"
+{
+  "email": "string",
+  "password": "string"
+}
 ```
-*response*
+`Response`
+
 ```json
 {
   "success": true,
@@ -64,13 +150,21 @@
 }
 ```
 
-####    Login User (POST) */auth/login*
-*body*
+---
+
+### ➡️ Login User (POST) /auth/login
+
+`Request Body`
+
 ```json
-    "email":"string",
-    "password":"string"
+{
+  "email": "string",
+  "password": "string"
+}
 ```
-*response*
+
+`Response`
+
 ```json
 {
   "success": true,
@@ -82,20 +176,25 @@
   "meta": null
 }
 ```
-####    Update account information (POST) */auth/update-account-info*
-`also need Authorization headers`
 
-*body*
+---
+
+### ➡️ Update Account Information (POST) /auth/update-account-info
+
+*🔑 Requires Authorization Header*
+
+`Request Body`
+
 ```json
-    {
-  "studentType": "MEDICAL_STUDENT",// MEDICAL_STUDENT, NURSING_STUDENT, DENTAL_STUDENT, PHARMACY_STUDENT, PUBLIC_HEALTH_STUDENT, DENTAL_HYGIENE_STUDENT, MEDICAL_LAB_TECHNOLOGY_STUDENT, RADIOLOGY_STUDENT, PHYSIOTHERAPY_STUDENT
+{
+  "studentType": "MEDICAL_STUDENT",
   "university": "string",
   "country": "string",
   "year_of_study": "string",
-  "preparingFor": "string" // come from backend
+  "preparingFor": "string"
 }
 ```
-*response*
+`Response`
 ```json
 {
   "success": true,
@@ -103,89 +202,48 @@
   "data": {
     "_id": "68b7a9acd0ce36ed899015e4",
     "email": "softvence.abumahid@gmail.com",
-    "isDeleted": false,
-    "accountStatus": "ACTIVE",
     "role": "STUDENT",
-    "isVerified": true,
-    "authType": "CUSTOM",
-    "isSubscribed": false,
-    "createdAt": "2025-09-03T02:36:28.234Z",
-    "updatedAt": "2025-09-03T05:22:42.656Z",
-    "profile_type": "student_profile",
     "studentType": "MEDICAL_STUDENT",
     "profile": {
-      "_id": "68b7cdbaa6de6969f409dc0c",
-      "accountId": "68b7a9acd0ce36ed899015e4",
-      "country": "United States",
       "university": "Harvard University",
+      "country": "United States",
       "preparingFor": "MCAT",
-      "year_of_study": "2005",
-      "dailyStreak": 0,
-      "point": 0,
-      "completedQuiz": [],
-      "completedFlashCard": [],
-      "completedCase": [],
-      "badges": [],
-      "connectedMentor": [],
-      "updatedAt": "2025-09-03T05:22:42.572Z",
-      "createdAt": "2025-09-03T05:22:42.572Z"
+      "year_of_study": "2005"
     }
   },
   "meta": null
 }
 ```
-####    Get my profile (GET) */auth/me*
-`also need Authorization headers`
 
-*response*
+---
+
+### ➡️ Get My Profile (GET) /auth/me
+
+*🔑 Requires Authorization Header*
+
+`Response`
+
 ```json
 {
   "success": true,
   "message": "Profile info fetched successfully!",
   "data": {
-    "account": {
-      "_id": "68b7a9acd0ce36ed899015e4",
-      "email": "softvence.abumahid@gmail.com",
-      "isDeleted": false,
-      "accountStatus": "ACTIVE",
-      "role": "STUDENT",
-      "isVerified": true,
-      "authType": "CUSTOM",
-      "lastOTP": "",
-      "isSubscribed": false,
-      "createdAt": "2025-09-03T02:36:28.234Z",
-      "updatedAt": "2025-09-03T05:22:42.656Z",
-      "password": "",
-      "profile_id": "68b7cdbaa6de6969f409dc0c",
-      "profile_type": "student_profile",
-      "studentType": "MEDICAL_STUDENT"
-    },
-    "profile": {
-      "_id": "68b7cdbaa6de6969f409dc0c",
-      "accountId": "68b7a9acd0ce36ed899015e4",
-      "country": "United States",
-      "university": "Harvard University",
-      "preparingFor": "MCAT",
-      "year_of_study": "2005",
-      "dailyStreak": 0,
-      "point": 0,
-      "completedQuiz": [],
-      "completedFlashCard": [],
-      "completedCase": [],
-      "badges": [],
-      "connectedMentor": [],
-      "__v": 0,
-      "updatedAt": "2025-09-03T05:22:42.572Z"
-    }
+    "account": { ... } // same for every user,
+    "profile": { ... } // change for each role like student/admin/mentor
   },
   "meta": null
 }
 ```
-####    Get new refreshToken (POST) */auth/refresh-token*
-`also need cookie headers`
 
-*response*
-```json
+---
+
+### ➡️ Get New RefreshToken (POST) /auth/refresh-token
+
+*🔑 Requires Cookie Header*
+
+`Response`
+
+```json 
 {
   "success": true,
   "message": "Access token generated successfully!",
@@ -193,18 +251,26 @@
     "accessToken": "string"
   },
   "meta": null
-}
-```
-####    Change Password (POST) */auth/change-password*
-`also need authorization header`
-*body*
-```json
-  {
-    "oldPassword":"string",
-    "newPassword":"string"
   }
 ```
-*response*
+
+
+---
+
+### ➡️ Change Password (POST) /auth/change-password
+
+*🔑 Requires Authorization Header*
+
+`Request Body`
+
+```json
+{
+  "oldPassword": "string",
+  "newPassword": "string"
+}
+```
+`Response`
+
 ```json
 {
   "success": true,
@@ -213,14 +279,20 @@
   "meta": null
 }
 ```
-####    Forgot Password (POST) */auth/forgot-password*
-*body*
+
+---
+
+### ➡️ Forgot Password (POST) /auth/forgot-password
+
+`Request Body`
+
 ```json
-  {
-    "email":"string",
-  }
+{
+  "email": "string"
+}
 ```
-*response*
+`Response`
+
 ```json
 {
   "success": true,
@@ -229,17 +301,22 @@
   "meta": null
 }
 ```
-####    Reset Password (POST) */auth/reset-password*
-*body*
+
+---
+
+### ➡️ Reset Password (POST) /auth/reset-password
+
+`Request Body`
+
 ```json
-  {
-    "email":"string",
-    "otp":"string",
-    "newPassword":"string"
-    
+{
+  "email": "string",
+  "otp": "string",
+  "newPassword": "string"
 }
 ```
-*response*
+`Response`
+
 ```json
 {
   "success": true,
@@ -248,19 +325,25 @@
   "meta": null
 }
 ```
-####    Change account status (POST) */auth/change-status*
-*only admin can access this*
-*also need authorization header / cookie*
-*body*
+
+
+---
+
+### ➡️ Change Account Status (POST) /auth/change-status
+
+*⚠️ Only Admin Can Access*
+*🔑 Requires Authorization Header / Cookie*
+
+`Request Body`
+
 ```json
 {
-    {
-  "email":"string",
-  "status":"SUSPENDED" // INACTIVE, SUSPENDED, ACTIVE
-}
+  "email": "string",
+  "status": "SUSPENDED" // ACTIVE, INACTIVE, SUSPENDED
 }
 ```
-*response*
+`Response`
+
 ```json
 {
   "success": true,
@@ -269,54 +352,53 @@
   "meta": null
 }
 ```
-####    Update Student Profile (PATCH) */student/update*
-*only student can access this*
-*also need authorization header / cookie*
 
-*body- multipart/form-data*
+---
+
+## Student Profile
+
+### ➡️ Update Student Profile (PATCH) /student/update
+
+*⚠️ Only Student Can Access*
+*🔑 Requires Authorization Header / Cookie*
+*📦 Content-Type: multipart/form-data*
+
+`Form Fields`
 
 | Name  | Type  | Value             |
 |-------|-------|-------------------|
 | image | File  | any type of image |
 | data  | string| stringify         |
 
-`data contain this type of value`
+`Example data field`
+
 ```ts
-    firstName?: string,
-    lastName?: string,
-    phone?: string,
-    country?: string,
-    university?: string,
-    preparingFor?: string,
-    bio?: string,
-    year_of_study?: string,
+{
+  firstName?: string,
+  lastName?: string,
+  phone?: string,
+  country?: string,
+  university?: string,
+  preparingFor?: string,
+  bio?: string,
+  year_of_study?: string
+}
 ```
 
-*response*
+`Response`
+
 ```json
 {
   "success": true,
   "message": "Profile update successful",
   "data": {
     "_id": "68b7cdbaa6de6969f409dc0c",
-    "accountId": "68b7a9acd0ce36ed899015e4",
-    "country": "United States",
     "university": "Harvard University",
-    "preparingFor": "MCAT",
-    "year_of_study": "2005",
-    "dailyStreak": 0,
-    "point": 2,
-    "completedQuiz": [],
-    "completedFlashCard": [],
-    "completedCase": [],
-    "badges": [],
-    "connectedMentor": [],
-    "__v": 0,
-    "updatedAt": "2025-09-04T04:16:06.388Z",
+    "country": "United States",
     "firstName": "Abumahid Islam",
     "lastName": "Islam Maruf",
     "phone": "01111111",
-    "profile_photo": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1756959366/b1zuh1sfrhfrfeairhdn.png"
+    "profile_photo": "https://res.cloudinary.com/.../image.png"
   },
   "meta": null
 }
