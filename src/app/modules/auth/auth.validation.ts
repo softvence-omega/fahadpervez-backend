@@ -10,6 +10,9 @@ const login_validation = z.object({
     email: z.string({ message: "Email is required" }),
     password: z.string({ message: "Email is required" })
 })
+const sign_in_with_google = z.object({
+    email: z.string({ message: "Email is required" }),
+})
 
 const changePassword = z.object({
     oldPassword: z.string({ message: "Old Password is required" }),
@@ -55,5 +58,6 @@ export const auth_validation = {
     verified_account,
     newVerificationOtp,
     updateProfile,
-    change_profile_status
+    change_profile_status,
+    sign_in_with_google
 }

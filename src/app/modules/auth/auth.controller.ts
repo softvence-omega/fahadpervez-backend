@@ -148,6 +148,15 @@ const change_profile_status = catchAsync(async (req, res) => {
         data: null,
     });
 });
+const sign_in_with_google = catchAsync(async (req, res) => {
+    await auth_services.sign_in_with_google_and_save_in_db();
+    manageResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: `Student registration successful`,
+        data: null,
+    });
+});
 
 
 
@@ -165,5 +174,6 @@ export const auth_controllers = {
     get_new_verification_otp,
     set_new_password,
     update_student_profile,
-    change_profile_status
+    change_profile_status,
+    sign_in_with_google
 }
