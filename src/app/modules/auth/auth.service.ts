@@ -249,6 +249,8 @@ const update_student_profile_into_db = async (req: Request) => {
     country: body.country,
     year_of_study: body.year_of_study,
     preparingFor: body.preparingFor,
+    firstName: body.firstName,
+    lastName: body.lastName
   }
   const updateAccountPayload: any = {
     studentType: body.studentType
@@ -434,8 +436,7 @@ const change_profile_status_from_db = async (
   status: TStatus,
   email: string,
 ) => {
-  const isAccountExists = await isAccountExist(email)
-  await Account_Model.findOneAndUpdate({ email: isAccountExists.email }, {
+  await Account_Model.findOneAndUpdate({ email: email }, {
     accountStatus: status,
   })
   return null;

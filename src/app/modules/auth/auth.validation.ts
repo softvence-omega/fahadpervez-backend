@@ -37,10 +37,12 @@ const newVerificationOtp = z.object({
 
 const updateProfile = z.object({
     studentType: z.enum(Object.values(AUTH_CONSTANTS.STUDENT_TYPES)),
-    university: z.string(),
-    country: z.string(),
-    year_of_study: z.string(),
-    preparingFor: z.string(),
+    university: z.string({ message: "University is required!" }),
+    country: z.string({ message: "Country is required!" }),
+    year_of_study: z.string({ message: "Studies year is required!" }),
+    preparingFor: z.string({ message: "Preparing exam type is required!" }),
+    firstName: z.string({ message: "First name is required!" }),
+    lastName: z.string({ message: "Last name is required!" }),
 })
 
 
