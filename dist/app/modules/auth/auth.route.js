@@ -1,0 +1,25 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_controller_1 = require("./auth.controller");
+const request_validator_1 = __importDefault(require("../../middlewares/request_validator"));
+const auth_validation_1 = require("./auth.validation");
+const auth_1 = __importDefault(require("../../middlewares/auth"));
+const authRoute = (0, express_1.Router)();
+authRoute.post("/register", (0, request_validator_1.default)(auth_validation_1.auth_validation.register_validation), auth_controller_1.auth_controllers.register_user);
+authRoute.post("/verified-account", (0, request_validator_1.default)(auth_validation_1.auth_validation.verified_account), auth_controller_1.auth_controllers.verified_account);
+authRoute.post("/new-verification-otp", (0, request_validator_1.default)(auth_validation_1.auth_validation.newVerificationOtp), auth_controller_1.auth_controllers.get_new_verification_otp);
+authRoute.post("/set-new-password", (0, request_validator_1.default)(auth_validation_1.auth_validation.login_validation), auth_controller_1.auth_controllers.set_new_password);
+authRoute.post("/login", (0, request_validator_1.default)(auth_validation_1.auth_validation.login_validation), auth_controller_1.auth_controllers.login_user);
+authRoute.post("/update-account-info", (0, auth_1.default)("STUDENT"), (0, request_validator_1.default)(auth_validation_1.auth_validation.updateProfile), auth_controller_1.auth_controllers.update_student_profile);
+authRoute.get('/me', (0, auth_1.default)("ADMIN", "MENTOR", "STUDENT"), auth_controller_1.auth_controllers.get_my_profile);
+authRoute.post('/refresh-token', auth_controller_1.auth_controllers.refresh_token);
+authRoute.post('/change-password', (0, auth_1.default)("ADMIN", "MENTOR", "STUDENT"), (0, request_validator_1.default)(auth_validation_1.auth_validation.changePassword), auth_controller_1.auth_controllers.change_password);
+authRoute.post('/forgot-password', (0, request_validator_1.default)(auth_validation_1.auth_validation.forgotPassword), auth_controller_1.auth_controllers.forget_password);
+authRoute.post('/reset-password', (0, request_validator_1.default)(auth_validation_1.auth_validation.resetPassword), auth_controller_1.auth_controllers.reset_password);
+authRoute.post('/change-status', (0, auth_1.default)("ADMIN"), (0, request_validator_1.default)(auth_validation_1.auth_validation.change_profile_status), auth_controller_1.auth_controllers.change_profile_status);
+authRoute.post("/sign-in-with-google", (0, request_validator_1.default)(auth_validation_1.auth_validation.sign_in_with_google), auth_controller_1.auth_controllers.sign_in_with_google);
+exports.default = authRoute;
