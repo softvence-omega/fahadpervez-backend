@@ -249,6 +249,8 @@ const update_student_profile_into_db = async (req: Request) => {
     country: body.country,
     year_of_study: body.year_of_study,
     preparingFor: body.preparingFor,
+    firstName: body.firstName,
+    lastName: body.lastName
   }
   const updateAccountPayload: any = {
     studentType: body.studentType

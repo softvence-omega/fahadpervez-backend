@@ -82,7 +82,7 @@
   "meta": null
 }
 ```
-####    Update initial profile (POST) */auth/update-student-profile*
+####    Update initial profile (POST) */auth/update-account-info*
 `also need Authorization headers`
 
 *body*
