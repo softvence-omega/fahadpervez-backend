@@ -89,6 +89,7 @@ export type TAccount = {
 
 ### Verify Account (POST) /auth/verified-account
 
+
 `Request Body`
 
 ```json
@@ -109,7 +110,9 @@ export type TAccount = {
 ```
 ---
 
+
 ### New OTP Request (POST) /auth/new-verification-otp
+
 
 `Request Body`
 
@@ -133,6 +136,7 @@ export type TAccount = {
 
 ### Set New Password (POST) /auth/set-new-password
 
+
 `Request Body`
 ```json
 {
@@ -154,6 +158,7 @@ export type TAccount = {
 ---
 
 ### Login User (POST) /auth/login
+
 
 `Request Body`
 
@@ -246,6 +251,7 @@ export type TAccount = {
 
 ### Get My Profile (GET) /auth/me
 
+
 *🔑 Requires Authorization Header*
 
 `Response`
@@ -266,6 +272,7 @@ export type TAccount = {
 
 ### Get New RefreshToken (POST) /auth/refresh-token
 
+
 *🔑 Requires Cookie Header*
 
 `Response`
@@ -285,6 +292,7 @@ export type TAccount = {
 ---
 
 ### Change Password (POST) /auth/change-password
+
 
 *🔑 Requires Authorization Header*
 
@@ -311,6 +319,7 @@ export type TAccount = {
 
 ### Forgot Password (POST) /auth/forgot-password
 
+
 `Request Body`
 
 ```json
@@ -332,6 +341,7 @@ export type TAccount = {
 ---
 
 ### Reset Password (POST) /auth/reset-password
+
 
 `Request Body`
 
@@ -357,6 +367,7 @@ export type TAccount = {
 ---
 
 ### Change Account Status (POST) /auth/change-status
+
 
 *⚠️ Only Admin Can Access*
 *🔑 Requires Authorization Header / Cookie*
@@ -385,6 +396,7 @@ export type TAccount = {
 ## Student Profile
 
 ### Update Student Profile (PATCH) /student/update
+
 
 *⚠️ Only Student Can Access*
 *🔑 Requires Authorization Header / Cookie*
