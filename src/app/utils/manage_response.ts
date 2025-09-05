@@ -8,7 +8,8 @@ interface IResponse<T> {
         page?: number,
         limit?: number,
         skip?: number,
-        total?: number
+        total?: number,
+        totalPages?: number,
     }
 }
 

@@ -11,8 +11,49 @@ const create_new_clinical_case = catchAsync(async (req, res) => {
         data: result
     })
 })
+const get_all_clinical_case = catchAsync(async (req, res) => {
+    const result = await clinical_case_services.get_all_clinical_case_from_db(req?.query)
+    manageResponse(res, {
+        statusCode: 200,
+        message: "Clinical case fetched!",
+        success: true,
+        data: result?.data,
+        meta: result?.meta
+    })
+})
+const get_single_clinical_case = catchAsync(async (req, res) => {
+    const result = await clinical_case_services.get_single_clinical_case_from_db(req?.params?.caseId)
+    manageResponse(res, {
+        statusCode: 200,
+        message: "Clinical case fetched!",
+        success: true,
+        data: result
+    })
+})
+const update_clinical_case_by_id = catchAsync(async (req, res) => {
+    const result = await clinical_case_services.update_clinical_case_by_id_into_db(req)
+    manageResponse(res, {
+        statusCode: 200,
+        message: "Clinical case updated!",
+        success: true,
+        data: result
+    })
+})
+const delete_clinical_case_by_id = catchAsync(async (req, res) => {
+    const result = await clinical_case_services.delete_clinical_case_by_id_from_db(req?.params?.caseId)
+    manageResponse(res, {
+        statusCode: 200,
+        message: "Clinical case deleted!",
+        success: true,
+        data: result
+    })
+})
 
 
 export const clinical_case_controllers = {
-    create_new_clinical_case
+    create_new_clinical_case,
+    get_all_clinical_case,
+    get_single_clinical_case,
+    update_clinical_case_by_id,
+    delete_clinical_case_by_id
 }

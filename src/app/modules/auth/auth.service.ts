@@ -11,7 +11,6 @@ import { isAccountExist } from './../../utils/isAccountExist';
 import { OTPMaker } from "../../utils/otpMaker";
 import { Request } from "express";
 import { Student_Model } from "../student/student.schema";
-import { TStudent } from "../student/student.interface";
 // register user
 const register_user_into_db = async (payload: TRegisterPayload) => {
   const isExistAccount = await Account_Model.findOne({ email: payload?.email });
