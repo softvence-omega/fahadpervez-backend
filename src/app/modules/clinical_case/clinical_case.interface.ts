@@ -1,6 +1,8 @@
 import { Types } from "mongoose";
 
+type ProfileType = "mentor_profile" | "admin_profile";
 export interface TClinicalCase {
+    profile_type: ProfileType;
     publishedBy: Types.ObjectId;
     caseName: string;
     topic: string;
@@ -16,7 +18,7 @@ export interface TClinicalCase {
         keyFeatures: string[]
     };
     isDeleted: boolean;
-    isAIGenerated:boolean;
+    isAIGenerated: boolean;
 }
 
 

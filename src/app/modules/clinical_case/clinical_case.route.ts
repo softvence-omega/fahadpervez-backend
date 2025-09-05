@@ -7,6 +7,9 @@ import { clinical_case_controllers } from "./clinical_case.controller";
 const clinical_route = Router();
 
 clinical_route.post("/create-new", auth("ADMIN", "MENTOR"), RequestValidator(clinical_case_validation.create), clinical_case_controllers.create_new_clinical_case)
-
+clinical_route.get("/", auth("ADMIN", "MENTOR", "STUDENT"), clinical_case_controllers.get_all_clinical_case)
+clinical_route.get("/:caseId", auth("ADMIN", "MENTOR", "STUDENT"), clinical_case_controllers.get_single_clinical_case)
+clinical_route.patch("/:caseId", auth("ADMIN", "MENTOR"), RequestValidator(clinical_case_validation.update), clinical_case_controllers.update_clinical_case_by_id)
+clinical_route.delete("/:caseId", auth("ADMIN", "MENTOR"), clinical_case_controllers.delete_clinical_case_by_id)
 
 export default clinical_route;

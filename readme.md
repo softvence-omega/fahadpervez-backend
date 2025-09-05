@@ -29,6 +29,11 @@ Base URL: https://fahadpervez-backend.onrender.com/api
   - [Update Student Profile](#update-student-profile-patch-studentupdate)
 - [Clinical Case Endpoints](#clinical-case-endpoints)
   - [Create new Case](#create-new-case-post-clinical-casecreate-new)
+  - [Get All Clinical Case](#get-all-clinical-case-get-clinical-caseall)
+  - [Get Single Clinical Case](#get-single-clinical-case-get-clinical-casecaseid)
+  - [Update Clinical Case](#update-clinical-case-patch-clinical-casecaseid)
+  - [Delete Clinical Case](#delete-clinical-case-delete-clinical-casecaseid)
+
 ---
 
 ## Account Data Types
@@ -543,7 +548,6 @@ type TStudentDecision = {
 *🔑 Requires Authorization Header / Cookie*
 
 `Request Body`
-
 ```ts
   {
     publishedBy?: string;
@@ -599,14 +603,155 @@ type TStudentDecision = {
   "meta": null
 }
 ```
-
 ---
+### Get all clinical Case (GET) /clinical-case
+`Params`--> `page`,`limit`
+`Response`
+```json
+{
+  "success": true,
+  "message": "Clinical case fetched!",
+  "data": [
+    {
+      "_id": "68b967b4a7aa2b75cf3b4889",
+      "publishedBy": {
+        "_id": "68b96709af6bef0d916390b1",
+        "accountId": "68b96709af6bef0d916390af",
+        "firstName": "Admin",
+        "lastName": "admin",
+        "profile_photo": "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+        "__v": 0
+      },
+      "caseName": "Acute Appendicitis",
+      "topic": "Cardiology",
+      "patientDetails": {
+        "age": 23,
+        "sex": "MALE",
+        "ethnicity": "Asian",
+        "occupation": "Student",
+        "remark": "No significant past medical history"
+      },
+      "caseHistory": "Patient presents with 2-day history of right lower quadrant abdominal pain, nausea, and mild fever.",
+      "vital_signs": {
+        "temperature": "38.2°C",
+        "heartRate": "102 bpm",
+        "bloodPressure": "118/76 mmHg",
+        "respiratoryRate": "20 breaths/min",
+        "generalAppearance": [
+          "Mildly ill-looking",
+          "Guarding abdomen"
+        ],
+        "abdominalExamination": [
+          "Tenderness in right iliac fossa",
+          "Rebound tenderness present"
+        ]
+      },
+      "laboratory_result": {
+        "testName": "CBC",
+        "testResult": "Elevated WBC count",
+        "subTest": [
+          {
+            "testName": "WBC",
+            "testResult": "14,500 /µL",
+            "refValue": "4,000 - 11,000 /µL"
+          },
+          {
+            "testName": "Neutrophils",
+            "testResult": "82%",
+            "refValue": "40 - 70%"
+          }
+        ]
+      },
+      "imaging_studies": [
+        "Ultrasound abdomen showing inflamed appendix"
+      ],
+      "caseTips": [
+        "Always rule out gynecological causes in females",
+        "Pain migration is a key feature"
+      ],
+      "studentDecision": [
+        {
+          "question": "Is this appendicitis?",
+          "supportingEvidence": [
+            "Right lower quadrant tenderness",
+            "Fever",
+            "Elevated WBC"
+          ],
+          "refutingEvidence": [
+            "No diarrhea",
+            "No urinary symptoms"
+          ],
+          "isCorrect": true
+        },
+        {
+          "question": "Should immediate surgery be done?",
+          "supportingEvidence": [
+            "Typical clinical presentation",
+            "Positive ultrasound findings"
+          ],
+          "refutingEvidence": [
+            "Patient is hemodynamically stable"
+          ],
+          "isCorrect": false
+        }
+      ],
+      "detailedExplanation": {
+        "explanation": "Acute appendicitis is inflammation of the appendix due to obstruction, commonly by a fecolith.",
+        "keyFeatures": [
+          "Right iliac fossa pain",
+          "Fever",
+          "Leukocytosis",
+          "Rebound tenderness"
+        ]
+      },
+      "isDeleted": false,
+      "isAIGenerated": false,
+      "createdAt": "2025-09-04T10:19:32.046Z",
+      "updatedAt": "2025-09-04T10:19:32.046Z"
+    },
+  ],
+  "meta": {
+    "page": 1,
+    "limit": "5",
+    "skip": 0,
+    "total": 5,
+    "totalPages": 1
+  }
+}
+```
+### Get Single Clinical Case (GET) /clinical-case/:caseId
+`Params-> caseId Needed`
 
+`Response`
+```json
+  // One Clinical case with admin or mentor profile
+```
+### Update Clinical Case (PATCH) /clinical-case/:caseId
+*⚠️ Only Admin and Mentor Can Access*
+*🔑 Requires Authorization Header / Cookie*
 
+`Request body`
+```json
+  // all filed ar optional, flow data structure and update easily
+```
+`Response`
+```json
+  // new updated case are returned
+```
+### Delete Clinical Case (DELETE) /clinical-case/:caseId
+*⚠️ Only Admin and Mentor Can Access*
+*🔑 Requires Authorization Header / Cookie*
 
+`Response`
+```json
+  {
+    "success":true,
+    "message":"Case is deleted"
+  }
+```
 ## Dummy Response For AI
-
 ### Case Data Types
+`GET-> dummy/clinical-case`
 ```json
 {
     "caseName": "Acute Appendicitis",
