@@ -9,6 +9,7 @@ Base URL: https://fahadpervez-backend.onrender.com/api
 - [Account Data Types](#account-data-types)
 - [Student Data Types](#student-data-types)
 - [Clinical Case Data Types](#clinical-case-data-types)
+- [Social Post Data Types](#social-post-data-types)
 - [Dummy Response For AI](#dummy-response-for-ai)
   - [Case Data Types](#case-data-types)
 - [Auth Endpoints](#auth-endpoints)
@@ -29,10 +30,20 @@ Base URL: https://fahadpervez-backend.onrender.com/api
   - [Update Student Profile](#update-student-profile-patch-studentupdate)
 - [Clinical Case Endpoints](#clinical-case-endpoints)
   - [Create new Case](#create-new-case-post-clinical-casecreate-new)
-  - [Get All Clinical Case](#get-all-clinical-case-get-clinical-caseall)
+  - [Get All Clinical Case](#get-all-clinical-case-get-clinical-case)
   - [Get Single Clinical Case](#get-single-clinical-case-get-clinical-casecaseid)
   - [Update Clinical Case](#update-clinical-case-patch-clinical-casecaseid)
   - [Delete Clinical Case](#delete-clinical-case-delete-clinical-casecaseid)
+- [Social Post Endpoints](#social-post-endpoints)
+  - [Create new post](#create-new-post-post-social-post)
+  - [Get all Social Post](#get-all-social-post-get-social-post)
+  - [Get single post](#get-single-post-get-social-postpostid)
+  - [Update post](#update-post-patch-social-postpostid)
+  - [Delete post](#delete-post-delete-social-postpostid)
+
+
+
+
 
 ---
 
@@ -98,7 +109,19 @@ type TStudent = {
 
 ```
 ---
-
+## Social Post Data Types
+```ts
+type TSocialPost = {
+    postedBy: Types.ObjectId;
+    profileType: "admin_profile" | "student_profile" | "mentor_profile";
+    topic: string;
+    content: string;
+    postImage?: string;
+    reaction?: number;
+    share?: number;
+    isDeleted: boolean;
+}
+```
 ## Clinical Case Data Types
 
 ```ts
@@ -749,6 +772,184 @@ type TStudentDecision = {
     "message":"Case is deleted"
   }
 ```
+## Social Post Endpoints
+
+### Create new post (POST) /social-post
+*🔑 Requires Authorization Header / Cookie*
+*📦 Content-Type: multipart/form-data*
+
+`Form Fields`
+
+| Name  | Type  | Value             |
+|-------|-------|-------------------|
+| image | File  | any type of image |
+| data  | string| stringify         |
+
+`Example data field`
+
+```json
+{
+  "topic":"Biology",
+  "content":"Hello this is test post"
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Social post created!",
+    "data": {
+        "postedBy": "68b96709af6bef0d916390b1",
+        "profileType": "admin_profile",
+        "topic": "Biology",
+        "postImage": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757055157/kq6bqiya6agwtx0onf8f.png",
+        "content": "Hello this is test post",
+        "reaction": 0,
+        "share": 0,
+        "isDeleted": false,
+        "_id": "68ba88b5368ee6f38b3d4b18",
+        "createdAt": "2025-09-05T06:52:37.544Z",
+        "updatedAt": "2025-09-05T06:52:37.544Z"
+    },
+    "meta": null
+}
+```
+---
+### Get all Social Post (GET) /social-post
+*🔑 Requires Authorization Header / Cookie*
+
+`Query Params you can pass->>> page,limit`
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Social post fetched!",
+    "data": [
+        {
+            "_id": "68ba88b5368ee6f38b3d4b18",
+            "postedBy": {
+                "_id": "68b96709af6bef0d916390b1",
+                "accountId": "68b96709af6bef0d916390af",
+                "firstName": "Admin",
+                "lastName": "admin",
+                "profile_photo": "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+                "__v": 0
+            },
+            "profileType": "admin_profile", // student_profile, mentor_profile
+            "topic": "Biology",
+            "postImage": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757055157/kq6bqiya6agwtx0onf8f.png",
+            "content": "Hello this is test post",
+            "reaction": 0,
+            "share": 0,
+            "isDeleted": false,
+            "createdAt": "2025-09-05T06:52:37.544Z",
+            "updatedAt": "2025-09-05T06:52:37.544Z"
+        },
+        {....}
+    ],
+    "meta": {
+        "total": 6,
+        "page": 1,
+        "limit": 10,
+        "totalPages": 1,
+        "skip": 0
+    }
+}
+
+```
+
+### Get single post (GET) /social-post/:postId
+*🔑 Requires Authorization Header / Cookie*
+
+`Query Params you can pass->>> isShared = true for share count`
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Social post fetched!",
+    "data": {
+        "_id": "68ba88b5368ee6f38b3d4b18",
+        "postedBy": {
+            "_id": "68b96709af6bef0d916390b1",
+            "accountId": "68b96709af6bef0d916390af",
+            "firstName": "Admin",
+            "lastName": "admin",
+            "profile_photo": "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+            "__v": 0
+        },
+        "profileType": "admin_profile",
+        "topic": "Biology",
+        "postImage": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757055157/kq6bqiya6agwtx0onf8f.png",
+        "content": "Hello this is test post",
+        "reaction": 0,
+        "share": 4,
+        "isDeleted": false,
+        "createdAt": "2025-09-05T06:52:37.544Z",
+        "updatedAt": "2025-09-05T08:41:37.195Z"
+    },
+    "meta": null
+}
+```
+### Update post (PATCH) /social-post/:postId
+*🔑 Requires Authorization Header / Cookie*
+*📦 Content-Type: multipart/form-data*
+
+`Form Fields`
+
+| Name  | Type  | Value             |
+|-------|-------|-------------------|
+| image | File  | any type of image |
+| data  | string| stringify         |
+
+`Example data field`
+
+```json
+{
+  "topic":"Biology", // optional
+  "content":"Hello this is test post" // optional
+}
+```
+`Response`
+
+```json
+{
+    "success": true,
+    "message": "Social post updated!",
+    "data": {
+        "_id": "68ba88b5368ee6f38b3d4b18",
+        "postedBy": "68b96709af6bef0d916390b1",
+        "profileType": "admin_profile",
+        "topic": "Biology",
+        "postImage": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757055157/kq6bqiya6agwtx0onf8f.png",
+        "content": "hello",
+        "reaction": [
+            "0"
+        ],
+        "share": 6,
+        "isDeleted": false,
+        "createdAt": "2025-09-05T06:52:37.544Z",
+        "updatedAt": "2025-09-05T08:52:50.446Z"
+    },
+    "meta": null
+}
+
+```
+
+### Delete post (DELETE) /social-post/:postId
+*🔑 Requires Authorization Header / Cookie*
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Social post deleted!",
+    "data": null,
+    "meta": null
+}
+```
+
 ## Dummy Response For AI
 ### Case Data Types
 `GET-> dummy/clinical-case`
