@@ -65,7 +65,16 @@ const DetailedExplanationSchema = new Schema(
 // Main schema
 const ClinicalCaseSchema = new Schema<TClinicalCase & Document>(
     {
-        publishedBy: { type: Schema.Types.ObjectId, ref: "account", required: true },
+        profile_type: {
+            type: String,
+            required: true,
+            enum: ["admin_profile", "mentor_profile"],
+        },
+        publishedBy: {
+            type: Schema.Types.ObjectId,
+            required: true,
+            refPath: "profile_type", // dynamic ref
+        },
         caseName: { type: String, required: true, index: true },
         topic: { type: String, required: true },
         patientDetails: { type: PatientDetailsSchema, required: false },
