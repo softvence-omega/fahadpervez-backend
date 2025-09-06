@@ -40,11 +40,8 @@ Base URL: https://fahadpervez-backend.onrender.com/api
   - [Get single post](#get-single-post-get-social-postpostid)
   - [Update post](#update-post-patch-social-postpostid)
   - [Delete post](#delete-post-delete-social-postpostid)
-
-
-
-
-
+  - [Give / Remove reaction on post](#give--remove-reaction-on-post-put-social-postpostid)
+  - [Comment on post](#comment-post)
 ---
 
 ## Account Data Types
@@ -111,15 +108,24 @@ type TStudent = {
 ---
 ## Social Post Data Types
 ```ts
-type TSocialPost = {
+type TComments = {
+    commentedBy: {
+        name: string;
+        profileImage: string;
+        email: string;
+    },
+    comment: string
+}
+export type TSocialPost = {
     postedBy: Types.ObjectId;
     profileType: "admin_profile" | "student_profile" | "mentor_profile";
     topic: string;
     content: string;
     postImage?: string;
-    reaction?: number;
+    reaction?: string[];
     share?: number;
     isDeleted: boolean;
+    comments: TComments[]
 }
 ```
 ## Clinical Case Data Types
@@ -937,6 +943,84 @@ type TStudentDecision = {
     "meta": null
 }
 ```
+
+### Give / Remove reaction on post (PUT) /social-post/:postId
+*🔑 Requires Authorization Header / Cookie*
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Social post react saved!",
+    "data": {
+        "share": 0,
+        "_id": "68ba88a6368ee6f38b3d4b04",
+        "postedBy": "68b7cdbaa6de6969f409dc0c",
+        "profileType": "student_profile",
+        "topic": "Biology",
+        "postImage": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757055142/tvjufl5zgymapilymmwq.png",
+        "content": "Hello this is test post",
+        "isDeleted": false,
+        "createdAt": "2025-09-05T06:52:22.607Z",
+        "updatedAt": "2025-09-06T05:59:06.297Z",
+        "reaction": [
+            "68b96709af6bef0d916390b1"
+        ]
+    },
+    "meta": null
+}
+```
+
+<a name="comment-post"></a>
+### Comment on post (PUT) /social-post/comment/:postId
+
+*🔑 Requires Authorization Header / Cookie*
+
+`Request body`
+```json
+{
+  "comment":"string"
+}
+```
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Social post comment saved!",
+    "data": {
+        "share": 0,
+        "_id": "68ba88a6368ee6f38b3d4b04",
+        "postedBy": "68b7cdbaa6de6969f409dc0c",
+        "profileType": "student_profile",
+        "topic": "Biology",
+        "postImage": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757055142/tvjufl5zgymapilymmwq.png",
+        "content": "Hello this is test post",
+        "isDeleted": false,
+        "createdAt": "2025-09-05T06:52:22.607Z",
+        "updatedAt": "2025-09-06T06:17:49.884Z",
+        "reaction": [
+            "68b96709af6bef0d916390b1"
+        ],
+        "comments": [
+            {
+                "commentedBy": {
+                    "name": "Admin admin",
+                    "profileImage": "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+                    "email": "admin@gmail.com"
+                },
+                "comment": "Hello ban",
+                "createdAt": "2025-09-06T06:17:45.647Z",
+                "updatedAt": "2025-09-06T06:17:45.647Z"
+            }
+        ]
+    },
+    "meta": null
+}
+```
+
+
+`Not That` - If first time hit this api then your react save after second time hit your react will be removed. Example- Give react / remove react.
 
 ## Dummy Response For AI
 ### Case Data Types
