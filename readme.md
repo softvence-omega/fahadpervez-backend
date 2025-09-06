@@ -10,6 +10,7 @@ Base URL: https://fahadpervez-backend.onrender.com/api
 - [Student Data Types](#student-data-types)
 - [Clinical Case Data Types](#clinical-case-data-types)
 - [Social Post Data Types](#social-post-data-types)
+- [Career Resource Data Types](#career-resource-data-types)
 - [Dummy Response For AI](#dummy-response-for-ai)
   - [Case Data Types](#case-data-types)
 - [Auth Endpoints](#auth-endpoints)
@@ -79,7 +80,7 @@ export type TAccount = {
   authType?: "GOOGLE" | "CUSTOM";
 };
 ```
----
+
 
 ## Student Data Types
 
@@ -105,7 +106,7 @@ type TStudent = {
 }
 
 ```
----
+
 ## Social Post Data Types
 ```ts
 type TComments = {
@@ -128,6 +129,24 @@ export type TSocialPost = {
     comments: TComments[]
 }
 ```
+
+
+## Career Resource Data Types
+
+```ts
+import { Types } from "mongoose";
+
+type TResourceTopic = "Residency Road maps" | "CV Template" | "Personal Statement" | "Research" | "Interview preparation"
+export type TCareerResource = {
+    uploadedBy: Types.ObjectId;
+    resourceName: string;
+    shortDescription: string;
+    totalDownloads: number;
+    resourceLink: string;
+    topic: TResourceTopic[]
+}
+```
+
 ## Clinical Case Data Types
 
 ```ts
@@ -862,8 +881,8 @@ type TStudentDecision = {
         "skip": 0
     }
 }
-
 ```
+---
 
 ### Get single post (GET) /social-post/:postId
 *🔑 Requires Authorization Header / Cookie*
@@ -898,6 +917,8 @@ type TStudentDecision = {
     "meta": null
 }
 ```
+---
+
 ### Update post (PATCH) /social-post/:postId
 *🔑 Requires Authorization Header / Cookie*
 *📦 Content-Type: multipart/form-data*
@@ -942,6 +963,7 @@ type TStudentDecision = {
 }
 
 ```
+---
 
 ### Delete post (DELETE) /social-post/:postId
 *🔑 Requires Authorization Header / Cookie*
@@ -955,6 +977,7 @@ type TStudentDecision = {
     "meta": null
 }
 ```
+---
 
 ### Give / Remove reaction on post (PUT) /social-post/:postId
 *🔑 Requires Authorization Header / Cookie*
@@ -982,6 +1005,9 @@ type TStudentDecision = {
     "meta": null
 }
 ```
+`Not That` - If first time hit this api then your react save after second time hit your react will be removed. Example- Give react / remove react.
+
+---
 
 <a name="comment-post"></a>
 ### Comment on post (PUT) /social-post/comment/:postId
@@ -1030,9 +1056,7 @@ type TStudentDecision = {
     "meta": null
 }
 ```
-
-
-`Not That` - If first time hit this api then your react save after second time hit your react will be removed. Example- Give react / remove react.
+---
 
 ## Dummy Response For AI
 ### Case Data Types

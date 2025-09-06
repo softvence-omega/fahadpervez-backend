@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { AUTH_CONSTANTS } from './auth.constant';
 
-type ProfileType = "student_profile" | "mentor_profile" | "admin_profile";
+export type ProfileType = "student_profile" | "mentor_profile" | "admin_profile";
 export type TStatus = "ACTIVE" | "INACTIVE" | "SUSPENDED"
 
 export type TAccount = {
