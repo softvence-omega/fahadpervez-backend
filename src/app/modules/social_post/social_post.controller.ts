@@ -47,11 +47,31 @@ const delete_social_post = catchAsync(async (req, res) => {
         success: true,
     })
 })
+const save_react_social_post = catchAsync(async (req, res) => {
+    const result = await social_post_services.save_react_social_post_in_db(req);
+    manageResponse(res, {
+        statusCode: 200,
+        message: "Social post react saved!",
+        success: true,
+        data: result
+    })
+})
+const save_comment_social_post = catchAsync(async (req, res) => {
+    const result = await social_post_services.save_comment_social_post_in_db(req);
+    manageResponse(res, {
+        statusCode: 200,
+        message: "Social post comment saved!",
+        success: true,
+        data: result
+    })
+})
 
 export const social_post_controllers = {
     create_new_social_post,
     get_all_social_post,
     get_single_post_by_id_with_share_count,
     update_social_post,
-    delete_social_post
+    delete_social_post,
+    save_react_social_post,
+    save_comment_social_post
 }
