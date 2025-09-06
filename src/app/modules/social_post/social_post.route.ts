@@ -32,6 +32,8 @@ social_post_router.patch(
     social_post_controllers.update_social_post
 )
 social_post_router.delete("/:postId", auth("ADMIN", "MENTOR", "STUDENT"), social_post_controllers.delete_social_post)
+social_post_router.put("/:postId", auth("ADMIN", "MENTOR", "STUDENT"), social_post_controllers.save_react_social_post)
+social_post_router.put("/comment/:postId", auth("ADMIN", "MENTOR", "STUDENT"), social_post_controllers.save_comment_social_post)
 
 
 
