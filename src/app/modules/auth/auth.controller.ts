@@ -8,8 +8,8 @@ const register_user = catchAsync(async (req, res) => {
     const result = await auth_services.register_user_into_db(req?.body)
     manageResponse(res, {
         success: true,
-        message: "Account created successful",
-        statusCode: httpStatus.OK,
+        message: "Account registered successful",
+        statusCode: httpStatus.CREATED,
         data: result
     })
 })
