@@ -1,4 +1,3 @@
-
 # API Documentation
 
 Base URL: https://fahadpervez-backend.onrender.com/api
@@ -2311,3 +2310,6 @@ type TStudentDecision = {
   }
 
 ```
+
+
+Please follow the api end points and data formate
