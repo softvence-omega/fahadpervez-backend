@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
-import { AppError } from '../utils/app_error';
 import { configs } from '../configs';
-import { jwtHelpers, JwtPayloadType } from '../utils/JWT';
 import { Account_Model } from '../modules/auth/auth.schema';
+import { AppError } from '../utils/app_error';
+import { jwtHelpers, JwtPayloadType } from '../utils/JWT';
 
 
-type Role = "ADMIN" | "STUDENT" | "MENTOR"
+type Role = "ADMIN" | "STUDENT" | "MENTOR" | "PROFESSIONAL"
 
 
 const auth = (...roles: Role[]) => {

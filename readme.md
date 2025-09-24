@@ -5,13 +5,13 @@ Base URL: https://fahadpervez-backend.onrender.com/api
 ---
 
 ## 📑 Table of Contents
-
-- [Account Data Types](#account-data-types)
-- [Student Data Types](#student-data-types)
-- [Clinical Case Data Types](#clinical-case-data-types)
-- [Social Post Data Types](#social-post-data-types)
-- [Career Resource Data Types](#career-resource-data-types)
-- [Dummy Response For AI](#dummy-response-for-ai)
+- [Data Types](#data-types)
+  - [Account Data Types](#account-data-types)
+  - [Student Data Types](#student-data-types)
+  - [Clinical Case Data Types](#clinical-case-data-types)
+  - [Social Post Data Types](#social-post-data-types)
+  - [Career Resource Data Types](#career-resource-data-types)
+  - [Dummy Response For AI](#dummy-response-for-ai)
   - [Case Data Types](#case-data-types)
 - [Auth Endpoints](#auth-endpoints)
   - [Register](#register-post-authregister)
@@ -20,7 +20,7 @@ Base URL: https://fahadpervez-backend.onrender.com/api
   - [Set New Password](#set-new-password-post-authset-new-password)
   - [Login User](#login-user-post-authlogin)
   - [Login with google](#login-with-google-post-authsign-in-with-google)
-  - [Update Account Information](#update-account-information-post-authupdate-account-info)
+  - [Update Account Information](#update-iniatial-profile)
   - [Get My Profile](#get-my-profile-get-authme)
   - [Get New Refresh Token](#get-new-refreshtoken-post-authrefresh-token)
   - [Change Password](#change-password-post-authchange-password)
@@ -85,7 +85,14 @@ export type TAccount = {
 ## Student Data Types
 
 ```ts
-type TStudent = {
+export type TCommonPreference = {
+    subject:string;
+    systemPreference: string;
+    topic:string;
+    subTopic:string;
+}
+
+export type TStudent = {
     accountId: Types.ObjectId,
     firstName?: string,
     lastName?: string,
@@ -103,8 +110,8 @@ type TStudent = {
     completedCase?: Types.ObjectId[],
     badges?: Types.ObjectId[],
     connectedMentor?: Types.ObjectId[],
+    preference:TCommonPreference
 }
-
 ```
 
 ## Social Post Data Types
@@ -213,7 +220,8 @@ type TStudentDecision = {
 `Request Body`
 ```json
 {
-  "email": "string"
+  "email": "string",
+  "password":"string"
 }
 ```
 `Response`
@@ -315,7 +323,7 @@ type TStudentDecision = {
   "message": "User is logged in successful !",
   "data": {
     "accessToken": "string",
-    "role": "STUDENT" // ADMIN, MENTOR, STUDENT
+    "role": "STUDENT" // ADMIN, MENTOR, STUDENT, PROFESSIONAL
   },
   "meta": null
 }
@@ -342,7 +350,7 @@ type TStudentDecision = {
   "message": "User is logged in successful !",
   "data": {
     "accessToken": "string",
-    "role": "STUDENT" // ADMIN, MENTOR, STUDENT
+    "role": "STUDENT" // ADMIN, MENTOR, STUDENT, PROFESSIONAL
   },
   "meta": null
 }
@@ -350,38 +358,57 @@ type TStudentDecision = {
 
 ---
 
-### Update Account Information (POST) /auth/update-account-info
+<p id="update-iniatial-profile">
+
+### Update Account Information (POST) /auth/update-initial-profile
 
 *🔑 Requires Authorization Header*
 
-`Request Body`
+*Content-Type: multipart/form-data*
 
-```json
-{
-  "studentType": "MEDICAL_STUDENT",
-  "university": "string",
-  "country": "string",
-  "year_of_study": "string",
-  "preparingFor": "string"
-}
+`Request Body - FormData`
+
+| Field Name | Data type | Value |
+|----------|----------|----------|
+| data     | json object     | see in example     |
+| image    | File     | any typ of image     |
+
+```ts
+// Example data, is role is student then pass only student object same like another profile
+type UpdateProfile = {
+  role: string;
+  student?: {
+    firstName: string;
+    lastName: string;
+    university: string;
+    country: string;
+    year_of_study: string;
+    studentType: (typeof AUTH_CONSTANTS.STUDENT_TYPES)[keyof typeof AUTH_CONSTANTS.STUDENT_TYPES];
+    preparingFor: string;
+  };
+  preference: typeof commonPreferenceValidationSchema;
+  bio?: string;
+  professional?: {
+    firstName: string;
+    lastName: string;
+    profile_photo: string;
+    institution: string;
+    country: string;
+    post_graduate: string;
+    experience: string;
+  };
+};
+
 ```
+
+
+
 `Response`
 ```json
 {
   "success": true,
   "message": "Profile updated successfully!",
-  "data": {
-    "_id": "68b7a9acd0ce36ed899015e4",
-    "email": "softvence.abumahid@gmail.com",
-    "role": "STUDENT",
-    "studentType": "MEDICAL_STUDENT",
-    "profile": {
-      "university": "Harvard University",
-      "country": "United States",
-      "preparingFor": "MCAT",
-      "year_of_study": "2005"
-    }
-  },
+  "data": {...}, // updated profile response
   "meta": null
 }
 ```
