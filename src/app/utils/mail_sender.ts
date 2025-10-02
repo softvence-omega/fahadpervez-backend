@@ -9,9 +9,10 @@ type TMailContent = {
 }
 
 const transporter = nodemailer.createTransport({
-    host: "gmail",
-    port: 587,
-    secure: false, // true for 465, false for other ports
+    // host: "smtp.gmail.com",
+    // port: 587,
+    // secure: false, // true for 465, false for other ports
+    service: "gmail",
     auth: {
         user: configs.email.app_email!,
         pass: configs.email.app_password!,
