@@ -300,6 +300,7 @@ const update_student_profile_into_db = async (req: Request) => {
     }
     updatedResult = await ProfessionalModel.findOneAndUpdate({ accountId: isValidAccount._id }, professionalPayload, { new: true })
   }
+  await Account_Model.findOneAndUpdate({ email: isValidAccount.email }, { profile_id: updatedResult?._id })
 
   return updatedResult
 };

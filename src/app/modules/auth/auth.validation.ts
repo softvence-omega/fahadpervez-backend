@@ -51,7 +51,7 @@ const updateProfile = z.object({
         country: z.string({ message: "Country is required" }),
         year_of_study: z.string({ message: "Year of Study is required" }),
         studentType: z.enum(Object.values(AUTH_CONSTANTS.STUDENT_TYPES), { message: "Student Type is required" }),
-        preparingFor: z.string({ message: "Preparing For is required" }),
+        preparingFor: z.string().optional(),
     }).optional(),
     preference: commonPreferenceValidationSchema.optional(),
     bio: z.string().optional(),
