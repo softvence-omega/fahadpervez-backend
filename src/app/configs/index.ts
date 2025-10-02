@@ -17,7 +17,8 @@ export const configs = {
     db_url: process.env.DB_URL,
     email: {
         app_email: process.env.APP_USER,
-        app_password: process.env.APP_PASSWORD
+        app_password: process.env.APP_PASSWORD,
+        sg_api_key: process.env.SENDGRID_API_KEY
     },
     cloudinary: {
         cloud_name: process.env.CLOUD_NAME,

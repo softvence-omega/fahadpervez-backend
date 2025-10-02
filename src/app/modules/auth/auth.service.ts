@@ -116,7 +116,19 @@ const verified_account_into_db = async (payload: { email: string, otp: string })
     lastOTP: "",
   });
 
-  return 'Account verified successfully!';
+  const accessToken = jwtHelpers.generateToken(
+    {
+      email: isAccountExists?.email,
+      role: isAccountExists?.role,
+    },
+    configs.jwt.access_token as Secret,
+    configs.jwt.access_expires as string,
+  );
+
+  return {
+    accessToken,
+    role: isAccountExists?.role
+  };
 }
 
 const get_new_verification_otp_from_db = async (email: string) => {
