@@ -1,5 +1,7 @@
-import nodemailer from 'nodemailer';
+import sgMail from '@sendgrid/mail';
 import { configs } from '../configs';
+
+sgMail.setApiKey(configs.email.sg_api_key as string);
 type TMailContent = {
     to: string,
     subject: string,
@@ -8,26 +10,28 @@ type TMailContent = {
     name?: string
 }
 
-const transporter = nodemailer.createTransport({
-    // host: "smtp.gmail.com",
-    // port: 587,
-    // secure: false, // true for 465, false for other ports
-    service: "gmail",
-    auth: {
-        user: configs.email.app_email!,
-        pass: configs.email.app_password!,
-    },
-});
+// const transporter = nodemailer.createTransport({
+//     // host: "smtp.gmail.com",
+//     // port: 587,
+//     // secure: false, // true for 465, false for other ports
+//     service: "gmail",
+//     auth: {
+//         user: configs.email.app_email!,
+//         pass: configs.email.app_password!,
+//     },
+// });
 
 // ✅ Email Sender Function
 const sendMail = async (payload: TMailContent) => {
-    const info = await transporter.sendMail({
+    const info = await sgMail.send({
         from: configs.email.app_email!,
         to: payload.to,
         subject: payload.subject,
         text: payload.textBody,
         html: payload.htmlBody,
     });
+    console.log("hello")
+    console.log(info)
     return info
 };
 
