@@ -53,7 +53,7 @@ const updateProfile = z.object({
         studentType: z.enum(Object.values(AUTH_CONSTANTS.STUDENT_TYPES), { message: "Student Type is required" }),
         preparingFor: z.string({ message: "Preparing For is required" }),
     }).optional(),
-    preference: commonPreferenceValidationSchema,
+    preference: commonPreferenceValidationSchema.optional(),
     bio: z.string().optional(),
     professional: z.object({
         firstName: { type: String, required: true },

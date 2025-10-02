@@ -1,9 +1,9 @@
 import { Request } from "express";
+import { AppError } from "../../utils/app_error";
+import uploadCloud from "../../utils/cloudinary";
 import { isAccountExist } from "../../utils/isAccountExist";
 import { TSocialPost } from "./social_post.interface";
-import uploadCloud from "../../utils/cloudinary";
 import { SocialPostModel } from "./social_post.schema";
-import { AppError } from "../../utils/app_error";
 
 const create_new_social_post_in_db = async (req: Request) => {
     const user = req?.user;
