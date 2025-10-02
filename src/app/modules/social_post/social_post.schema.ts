@@ -12,7 +12,7 @@ const commentSchema = new Schema({
 }, { _id: false, versionKey: false, timestamps: true });
 
 const socialPostSchema = new Schema<TSocialPost>({
-    postedBy: { type: Schema.ObjectId, required: true, refPath: "profileType" },
+    postedBy: { type: Schema.ObjectId, required: false, refPath: "profileType", },
     profileType: {
         type: String,
         required: true,
