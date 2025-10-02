@@ -1,16 +1,18 @@
+import bcrypt from "bcrypt";
+import { Request } from "express";
+import httpStatus from 'http-status';
+import { JwtPayload, Secret } from "jsonwebtoken";
+import { configs } from "../../configs";
 import { AppError } from "../../utils/app_error";
+import uploadCloud from "../../utils/cloudinary";
+import { jwtHelpers } from "../../utils/JWT";
+import sendMail from "../../utils/mail_sender";
+import { OTPMaker } from "../../utils/otpMaker";
+import { ProfessionalModel } from "../professional/professional.schema";
+import { Student_Model } from "../student/student.schema";
+import { isAccountExist } from './../../utils/isAccountExist';
 import { TAccount, TLoginPayload, TRegisterPayload, TStatus } from "./auth.interface";
 import { Account_Model } from "./auth.schema";
-import httpStatus from 'http-status';
-import bcrypt from "bcrypt";
-import { jwtHelpers } from "../../utils/JWT";
-import { configs } from "../../configs";
-import { JwtPayload, Secret } from "jsonwebtoken";
-import sendMail from "../../utils/mail_sender";
-import { isAccountExist } from './../../utils/isAccountExist';
-import { OTPMaker } from "../../utils/otpMaker";
-import { Request } from "express";
-import { Student_Model } from "../student/student.schema";
 // register user
 const register_user_into_db = async (payload: TRegisterPayload) => {
   const isExistAccount = await Account_Model.findOne({ email: payload?.email });
@@ -20,6 +22,7 @@ const register_user_into_db = async (payload: TRegisterPayload) => {
   // Generate 6-digit OTP
   const otp = OTPMaker();
   const otpDigits = otp.split("");
+  const hashedPassword: string = bcrypt.hashSync(payload.password, 10);
 
   const accountRegistrationPayload: Partial<TAccount> = {
     email: payload?.email,
@@ -27,6 +30,7 @@ const register_user_into_db = async (payload: TRegisterPayload) => {
     role: "STUDENT",
     profile_type: "student_profile",
     authType: "CUSTOM",
+    password: hashedPassword
 
   }
   await Account_Model.create(accountRegistrationPayload)
@@ -243,41 +247,52 @@ const login_user_from_db = async (payload: TLoginPayload) => {
 }
 
 const update_student_profile_into_db = async (req: Request) => {
+  const user = req?.user;
   const body = req?.body;
-  const updateStudentPayload: any = {
-    university: body.university,
-    country: body.country,
-    year_of_study: body.year_of_study,
-    preparingFor: body.preparingFor,
-    firstName: body.firstName,
-    lastName: body.lastName
-  }
-  const updateAccountPayload: any = {
-    studentType: body.studentType
+  const isValidAccount = await isAccountExist(user?.email as string);
+
+  // upload image if exist
+  if (req?.file) {
+    const cloudRes = await uploadCloud(req?.file)
+    body.profile_photo = cloudRes?.secure_url
   }
 
-  const isExistAccount = await isAccountExist(req?.user?.email!)
-  if (isExistAccount?.profile_id) {
-    await Student_Model.findOneAndUpdate({ accountId: isExistAccount?._id }, updateStudentPayload)
-  } else {
-    updateStudentPayload.accountId = isExistAccount._id
-    const profileRes = await Student_Model.create(updateStudentPayload)
-    updateAccountPayload.profile_id = profileRes._id
-    updateAccountPayload.profile_type = "student_profile"
-  }
-  await Account_Model.findOneAndUpdate({ email: isExistAccount.email }, updateAccountPayload)
-
-  const updateResponse: any = await Account_Model.findOne({ email: isExistAccount.email })
-    .select("-password -lastOTP -__v")
-    .populate("profile_id")
-    .lean()
-  if (updateResponse?.profile_id) {
-    updateResponse.profile = updateResponse.profile_id;
-    delete updateResponse.profile_id;
+  let updatedResult;
+  // update profile conditionally
+  if (body.role == "STUDENT") {
+    const studentPayload = {
+      ...body?.student,
+      preference: body?.preference,
+      bio: body?.bio,
+      profile_photo: body?.profile_photo,
+      accountId: isValidAccount._id
+    }
+    updatedResult = await Student_Model.create(studentPayload)
   }
 
-  return updateResponse
+  if (body.role == "MENTOR") {
+    const mentorPayload = {
+      ...body?.mentor,
+      profile_photo: body?.profile_photo,
+      preference: body?.preference,
+      bio: body?.bio,
+    }
+    // updatedResult = await Mentor_Model.findOneAndUpdate({ accountId: isValidAccount._id }, mentorPayload, { new: true })
+  }
+  if (body.role == "PROFESSIONAL") {
+    const professionalPayload = {
+      ...body?.professional,
+      profile_photo: body?.profile_photo,
+      preference: body?.preference,
+      bio: body?.bio,
+    }
+    updatedResult = await ProfessionalModel.findOneAndUpdate({ accountId: isValidAccount._id }, professionalPayload, { new: true })
+  }
+
+  return updatedResult
 };
+
+
 const get_my_profile_from_db = async (email: string) => {
   const isExistAccount = await isAccountExist(email)
   const profile = await Student_Model.findOne({ accountId: isExistAccount._id }).lean();
