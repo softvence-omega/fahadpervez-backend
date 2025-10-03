@@ -4,6 +4,7 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import { configs } from './app/configs';
 import globalErrorHandler from './app/middlewares/global_error_handler';
 import notFound from './app/middlewares/not_found_api';
 import appRouter from './routes';
@@ -18,7 +19,7 @@ const swaggerOptions = {
             version: "1.0.0",
             description: "Express API with auto-generated Swagger docs",
         },
-        servers: [{ url: "http://localhost:5000" }, { url: "https://fahadpervez-backend.onrender.com" }],
+        servers: [{ url: "https://fahadpervez-backend.onrender.com" }, { url: "http://localhost:5000" }],
         components: {
             securitySchemes: {
                 bearerAuth: {
@@ -34,7 +35,10 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: [path.join(__dirname, "./**/*.ts")], // <--- this is important
+    apis: [path.join(
+        __dirname,
+        configs.env == "production" ? "./**/*.js" : "./**/*.ts"
+    ),],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
