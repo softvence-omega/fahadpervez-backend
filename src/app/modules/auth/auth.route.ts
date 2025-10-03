@@ -7,7 +7,52 @@ import { auth_validation } from "./auth.validation";
 
 const authRoute = Router()
 
+/**
+ * @openapi
+ * /api/auth/register:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Register a new user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: user@example.com
+ *               password:
+ *                 type: string
+ *                 example: secret123
+ *     
+ */
+
 authRoute.post("/register", RequestValidator(auth_validation.register_validation), auth_controllers.register_user)
+/**
+ * @openapi
+ * /api/auth/verified-account:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Verify your account
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: user@example.com
+ *               otp:
+ *                 type: string
+ *                 example: 123456
+ *     
+ */
 authRoute.post("/verified-account", RequestValidator(auth_validation.verified_account), auth_controllers.verified_account)
 authRoute.post("/new-verification-otp", RequestValidator(auth_validation.newVerificationOtp), auth_controllers.get_new_verification_otp)
 authRoute.post("/set-new-password", RequestValidator(auth_validation.login_validation), auth_controllers.set_new_password)
