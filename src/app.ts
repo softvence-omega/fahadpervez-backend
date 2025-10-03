@@ -19,6 +19,20 @@ const swaggerOptions = {
             description: "Express API with auto-generated Swagger docs",
         },
         servers: [{ url: "http://localhost:5000" }],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: "http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT",
+                },
+            },
+        },
+        security: [
+            {
+                bearerAuth: [],
+            },
+        ],
     },
     apis: [path.join(__dirname, "./**/*.ts")], // <--- this is important
 };
