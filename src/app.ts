@@ -18,7 +18,7 @@ const swaggerOptions = {
             version: "1.0.0",
             description: "Express API with auto-generated Swagger docs",
         },
-        servers: [{ url: "http://localhost:5000" }],
+        servers: [{ url: "http://localhost:5000" }, { url: "https://fahadpervez-backend.onrender.com" }],
         components: {
             securitySchemes: {
                 bearerAuth: {
