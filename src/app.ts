@@ -19,27 +19,34 @@ const swaggerOptions = {
             version: "1.0.0",
             description: "Express API with auto-generated Swagger docs",
         },
-        servers: [{ url: "https://fahadpervez-backend.onrender.com" }, { url: "http://localhost:5000" }],
+        servers: [
+            { url: "https://fahadpervez-backend.onrender.com" },
+            { url: "http://localhost:5000" },
+        ],
         components: {
             securitySchemes: {
-                bearerAuth: {
-                    type: "http",
-                    scheme: "bearer",
-                    bearerFormat: "JWT",
+                AuthorizationToken: {
+                    type: "apiKey",
+                    in: "header",
+                    name: "Authorization",
+                    description: "Put your accessToken here ",
                 },
             },
         },
         security: [
             {
-                bearerAuth: [],
+                AuthorizationToken: []
             },
         ],
     },
-    apis: [path.join(
-        __dirname,
-        configs.env == "production" ? "./**/*.js" : "./**/*.ts"
-    ),],
+    apis: [
+        path.join(
+            __dirname,
+            configs.env === "production" ? "./**/*.js" : "./**/*.ts"
+        ),
+    ],
 };
+
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
