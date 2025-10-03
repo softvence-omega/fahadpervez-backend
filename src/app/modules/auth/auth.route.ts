@@ -55,10 +55,10 @@ authRoute.post("/register", RequestValidator(auth_validation.register_validation
  *             properties:
  *               email:
  *                 type: string
- *                 example: user@example.com
+ *                 example: softvence.abumahid@gmail.com
  *               password:
  *                 type: string
- *                 example: secret123
+ *                 example: 123456
  *     responses:
  *       200:
  *         description: User logged in successfully
