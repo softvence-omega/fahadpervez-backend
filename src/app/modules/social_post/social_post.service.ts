@@ -2,8 +2,12 @@ import { Request } from "express";
 import { AppError } from "../../utils/app_error";
 import uploadCloud from "../../utils/cloudinary";
 import { isAccountExist } from "../../utils/isAccountExist";
-import { TSocialPost } from "./social_post.interface";
-import { SocialPostModel } from "./social_post.schema";
+import { Admin_Model } from "../admin/admin.schema";
+import { MentorModel } from "../mentor/mentor.schema";
+import { ProfessionalModel } from "../professional/professional.schema";
+import { Student_Model } from "../student/student.schema";
+import { TQuestionSocial, TSocialPost } from "./social_post.interface";
+import { QuestionSocialModel, SocialPostModel } from "./social_post.schema";
 
 const create_new_social_post_in_db = async (req: Request) => {
     const user = req?.user;
@@ -131,6 +135,78 @@ const save_comment_social_post_in_db = async (req: Request) => {
 };
 
 
+// question post
+
+const save_new_question_post_into_db = async (req: Request) => {
+    const user = req?.user;
+    const isUserExist = await isAccountExist(user?.email as string);
+    const payload: Partial<TQuestionSocial> = req?.body;
+    payload.postedBy = isUserExist?.profile_id;
+    payload.profileType = isUserExist?.profile_type;
+    const result = QuestionSocialModel.create(payload);
+    return result
+}
+
+const get_all_question_social_post_from_db = async (req: Request) => {
+    const page = Number(req.query.page) || 1;      // default page = 1
+    const limit = Number(req.query.limit) || 10;   // default limit = 10
+    const skip = (page - 1) * limit;
+
+    const [questions, total] = await Promise.all([
+        QuestionSocialModel.find()
+            .skip(skip)
+            .limit(limit)
+            .sort({ createdAt: -1 }) // newest first, optional
+            .lean()
+            .populate("postedBy", "firstName lastName profile_photo"),
+        QuestionSocialModel.countDocuments(),
+    ]);
+
+    return {
+        data: questions,
+        pagination: {
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+        },
+    };
+};
+
+const give_answer_to_question_into_db = async (req: Request) => {
+    const user = req?.user;
+    const postId = req?.params?.postId;
+
+    let isProfile: any;
+    if (user?.role == "STUDENT") {
+        isProfile = await Student_Model.findOne({ accountId: user?.accountId }).lean();
+    }
+    else if (user?.role == "MENTOR") {
+        isProfile = await MentorModel.findOne({ accountId: user?.accountId }).lean();
+    }
+    else if (user?.role == "ADMIN") {
+        isProfile = await Admin_Model.findOne({ accountId: user?.accountId }).lean();
+    }
+    else if (user?.role == "PROFESSIONAL") {
+        isProfile = await ProfessionalModel.findOne({ accountId: user?.accountId }).lean();
+    }
+
+    const result = await QuestionSocialModel.findByIdAndUpdate(
+        postId,
+        {
+            $addToSet: {
+                answers: {
+                    name: isProfile?.firstName as string,
+                    answer: req?.body?.answer,
+                    photo: isProfile?.profile_photo,
+                }
+            }
+        },
+        { new: true }
+    );
+    return result;
+}
+
 export const social_post_services = {
     create_new_social_post_in_db,
     get_all_social_post_from_db,
@@ -138,5 +214,8 @@ export const social_post_services = {
     update_social_post_in_db,
     delete_social_post_from_db,
     save_react_social_post_in_db,
-    save_comment_social_post_in_db
+    save_comment_social_post_in_db,
+    save_new_question_post_into_db,
+    get_all_question_social_post_from_db,
+    give_answer_to_question_into_db
 }

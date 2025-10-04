@@ -1,5 +1,4 @@
 import { Types } from "mongoose";
-import { TProfileType } from "../../types/common";
 
 type CardCustomization = {
   prompt: string;
@@ -12,13 +11,12 @@ type CardCustomization = {
 type AiFlashCard = {
   category: string;
   topicName: string;
-  level:string;
+  level: string;
   accountId: string;
 };
 
 export type TFlashCard = {
   postedBy: Types.ObjectId;
-  profileType:TProfileType
   cardCustomization: CardCustomization[];
   aiFlashCard?: AiFlashCard[];
   uploadMedia?: string;

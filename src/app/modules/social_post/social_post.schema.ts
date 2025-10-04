@@ -1,6 +1,6 @@
-// make social post mongoose schema
 import { model, Schema, Types } from "mongoose";
 import { TSocialPost } from "./social_post.interface";
+import { profileTypeEnum } from "../../common/constant";
 
 const commentSchema = new Schema({
     commentedBy: {
@@ -16,7 +16,7 @@ const socialPostSchema = new Schema<TSocialPost>({
     profileType: {
         type: String,
         required: true,
-        enum: ["student_profile", "admin_profile", "mentor_profile" ,"professional_profile"],
+        enum: profileTypeEnum,
     },
     topic: { type: String, required: true },
     postImage: { type: String, required: false },
@@ -36,10 +36,11 @@ const AnswerSchema = new Schema({
 
 const QuestionSocialSchema = new Schema({
     question: { type: String, required: true },
-    postedBy: { type: Types.ObjectId, required: true, ref: 'User' },
-    profileType: { type: String, enum: ['admin', 'user', 'guest'], required: true },
+    postedBy: { type: Types.ObjectId, required: true, refPath: "profileType" },
+    profileType: { type: String, enum: profileTypeEnum, required: true },
     answers: { type: [AnswerSchema], default: [] },
 }, { timestamps: true });
 
 
 export const SocialPostModel = model("social_post", socialPostSchema);
+export const QuestionSocialModel = model("question_social", QuestionSocialSchema);

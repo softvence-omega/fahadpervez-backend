@@ -36,7 +36,7 @@ export const authDocs = {
                             type: "object",
                             required: ["email", "password"],
                             properties: {
-                                email: { type: "string", example: "user@example.com" },
+                                email: { type: "string", example: "softvence.abumahid@gmail.com" },
                                 password: { type: "string", example: "123456" }
                             }
                         }
@@ -226,11 +226,6 @@ export const authDocs = {
             }
         }
     },
-
-
-
-
-
     "/api/auth/update-initial-profile": {
         patch: {
             tags: ["Auth"],
