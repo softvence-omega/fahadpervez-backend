@@ -1,4 +1,5 @@
-import { Types } from "mongoose"
+import { Types } from "mongoose";
+import { TProfileType } from "../../types/common";
 
 type TComments = {
     commentedBy: {
@@ -10,7 +11,7 @@ type TComments = {
 }
 export type TSocialPost = {
     postedBy: Types.ObjectId;
-    profileType: "admin_profile" | "student_profile" | "mentor_profile";
+    profileType: TProfileType;
     topic: string;
     content: string;
     postImage?: string;
@@ -18,4 +19,16 @@ export type TSocialPost = {
     share?: number;
     isDeleted: boolean;
     comments: TComments[]
+}
+
+
+export type TQuestionSocial = {
+    question: string;
+    postedBy: Types.ObjectId;
+    profileType: TProfileType;
+    answers: {
+        answer: string;
+        name: string;
+        photo?: string;
+    }[];
 }
