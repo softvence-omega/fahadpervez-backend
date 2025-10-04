@@ -226,6 +226,7 @@ const login_user_from_db = async (payload: TLoginPayload) => {
     {
       email: isExistAccount.email,
       role: isExistAccount.role,
+      accountId: isExistAccount._id
     },
     configs.jwt.access_token as Secret,
     configs.jwt.access_expires as string,
@@ -235,6 +236,7 @@ const login_user_from_db = async (payload: TLoginPayload) => {
     {
       email: isExistAccount.email,
       role: isExistAccount.role,
+      accountId: isExistAccount._id
     },
     configs.jwt.refresh_token as Secret,
     configs.jwt.refresh_expires as string,
@@ -493,7 +495,7 @@ const sign_in_with_google_and_save_in_db = async (payload: any) => {
   }
 
   // Generate tokens
-  const tokenPayload = { email: account.email, role: account.role };
+  const tokenPayload = { email: account.email, role: account.role, accountId: account._id };
   const [accessToken, refreshToken] = await Promise.all([
     jwtHelpers.generateToken(tokenPayload, configs.jwt.access_token as Secret, configs.jwt.access_expires as string),
     jwtHelpers.generateToken(tokenPayload, configs.jwt.refresh_token as Secret, configs.jwt.refresh_expires as string),

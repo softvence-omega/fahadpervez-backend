@@ -1,4 +1,4 @@
-import { Schema, model, Types } from "mongoose";
+import { model, Schema } from "mongoose";
 import { TFlashCard } from "./flash_card.interface";
 
 // ---------- CardCustomization Sub-Schema ----------
@@ -32,19 +32,9 @@ const AiFlashCardSchema = new Schema(
 const FlashCardSchema = new Schema<TFlashCard>(
   {
     postedBy: {
-      type: Schema.ObjectId,
-      required: false,
-      refPath: "profileType",
-    },
-    profileType: {
-      type: String,
+      type: Schema.Types.ObjectId,
       required: true,
-      enum: [
-        "student_profile",
-        "admin_profile",
-        "mentor_profile",
-        "professional_profile",
-      ],
+      ref: "account", // dynamic ref
     },
     cardCustomization: { type: [CardCustomizationSchema], default: [] },
     aiFlashCard: { type: [AiFlashCardSchema], default: [] },

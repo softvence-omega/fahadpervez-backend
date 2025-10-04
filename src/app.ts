@@ -27,9 +27,12 @@ const swaggerOptions = {
             ...clinicalCaseSwagger,
             ...socialPostDocs
         },
-        servers: [
+        servers: configs.env === "production" ? [
             { url: "https://fahadpervez-backend.onrender.com" },
             { url: "http://localhost:5000" },
+        ] : [
+            { url: "http://localhost:5000" },
+            { url: "https://fahadpervez-backend.onrender.com" },
         ],
         components: {
             securitySchemes: {

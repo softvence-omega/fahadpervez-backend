@@ -39,7 +39,6 @@ export const socialPostDocs = {
             }
         }
     },
-
     "/api/social-post/{postId}": {
         get: {
             tags: ["Social Post"],
@@ -128,7 +127,6 @@ export const socialPostDocs = {
             }
         }
     },
-
     "/api/social-post/comment/{postId}": {
         put: {
             tags: ["Social Post"],
@@ -160,6 +158,90 @@ export const socialPostDocs = {
             },
             responses: {
                 200: { description: "Comment saved successfully" }
+            }
+        }
+    },
+    "/api/social-post/question/post": {
+        post: {
+            tags: ["Social Question Post"],
+            summary: "Post a new question",
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            properties: {
+                                question: {
+                                    type: "string",
+                                    example: "How can i learn biology?"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: "Comment saved successfully" }
+            }
+        }
+    },
+    "/api/social-post/question/get-all": {
+        get: {
+            tags: ["Social Question Post"],
+            summary: "Get all question posts",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "page",
+                    in: "query",
+                    required: false,
+                    schema: { type: "integer", default: 1 }
+                },
+                {
+                    name: "limit",
+                    in: "query",
+                    required: false,
+                    schema: { type: "integer", default: 10 }
+                }
+            ],
+            responses: {
+                200: { description: "Single question data" }
+            }
+        }
+    },
+    "/api/social-post/question/post-answer/{postId}": {
+        patch: {
+            tags: ["Social Question Post"],
+            summary: "Answer a question",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "postId",
+                    in: "path",
+                    required: true,
+                    schema: { type: "string" }
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            properties: {
+                                answer: {
+                                    type: "string",
+                                    example: "Answer to the question"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: { description: "Question answer saved successfully" }
             }
         }
     }
