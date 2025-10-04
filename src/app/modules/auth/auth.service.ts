@@ -204,17 +204,6 @@ const get_new_verification_otp_from_db = async (email: string) => {
   return null
 }
 
-const set_new_password_into_db = async (payload: { email: string, password: string }) => {
-  const isExistAccount = await isAccountExist(payload.email)
-  if (!isExistAccount.isVerified) {
-    throw new AppError('Account is not verified', httpStatus.UNAUTHORIZED);
-  }
-  const hashedPassword: string = await bcrypt.hash(payload.password, 10);
-  await Account_Model.findOneAndUpdate({ email: isExistAccount.email }, {
-    password: hashedPassword,
-  })
-  return 'Password changed successful.';
-}
 
 const login_user_from_db = async (payload: TLoginPayload) => {
   // check account info 
@@ -528,7 +517,6 @@ export const auth_services = {
   reset_password_into_db,
   verified_account_into_db,
   get_new_verification_otp_from_db,
-  set_new_password_into_db,
   update_student_profile_into_db,
   change_profile_status_from_db,
   sign_in_with_google_and_save_in_db
