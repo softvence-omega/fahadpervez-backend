@@ -9,8 +9,8 @@ import globalErrorHandler from './app/middlewares/global_error_handler';
 import notFound from './app/middlewares/not_found_api';
 import { authDocs } from './app/modules/auth/auth.swagger';
 import { clinicalCaseSwagger } from './app/modules/clinical_case/clinical_case.swagger';
-import appRouter from './routes';
 import { socialPostDocs } from './app/modules/social_post/social_post.swagger';
+import appRouter from './routes';
 const app = express()
 
 
@@ -62,7 +62,9 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // middleware
 app.use(cors({
-    origin: ["http://localhost:3000","http://localhost:5173","https://ai-student-protal.netlify.app"]
+    origin: ["http://localhost:3000", "http://localhost:5173", "https://ai-student-protal.netlify.app"],
+    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
+    credentials: true
 }))
 app.use(express.json({ limit: "100mb" }))
 app.use(express.raw())
