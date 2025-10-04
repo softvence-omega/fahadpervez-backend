@@ -22,5 +22,6 @@ export type JwtPayloadType = JwtPayload & {
     role: string;
     iat: number;
     exp: number;
+    accountId?:string
 };
 export type JwtTokenType = string | JwtPayloadType | null;

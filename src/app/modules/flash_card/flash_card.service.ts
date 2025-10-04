@@ -1,7 +1,7 @@
 import { Request } from "express";
+import uploadCloud from "../../utils/cloudinary";
 import { isAccountExist } from "../../utils/isAccountExist";
 import { TFlashCard } from "./flash_card.interface";
-import uploadCloud from "../../utils/cloudinary";
 import { FlashcardModel } from "./flash_card.schema";
 // ------------create new flash card ------------
 const create_new_flash_card_in_db = async (req: Request) => {
@@ -9,8 +9,6 @@ const create_new_flash_card_in_db = async (req: Request) => {
   const isUserExist = await isAccountExist(user?.email as string);
   const payload: TFlashCard = req?.body;
   payload.postedBy = isUserExist.profile_id;
-  payload.profileType = isUserExist.profile_type;
-
   if (req?.file) {
     const cloudRes = await uploadCloud(req?.file);
     payload.uploadMedia = cloudRes?.secure_url;
@@ -20,10 +18,7 @@ const create_new_flash_card_in_db = async (req: Request) => {
 };
 // ------------get all flash cards ------------
 const get_all_flash_card_in_db = async () => {
-  const result = await FlashcardModel.find({ isDeleted: false }).populate(
-    "postedBy",
-    "-password -otp -__v -isDeleted -status -profileType -createdAt -updatedAt"
-  );
+  const result = await FlashcardModel.find({ isDeleted: false });
   return result;
 };
 // ------------get single flash card ------------
@@ -31,10 +26,7 @@ const get_single_flash_card_in_db = async (id: string) => {
   const result = await FlashcardModel.findOne({
     _id: id,
     isDeleted: false,
-  }).populate(
-    "postedBy",
-    "-password -otp -__v -isDeleted -status -profileType -createdAt -updatedAt"
-  );
+  });
   return result;
 };
 //   ------------update flash card ------------ 
