@@ -1,5 +1,5 @@
 // make social post mongoose schema
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import { TSocialPost } from "./social_post.interface";
 
 const commentSchema = new Schema({
@@ -26,5 +26,20 @@ const socialPostSchema = new Schema<TSocialPost>({
     share: { type: Number, required: false, default: 0 },
     isDeleted: { type: Boolean, default: false },
 }, { timestamps: true, versionKey: false });
+
+
+const AnswerSchema = new Schema({
+    answer: { type: String, required: true },
+    name: { type: String, required: true },
+    photo: { type: String, required: false },
+});
+
+const QuestionSocialSchema = new Schema({
+    question: { type: String, required: true },
+    postedBy: { type: Types.ObjectId, required: true, ref: 'User' },
+    profileType: { type: String, enum: ['admin', 'user', 'guest'], required: true },
+    answers: { type: [AnswerSchema], default: [] },
+}, { timestamps: true });
+
 
 export const SocialPostModel = model("social_post", socialPostSchema);
