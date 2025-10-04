@@ -7,6 +7,9 @@ import swaggerUi from "swagger-ui-express";
 import { configs } from './app/configs';
 import globalErrorHandler from './app/middlewares/global_error_handler';
 import notFound from './app/middlewares/not_found_api';
+import { authDocs } from './app/modules/auth/auth.swagger';
+import { clinicalCaseSwagger } from './app/modules/clinical_case/clinical_case.swagger';
+import { socialPostDocs } from './app/modules/social_post/social_post.swagger';
 import appRouter from './routes';
 const app = express()
 
@@ -15,9 +18,14 @@ const swaggerOptions = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "My API",
+            title: "Fahad Pervez API - Team Future-Stack",
             version: "1.0.0",
             description: "Express API with auto-generated Swagger docs",
+        },
+        paths: {
+            ...authDocs,
+            ...clinicalCaseSwagger,
+            ...socialPostDocs
         },
         servers: [
             { url: "https://fahadpervez-backend.onrender.com" },
@@ -54,7 +62,9 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // middleware
 app.use(cors({
-    origin: ["http://localhost:3000"]
+    origin: ["http://localhost:3000", "http://localhost:5173", "https://ai-student-protal.netlify.app"],
+    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
+    credentials: true
 }))
 app.use(express.json({ limit: "100mb" }))
 app.use(express.raw())

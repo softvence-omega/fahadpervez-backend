@@ -24,7 +24,6 @@ const AiFlashCardSchema = new Schema(
     category: { type: String, required: true },
     topicName: { type: String, required: true },
     level: { type: String, required: true },
-    accountId: { type: String },
   },
   { _id: false }
 );
@@ -37,7 +36,16 @@ const FlashCardSchema = new Schema<TFlashCard>(
       required: false,
       refPath: "profileType",
     },
-
+    profileType: {
+      type: String,
+      required: true,
+      enum: [
+        "student_profile",
+        "admin_profile",
+        "mentor_profile",
+        "professional_profile",
+      ],
+    },
     cardCustomization: { type: [CardCustomizationSchema], default: [] },
     aiFlashCard: { type: [AiFlashCardSchema], default: [] },
     uploadMedia: { type: String },
