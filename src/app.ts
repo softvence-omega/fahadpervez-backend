@@ -7,7 +7,10 @@ import swaggerUi from "swagger-ui-express";
 import { configs } from './app/configs';
 import globalErrorHandler from './app/middlewares/global_error_handler';
 import notFound from './app/middlewares/not_found_api';
+import { authDocs } from './app/modules/auth/auth.swagger';
+import { clinicalCaseSwagger } from './app/modules/clinical_case/clinical_case.swagger';
 import appRouter from './routes';
+import { socialPostDocs } from './app/modules/social_post/social_post.swagger';
 const app = express()
 
 
@@ -15,9 +18,14 @@ const swaggerOptions = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "My API",
+            title: "Fahad Pervez API - Team Future-Stack",
             version: "1.0.0",
             description: "Express API with auto-generated Swagger docs",
+        },
+        paths: {
+            ...authDocs,
+            ...clinicalCaseSwagger,
+            ...socialPostDocs
         },
         servers: [
             { url: "https://fahadpervez-backend.onrender.com" },

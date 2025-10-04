@@ -26,11 +26,11 @@ const get_all_social_post_from_db = async (query: any) => {
     const [total, posts] = await Promise.all([
         SocialPostModel.countDocuments({ isDeleted: false }),
         SocialPostModel.find({ isDeleted: false })
-            .populate("postedBy")
+            .populate("postedBy", "firstName lastName profile_photo")
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
-            .lean(),
+            .lean()
     ]);
 
     return {
@@ -51,7 +51,7 @@ const get_single_post_by_id_with_share_count_from_db = async (req: Request) => {
     if (isShared == "true") {
         await SocialPostModel.findByIdAndUpdate(postId, { $inc: { share: 1 } })
     }
-    const result = await SocialPostModel.findOne({ _id: postId, isDeleted: false }).lean().populate("postedBy");
+    const result = await SocialPostModel.findOne({ _id: postId, isDeleted: false }).lean().populate("postedBy", "firstName lastName profile_photo");
     return result
 }
 
