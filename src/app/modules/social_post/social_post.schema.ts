@@ -16,7 +16,7 @@ const socialPostSchema = new Schema<TSocialPost>({
     profileType: {
         type: String,
         required: true,
-        enum: ["student_profile", "admin_profile", "mentor_profile"],
+        enum: ["student_profile", "admin_profile", "mentor_profile" ,"professional_profile"],
     },
     topic: { type: String, required: true },
     postImage: { type: String, required: false },
