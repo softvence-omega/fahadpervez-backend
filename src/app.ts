@@ -8,6 +8,7 @@ import { configs } from './app/configs';
 import globalErrorHandler from './app/middlewares/global_error_handler';
 import notFound from './app/middlewares/not_found_api';
 import { authDocs } from './app/modules/auth/auth.swagger';
+import { chatSwaggerDoc } from './app/modules/chat/chat.swagger';
 import { clinicalCaseSwagger } from './app/modules/clinical_case/clinical_case.swagger';
 import { socialPostDocs } from './app/modules/social_post/social_post.swagger';
 import appRouter from './routes';
@@ -25,7 +26,8 @@ const swaggerOptions = {
         paths: {
             ...authDocs,
             ...clinicalCaseSwagger,
-            ...socialPostDocs
+            ...socialPostDocs,
+            ...chatSwaggerDoc
         },
         servers: configs.env === "production" ? [
             { url: "https://fahadpervez-backend.onrender.com" },
