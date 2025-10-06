@@ -96,6 +96,36 @@ const give_answer_to_question = catchAsync(async (req, res) => {
         data: result
     })
 })
+const save_new_forum = catchAsync(async (req, res) => {
+    const result = await social_post_services.save_new_forum_into_db(req);
+    manageResponse(res, {
+        statusCode: 201,
+        message: "Forum post successful.",
+        success: true,
+        data: result
+    })
+})
+const get_all_forum_post = catchAsync(async (req, res) => {
+    const result = await social_post_services.get_all_forum_post_from_db(req);
+    manageResponse(res, {
+        statusCode: 200,
+        message: "Forum fetched successful.",
+        success: true,
+        data: {
+            data: result?.data,
+            meta: result?.pagination
+        }
+    })
+})
+const get_single_forum_post = catchAsync(async (req, res) => {
+    const result = await social_post_services.get_single_forum_post_from_db(req);
+    manageResponse(res, {
+        statusCode: 200,
+        message: "Forum fetched successful.",
+        success: true,
+        data: result
+    })
+})
 
 export const social_post_controllers = {
     create_new_social_post,
@@ -107,5 +137,8 @@ export const social_post_controllers = {
     save_comment_social_post,
     save_new_question_post,
     get_all_question_social,
-    give_answer_to_question
+    give_answer_to_question,
+    save_new_forum,
+    get_all_forum_post,
+    get_single_forum_post
 }
