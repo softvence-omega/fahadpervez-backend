@@ -16,9 +16,26 @@ const update_anser = z.object({
     answer: z.string({ message: "question is required" }),
 })
 
+
+// for forum
+const CommentSchemaZ = z.object({
+    name: z.string(),
+    photo: z.string().url().optional(),
+    studentType: z.string().optional(),
+    comment: z.string(),
+});
+
+export const forum_post = z.object({
+    title: z.string(),
+    category: z.string(),
+    content: z.string(),
+    tags: z.array(z.string()).optional(),
+});
+
 export const social_post_validation = {
     create,
     update,
     create_question,
-    update_anser
+    update_anser,
+    forum_post
 }

@@ -6,8 +6,8 @@ import { Admin_Model } from "../admin/admin.schema";
 import { MentorModel } from "../mentor/mentor.schema";
 import { ProfessionalModel } from "../professional/professional.schema";
 import { Student_Model } from "../student/student.schema";
-import { TQuestionSocial, TSocialPost } from "./social_post.interface";
-import { QuestionSocialModel, SocialPostModel } from "./social_post.schema";
+import { TForumPost, TQuestionSocial, TSocialPost } from "./social_post.interface";
+import { ForumPostModel, QuestionSocialModel, SocialPostModel } from "./social_post.schema";
 
 const create_new_social_post_in_db = async (req: Request) => {
     const user = req?.user;
@@ -207,6 +207,66 @@ const give_answer_to_question_into_db = async (req: Request) => {
     return result;
 }
 
+
+// forum post
+
+const save_new_forum_into_db = async (req: Request) => {
+    const user = req?.user;
+    const isUserExist = await isAccountExist(user?.email as string);
+    const payload: Partial<TForumPost> = req?.body;
+    payload.postedBy = isUserExist?.profile_id;
+    payload.profileType = isUserExist?.profile_type;
+    const result = ForumPostModel.create(payload);
+    return result
+}
+const get_all_forum_post_from_db = async (req: Request) => {
+    // Pagination params
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+    const { searchTerm, category } = req.query;
+    const filter: any = {};
+    if (searchTerm) {
+        filter.title = { $regex: searchTerm, $options: "i" };
+    }
+    if (category) {
+        filter.category = category;
+    }
+
+    // Query with filters + pagination
+    const result = await ForumPostModel.find(filter)
+        .sort("-createdAt")
+        .skip(skip)
+        .limit(limit)
+        .lean()
+        .populate("postedBy", "firstName lastName profile_photo")
+        .select("-comments");
+
+    const total = await ForumPostModel.countDocuments(filter);
+
+    return {
+        data: result,
+        pagination: {
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+        },
+    };
+};
+const get_single_forum_post_from_db = async (req: Request) => {
+    const result = await ForumPostModel.findById(req?.params?.postId)
+        .lean()
+        .populate("postedBy", "firstName lastName profile_photo")
+
+    if (!result) {
+        throw new AppError("Forum post not found", 404);
+    }
+
+    return result;
+};
+
+
 export const social_post_services = {
     create_new_social_post_in_db,
     get_all_social_post_from_db,
@@ -217,5 +277,8 @@ export const social_post_services = {
     save_comment_social_post_in_db,
     save_new_question_post_into_db,
     get_all_question_social_post_from_db,
-    give_answer_to_question_into_db
+    give_answer_to_question_into_db,
+    save_new_forum_into_db,
+    get_all_forum_post_from_db,
+    get_single_forum_post_from_db
 }
