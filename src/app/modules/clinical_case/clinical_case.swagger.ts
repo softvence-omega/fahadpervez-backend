@@ -3,6 +3,7 @@ export const clinicalCaseSwagger = {
     post: {
       tags: ["Clinical Case"],
       summary: "Create a new clinical case",
+      security: [{ bearerAuth: [] }],
       requestBody: {
         required: true,
         content: {
@@ -30,6 +31,7 @@ export const clinicalCaseSwagger = {
     get: {
       tags: ["Clinical Case"],
       summary: "Get all clinical cases",
+      security: [{ bearerAuth: [] }],
       responses: {
         200: {
           description: "List of clinical cases",
@@ -42,6 +44,7 @@ export const clinicalCaseSwagger = {
     get: {
       tags: ["Clinical Case"],
       summary: "Get a single clinical case",
+      security: [{ bearerAuth: [] }],
       parameters: [
         {
           name: "caseId",

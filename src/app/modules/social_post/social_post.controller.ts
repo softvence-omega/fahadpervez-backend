@@ -111,10 +111,8 @@ const get_all_forum_post = catchAsync(async (req, res) => {
         statusCode: 200,
         message: "Forum fetched successful.",
         success: true,
-        data: {
-            data: result?.data,
-            meta: result?.pagination
-        }
+        data: result?.data,
+        meta: result?.pagination
     })
 })
 const get_single_forum_post = catchAsync(async (req, res) => {
