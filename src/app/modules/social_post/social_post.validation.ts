@@ -13,7 +13,10 @@ const create_question = z.object({
     question: z.string({ message: "question is required" }),
 })
 const update_anser = z.object({
-    answer: z.string({ message: "question is required" }),
+    answer: z.string({ message: "Answer is required is required" }),
+})
+const forum_comment = z.object({
+    comment: z.string({ message: "Comment is required is required" }),
 })
 
 

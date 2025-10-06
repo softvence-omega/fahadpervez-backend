@@ -126,6 +126,15 @@ const get_single_forum_post = catchAsync(async (req, res) => {
         data: result
     })
 })
+const write_a_comment_on_forum_post = catchAsync(async (req, res) => {
+    const result = await social_post_services.write_a_comment_on_forum_post_into_db(req);
+    manageResponse(res, {
+        statusCode: 200,
+        message: "Forum comment successful.",
+        success: true,
+        data: result
+    })
+})
 
 export const social_post_controllers = {
     create_new_social_post,
@@ -140,5 +149,6 @@ export const social_post_controllers = {
     give_answer_to_question,
     save_new_forum,
     get_all_forum_post,
-    get_single_forum_post
+    get_single_forum_post,
+    write_a_comment_on_forum_post
 }
