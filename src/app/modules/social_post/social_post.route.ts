@@ -47,6 +47,7 @@ social_post_router.patch("/question/post-answer/:postId", auth("ADMIN", "MENTOR"
 social_post_router.post("/forum/post", auth("ADMIN", "MENTOR", "STUDENT", "PROFESSIONAL"), RequestValidator(social_post_validation.forum_post), social_post_controllers.save_new_forum)
 social_post_router.get("/forum/get-all", auth("ADMIN", "MENTOR", "STUDENT", "PROFESSIONAL"), social_post_controllers.get_all_forum_post)
 social_post_router.get("/forum/get-single/:postId", auth("ADMIN", "MENTOR", "STUDENT", "PROFESSIONAL"), social_post_controllers.get_single_forum_post)
+social_post_router.patch("/forum/comment/:postId", auth("ADMIN", "MENTOR", "STUDENT", "PROFESSIONAL"), social_post_controllers.write_a_comment_on_forum_post)
 
 
 

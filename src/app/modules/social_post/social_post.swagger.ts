@@ -341,4 +341,38 @@ export const socialPostDocs = {
             }
         }
     },
+    "/api/social-post/forum/comment/{postId}": {
+        patch: {
+            tags: ["Forum Post"],
+            summary: "Write a comment on a forum post",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "postId",
+                    in: "path",
+                    required: true,
+                    schema: { type: "string" }
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            properties: {
+                                comment: {
+                                    type: "string",
+                                    example: "This is a comment"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                201: { description: "Forum post fetched successfully" }
+            }
+        }
+    },
 };

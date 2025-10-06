@@ -266,6 +266,29 @@ const get_single_forum_post_from_db = async (req: Request) => {
     return result;
 };
 
+const write_a_comment_on_forum_post_into_db = async (req: Request) => {
+    const postId = req?.params?.postId;
+    const user = req?.user;
+    const isUserExist = await isAccountExist(user?.email as string, "profile_id") as any;
+    const commentPayload = {
+        name: isUserExist?.profile_id?.firstName + " " + isUserExist?.profile_id?.lastName,
+        photo: isUserExist?.profile_id?.profile_photo,
+        comment: req?.body?.comment,
+        studentType: isUserExist?.profile_id?.studentType || " "
+    }
+
+    const result = await ForumPostModel.findByIdAndUpdate(
+        postId,
+        {
+            $addToSet: {
+                comments: commentPayload
+            }
+        },
+        { new: true }
+    )
+    return result;
+};
+
 
 export const social_post_services = {
     create_new_social_post_in_db,
@@ -280,5 +303,6 @@ export const social_post_services = {
     give_answer_to_question_into_db,
     save_new_forum_into_db,
     get_all_forum_post_from_db,
-    get_single_forum_post_from_db
+    get_single_forum_post_from_db,
+    write_a_comment_on_forum_post_into_db
 }
