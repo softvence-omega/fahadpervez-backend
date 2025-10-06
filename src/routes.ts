@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import authRoute from './app/modules/auth/auth.route';
+import careerResourceRoute from './app/modules/career_resource/career_resource.route';
+import chatRouter from './app/modules/chat/chat.route';
 import clinical_route from './app/modules/clinical_case/clinical_case.route';
 import dummy_route from './app/modules/dummy/dummy.route';
-import studentRoute from './app/modules/student/student.route';
-import social_post_router from './app/modules/social_post/social_post.route';
-import careerResourceRoute from './app/modules/career_resource/career_resource.route';
 import flash_card_router from './app/modules/flash_card/flash_card.route';
+import social_post_router from './app/modules/social_post/social_post.route';
+import studentRoute from './app/modules/student/student.route';
 
 
 const appRouter = Router();
@@ -18,6 +19,7 @@ const moduleRoutes = [
     { path: "/social-post", route: social_post_router },
     { path: "/career-resource", route: careerResourceRoute },
     { path: "/flash-card", route: flash_card_router },
+    { path: "/chat", route: chatRouter }
 
 ];
 
