@@ -241,7 +241,20 @@ export const authDocs = {
                                 image: { type: "string", format: "binary" },
                                 data: {
                                     type: "string",
-                                    description: "JSON string of profile data"
+                                    description: "JSON string of initial profile data",
+                                    example: {
+                                        "role": "STUDENT",
+                                        "student": {
+                                            "firstName": "Alice",
+                                            "lastName": "Johnson",
+                                            "university": "Harvard University",
+                                            "country": "USA",
+                                            "year_of_study": "3",
+                                            "studentType": "MEDICAL_STUDENT",
+                                            "preparingFor": "Masters in Computer Science"
+                                        },
+                                        "bio": "Curious learner passionate about AI and data science."
+                                    }
                                 }
                             }
                         }

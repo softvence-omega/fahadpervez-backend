@@ -244,5 +244,101 @@ export const socialPostDocs = {
                 200: { description: "Question answer saved successfully" }
             }
         }
-    }
+    },
+    // forum post
+    "/api/social-post/forum/post": {
+        post: {
+            tags: ["Forum Post"],
+            summary: "Create a new forum post",
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            properties: {
+                                title: {
+                                    type: "string",
+                                    example: "This is test forum post"
+                                },
+                                category: {
+                                    type: "string",
+                                    example: "Biology"
+                                },
+                                content: {
+                                    type: "string",
+                                    example: "Hello this is test forum post"
+                                },
+                                tags: {
+                                    type: "array",
+                                    items: {
+                                        type: "string",
+                                        example: "biology"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                201: { description: "Forum post created successfully" }
+            }
+        }
+    },
+    "/api/social-post/forum/get-all": {
+        get: {
+            tags: ["Forum Post"],
+            summary: "Get all forum posts",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "page",
+                    in: "query",
+                    required: false,
+                    schema: { type: "integer", default: 1 }
+                },
+                {
+                    name: "limit",
+                    in: "query",
+                    required: false,
+                    schema: { type: "integer", default: 10 }
+                },
+                {
+                    name: "category",
+                    in: "query",
+                    required: false,
+                    schema: { type: "string" }
+                },
+                {
+                    name: "searchTerm",
+                    in: "query",
+                    required: false,
+                    schema: { type: "string" }
+                }
+            ],
+            responses: {
+                201: { description: "Forum post fetched successfully" }
+            }
+        }
+    },
+    "/api/social-post/forum/get-single/{postId}": {
+        get: {
+            tags: ["Forum Post"],
+            summary: "Get forum post by ID",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "postId",
+                    in: "path",
+                    required: true,
+                    schema: { type: "string" }
+                }
+            ],
+            responses: {
+                201: { description: "Forum post fetched successfully" }
+            }
+        }
+    },
 };

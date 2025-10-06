@@ -32,3 +32,20 @@ export type TQuestionSocial = {
         photo?: string;
     }[];
 }
+
+
+// For forum
+export type TForumPost = {
+    title: string;
+    category: string;
+    content: string;
+    postedBy: Types.ObjectId;
+    profileType: TProfileType;
+    tags?: string[];
+    comments?: {
+        name: string;
+        photo?: string;
+        studentType?: string;
+        comment: string;
+    }[]
+}
