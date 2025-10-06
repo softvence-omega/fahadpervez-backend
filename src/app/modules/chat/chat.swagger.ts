@@ -3,6 +3,7 @@ export const chatSwaggerDoc = {
         post: {
             tags: ["Chat Bot"],
             summary: "Save Chat history",
+            security: [{ bearerAuth: [] }],
             requestBody: {
                 required: true,
                 content: {
@@ -26,6 +27,53 @@ export const chatSwaggerDoc = {
             responses: {
                 201: {
                     description: "Chat history saved successfully",
+                },
+            },
+        },
+    },
+    "/api/chat/get-all": {
+        get: {
+            tags: ["Chat Bot"],
+            summary: "Get All Chat history",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "page",
+                    in: "query",
+                    required: false,
+                    schema: { type: "integer", default: 1 }
+                },
+                {
+                    name: "limit",
+                    in: "query",
+                    required: false,
+                    schema: { type: "integer", default: 10 }
+                }
+            ],
+            responses: {
+                200: {
+                    description: "Chat history fetched successfully",
+                },
+            },
+        },
+    },
+    "/api/chat/get-by-sessionId/{id}": {
+        get: {
+            tags: ["Chat Bot"],
+            summary: "Get All Chat history",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "id",
+                    in: "path",
+                    required: true,
+                    schema: { type: "string" },
+                    description: "You can use session id or id of chat history"
+                }
+            ],
+            responses: {
+                200: {
+                    description: "Chat history fetched successfully",
                 },
             },
         },
