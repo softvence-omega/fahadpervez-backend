@@ -1,10 +1,11 @@
 import { Types } from "mongoose";
-import { ProfileType } from "../auth/auth.interface";
+import { TProfileType } from "../../types/common";
+
 
 type TResourceTopic = "Residency Road maps" | "CV Template" | "Personal Statement" | "Research" | "Interview preparation"
 export type TCareerResource = {
     uploadedBy: Types.ObjectId;
-    profileType: ProfileType;
+    profileType: TProfileType;
     resourceName: string;
     shortDescription: string;
     totalDownloads: number;
