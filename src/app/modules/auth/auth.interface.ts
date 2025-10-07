@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
+import { TProfileType } from "../../types/common";
 
-export type ProfileType = "student_profile" | "mentor_profile" | "admin_profile";
 export type TStatus = "ACTIVE" | "INACTIVE" | "SUSPENDED"
 
 export type TAccount = {
@@ -13,7 +13,7 @@ export type TAccount = {
     isSubscribed?: boolean;
     lastOTP?: string;
     isVerified?: boolean,
-    profile_type: ProfileType;
+    profile_type: TProfileType;
     authType?: "GOOGLE" | "CUSTOM"
 }
 

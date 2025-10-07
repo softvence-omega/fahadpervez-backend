@@ -39,6 +39,7 @@ const auth = (...roles: Role[]) => {
             if (!isUserExist?.isVerified) {
                 throw new AppError("This account is not verified ", 401)
             }
+            verifiedUser.profileType = isUserExist?.profile_type
             req.user = verifiedUser as JwtPayloadType;
             next();
         } catch (err) {
