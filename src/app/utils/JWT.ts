@@ -1,4 +1,5 @@
 import jwt, { JwtPayload, Secret, SignOptions } from 'jsonwebtoken';
+import { TProfileType } from '../types/common';
 
 const generateToken = (payload: object, secret: Secret, expiresIn: string) => {
     const token = jwt.sign(payload, secret, {
@@ -22,6 +23,7 @@ export type JwtPayloadType = JwtPayload & {
     role: string;
     iat: number;
     exp: number;
-    accountId?:string
+    accountId?: string;
+    profileType?: TProfileType
 };
 export type JwtTokenType = string | JwtPayloadType | null;
