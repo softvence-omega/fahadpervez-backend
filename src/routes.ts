@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import adminRouter from './app/modules/admin/admin.route';
 import authRoute from './app/modules/auth/auth.route';
 import careerResourceRoute from './app/modules/career_resource/career_resource.route';
 import chatRouter from './app/modules/chat/chat.route';
@@ -22,6 +23,7 @@ const moduleRoutes = [
     { path: "/flash-card", route: flash_card_router },
     { path: "/chat", route: chatRouter },
     { path: "/mcq-bank", route: mcqBankRouter },
+    { path: "/admin", route: adminRouter }
 
 ];
 
