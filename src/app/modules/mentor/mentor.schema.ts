@@ -1,7 +1,10 @@
 import { model, Schema } from "mongoose";
 
 const mentorSchema = new Schema({
-    name: { type: String, required: false }
+    firstName: { type: String, required: false },
+    lastName: { type: String, required: false },
+    specialties: { type: String, required: false },
+    experience: { type: String, required: false },
 })
 
 
