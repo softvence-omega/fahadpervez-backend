@@ -30,7 +30,7 @@ app.use("/api", appRouter)
 app.get("/", (req: Request, res: Response) => {
     res.status(200).json({
         status: "success",
-        message: "AI Student portal server is running successfully! health 100%",
+        message: "AI Student portal server is running successfully! health 50%",
         data: null,
     });
 });
