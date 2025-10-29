@@ -1,68 +1,13 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Request, Response } from 'express';
-import path from 'path';
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-import { configs } from './app/configs';
 import globalErrorHandler from './app/middlewares/global_error_handler';
 import notFound from './app/middlewares/not_found_api';
-import { adminSwaggerDoc } from './app/modules/admin/admin.swagger';
-import { authDocs } from './app/modules/auth/auth.swagger';
-import { chatSwaggerDoc } from './app/modules/chat/chat.swagger';
-import { clinicalCaseSwagger } from './app/modules/clinical_case/clinical_case.swagger';
-import { mcqBankSwaggerDoc } from './app/modules/mcq_bank/mcq_bank.swagger';
-import { socialPostDocs } from './app/modules/social_post/social_post.swagger';
 import appRouter from './routes';
+import { swaggerOptions } from './swaggerOptions';
 const app = express()
-
-
-const swaggerOptions = {
-    definition: {
-        openapi: "3.0.0",
-        info: {
-            title: "Fahad Pervez API - Team Future-Stack",
-            version: "1.0.0",
-            description: "Express API with auto-generated Swagger docs",
-        },
-        paths: {
-            ...authDocs,
-            ...adminSwaggerDoc,
-            ...clinicalCaseSwagger,
-            ...socialPostDocs,
-            ...chatSwaggerDoc,
-            ...mcqBankSwaggerDoc,
-        },
-        servers: configs.env === "production" ? [
-            { url: "https://fahadpervez-backend.onrender.com" },
-            { url: "http://localhost:5000" },
-        ] : [
-            { url: "http://localhost:5000" },
-            { url: "https://fahadpervez-backend.onrender.com" },
-        ],
-        components: {
-            securitySchemes: {
-                AuthorizationToken: {
-                    type: "apiKey",
-                    in: "header",
-                    name: "Authorization",
-                    description: "Put your accessToken here ",
-                },
-            },
-        },
-        security: [
-            {
-                AuthorizationToken: []
-            },
-        ],
-    },
-    apis: [
-        path.join(
-            __dirname,
-            configs.env === "production" ? "./**/*.js" : "./**/*.ts"
-        ),
-    ],
-};
 
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
