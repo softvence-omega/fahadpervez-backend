@@ -78,6 +78,7 @@ export const studyModeTreeSwaggerDocs = {
         patch: {
             tags: ["Study Mode Tree -(Admin)"],
             summary: "Update a Content Management tree",
+            security: [{ bearerAuth: [] }],
             description: "Updates a content management tree based on the provided tree ID. Please send all existing data + new data.",
             parameters: [
                 {
@@ -148,6 +149,7 @@ export const studyModeTreeSwaggerDocs = {
         delete: {
             tags: ["Study Mode Tree -(Admin)"],
             summary: "Delete content management tree",
+            security: [{ bearerAuth: [] }],
             description: "Deletes a content management tree based on the provided tree ID.",
             parameters: [
                 {
