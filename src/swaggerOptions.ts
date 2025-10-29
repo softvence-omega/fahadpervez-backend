@@ -7,6 +7,7 @@ import { clinicalCaseSwagger } from "./app/modules/clinical_case/clinical_case.s
 import { mcqBankSwaggerDoc } from "./app/modules/mcq_bank/mcq_bank.swagger";
 import { socialPostDocs } from "./app/modules/social_post/social_post.swagger";
 import { studyModeTreeSwaggerDocs } from "./app/modules/study_mode_tree/study_mode_tree.swagger";
+import { examSwaggerDocs } from "./app/modules/exam/exam.swagger";
 
 
 export const swaggerOptions = {
@@ -26,7 +27,8 @@ export const swaggerOptions = {
             ...mcqBankSwaggerDoc,
 
             ...studyModeTreeSwaggerDocs,
-        },
+        
+            ...examSwaggerDocs,},
         servers: configs.env === "production" ? [
             { url: "https://fahadpervez-backend.onrender.com" },
             { url: "http://localhost:5000" },

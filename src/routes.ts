@@ -10,11 +10,13 @@ import mcqBankRouter from './app/modules/mcq_bank/mcq_bank.route';
 import social_post_router from './app/modules/social_post/social_post.route';
 import studentRoute from './app/modules/student/student.route';
 import study_mode_tree_router from './app/modules/study_mode_tree/study_mode_tree.route';
+import examRoute from './app/modules/exam/exam.route';
 
 
 const appRouter = Router();
 
 const moduleRoutes = [
+    { path: "/exam", route: examRoute },
     { path: "/study_mode_tree", route: study_mode_tree_router },
     { path: '/auth', route: authRoute },
     { path: "/clinical-case", route: clinical_route },
