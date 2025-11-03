@@ -13,10 +13,14 @@ export const mcqBankSwaggerDoc = {
                             properties: {
                                 data: {
                                     type: "string",
-                                    description: "JSON string containing metadata like subjectName and mcqBankTitle",
+                                    description: "Provide a valid data format for MCQs",
                                     example: {
-                                        mcqBankTitle: "Anatomy Essentials MCQs",
-                                        subjectName: "Neurology",
+                                        title: "Anatomy Essentials MCQs",
+                                        subject: "Neurology",
+                                        system: "Anatomy",
+                                        topic: "Anatomy",
+                                        subtopic: "Anatomy",
+                                        type: "exam",
                                     },
                                 },
                                 file: {
@@ -176,11 +180,10 @@ export const mcqBankSwaggerDoc = {
                         schema: {
                             type: "object",
                             properties: {
-                                category: { type: "string", example: "Anatomy" },
                                 difficulty: {
                                     type: "string",
-                                    enum: ["Easy", "Medium", "Hard"],
-                                    example: "Medium",
+                                    enum: ["Basics", "Intermediate", "Advance"],
+                                    example: "Intermediate",
                                 },
                                 question: {
                                     type: "string",
@@ -190,9 +193,11 @@ export const mcqBankSwaggerDoc = {
                                 optionB: { type: "string", example: "Facial nerve" },
                                 optionC: { type: "string", example: "Trigeminal nerve" },
                                 optionD: { type: "string", example: "Vagus nerve" },
+                                optionE: { type: "string", example: "Vagus nerve" },
+                                optionF: { type: "string", example: "Vagus nerve" },
                                 correctOption: {
                                     type: "string",
-                                    enum: ["A", "B", "C", "D"],
+                                    enum: ["A", "B", "C", "D", "E", "F"],
                                     example: "B",
                                 },
                                 explanationB: {

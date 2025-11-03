@@ -3,43 +3,52 @@ import { excelConverter } from "../../utils/excel_converter";
 import { isAccountExist } from "../../utils/isAccountExist";
 import { TMcqBank } from "./mcq_bank.interface";
 import { McqBankModel } from "./mcq_bank.schema";
+import { mcq_validation } from "./mcq_bank.validation";
 
 type TRawMcqRow = {
-    category: string;
-    difficulty: "Easy" | "Medium" | "Hard";
+    difficulty: "Basics" | "Intermediate" | "Advance";
     question: string;
     imageDescription?: string;
     optionA: string;
     optionB: string;
     optionC: string;
     optionD: string;
+    optionE: string;
+    optionF: string;
     explanationA?: string;
     explanationB?: string;
     explanationC?: string;
     explanationD?: string;
-    correctOption: "A" | "B" | "C" | "D";
+    explanationE?: string;
+    explanationF?: string;
+    correctOption: "A" | "B" | "C" | "D" | "E" | "F";
 };
 
 const upload_bulk_mcq_bank_into_db = async (req: Request) => {
     const user = req?.user;
     const isUserExist: any = await isAccountExist(user?.email as string, "profile_id");
-
+    const body = req?.body as TMcqBank;
     // Parse Excel data if file exists
     const excelData: any = req.file ? excelConverter.parseFile(req.file.path) || [] : [];
 
-    const refineData = excelData.map((item: TRawMcqRow) => ({
-        category: item.category || "",
-        difficulty: item.difficulty || "Easy", // Default if missing
-        question: item.question || "",
-        imageDescription: item.imageDescription || undefined, // optional
-        options: [
+    const refineData = excelData.map((item: TRawMcqRow) => {
+        const options = [
             { option: "A" as const, optionText: item.optionA || "", explanation: item.explanationA || undefined },
             { option: "B" as const, optionText: item.optionB || "", explanation: item.explanationB || undefined },
             { option: "C" as const, optionText: item.optionC || "", explanation: item.explanationC || undefined },
             { option: "D" as const, optionText: item.optionD || "", explanation: item.explanationD || undefined },
-        ],
-        correctOption: (item.correctOption?.toUpperCase() as "A" | "B" | "C" | "D") || "A",
-    }));
+            { option: "E" as const, optionText: item.optionE || "", explanation: item.explanationE || undefined },
+            { option: "F" as const, optionText: item.optionF || "", explanation: item.explanationF || undefined },
+        ].filter(opt => opt.optionText?.trim() !== ""); // 🧹 remove empty options
+
+        return {
+            difficulty: item?.difficulty,
+            question: item?.question,
+            imageDescription: item.imageDescription || undefined,
+            options,
+            correctOption: (item.correctOption?.toUpperCase() as "A" | "B" | "C" | "D" | "E" | "F"),
+        };
+    });
 
 
     const uploadedBy = [
@@ -50,15 +59,22 @@ const upload_bulk_mcq_bank_into_db = async (req: Request) => {
         .join(" ");
 
     const payload: TMcqBank = {
-        subjectName: req.body?.subjectName || "",
-        mcqBankTitle: req.body?.mcqBankTitle || "",
+        title: body?.title,
         uploadedBy,
-        mcqSets: refineData,
-        totalMcq: refineData.length
+        mcqs: refineData,
+        subject: body?.subject,
+        system: body?.system,
+        topic: body?.topic,
+        subtopic: body?.subtopic,
+        slug: (body?.subject + body?.system + body?.topic + body?.subtopic).toLowerCase(),
+        type: body?.type,
     };
 
+    // type checking for all ok
+    await mcq_validation.create.parseAsync(payload);
+
     const result = await McqBankModel.create(payload);
-    return Array.isArray(result) ? result.length : 1; //
+    return Array.isArray(result) ? result.length : 1;
 };
 
 const get_all_mcq_banks = async (req: Request) => {
@@ -66,25 +82,38 @@ const get_all_mcq_banks = async (req: Request) => {
         page = "1",
         limit = "10",
         searchTerm = "",
-    } = req.query as { page?: string; limit?: string; searchTerm?: string };
+        subject = "",
+        system = "",
+        topic = "",
+        subtopic = "",
+    } = req.query as {
+        page?: string;
+        limit?: string;
+        searchTerm?: string;
+        subject?: string;
+        system?: string;
+        topic?: string;
+        subtopic?: string;
+    };
 
     const pageNumber = parseInt(page, 10);
     const limitNumber = parseInt(limit, 10);
     const skip = (pageNumber - 1) * limitNumber;
 
-    // Build search filter
-    const searchFilter = searchTerm
-        ? {
-            $or: [
-                { mcqBankTitle: { $regex: searchTerm, $options: "i" } },
-                { subjectName: { $regex: searchTerm, $options: "i" } },
-            ],
-        }
-        : {};
+    const slugFilter = (subject + system + topic + subtopic).toLowerCase();
 
-    // Fetch paginated and filtered results (excluding mcqSets for performance)
+    // 🔍 Build search filter
+    const searchFilter =
+        searchTerm || slugFilter
+            ? {
+                $or: [
+                    { title: { $regex: searchTerm, $options: "i" } },
+                    { slug: { $regex: slugFilter, $options: "i" } },
+                ],
+            }
+            : {};
+
     const result = await McqBankModel.find(searchFilter)
-        .select("-mcqSets")
         .skip(skip)
         .limit(limitNumber)
         .sort({ createdAt: -1 })
@@ -93,6 +122,21 @@ const get_all_mcq_banks = async (req: Request) => {
     const total = await McqBankModel.countDocuments(searchFilter);
     const totalPages = Math.ceil(total / limitNumber);
 
+    // 🧩 Transform results (map over array)
+    const res = result.map((item: any) => ({
+        _id: item._id,
+        title: item.title,
+        subject: item.subject,
+        system: item.system,
+        topic: item.topic,
+        subtopic: item.subtopic,
+        slug: item.slug,
+        type: item.type,
+        uploadedBy: item.uploadedBy,
+        totalMcq: item.mcqs?.length || 0,
+        createdAt: item?.createdAt,
+    }));
+
     return {
         meta: {
             page: pageNumber,
@@ -100,7 +144,7 @@ const get_all_mcq_banks = async (req: Request) => {
             total,
             totalPages,
         },
-        data: result,
+        data: res,
     };
 };
 
@@ -125,16 +169,15 @@ const update_specific_question = async (
     const mcqBank = await McqBankModel.findById(mcqBankId);
     if (!mcqBank) throw new Error("MCQ Bank not found");
 
-    if (!mcqBank.mcqSets || questionIndex < 0 || questionIndex >= mcqBank.mcqSets.length) {
+    if (!mcqBank?.mcqs || questionIndex < 0 || questionIndex >= mcqBank?.mcqs.length) {
         throw new Error("Invalid question index");
     }
 
-    const existingQuestion = mcqBank.mcqSets[questionIndex];
+    const existingQuestion = mcqBank?.mcqs[questionIndex];
 
     // Merge updates
-    mcqBank.mcqSets[questionIndex] = {
+    mcqBank.mcqs[questionIndex] = {
         ...existingQuestion,
-        category: updatedQuestionData.category ?? existingQuestion.category,
         difficulty: updatedQuestionData.difficulty ?? existingQuestion.difficulty,
         question: updatedQuestionData.question ?? existingQuestion.question,
         imageDescription: updatedQuestionData.imageDescription ?? existingQuestion.imageDescription,
@@ -158,7 +201,7 @@ const update_specific_question = async (
                 option: "D",
                 optionText: updatedQuestionData.optionD ?? existingQuestion.options[3].optionText,
                 explanation: updatedQuestionData.explanationD ?? existingQuestion.options[3].explanation,
-            },
+            }
         ],
         correctOption: (updatedQuestionData.correctOption as "A" | "B" | "C" | "D") ?? existingQuestion.correctOption,
     };
