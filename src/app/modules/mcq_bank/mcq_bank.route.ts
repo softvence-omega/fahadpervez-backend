@@ -1,9 +1,7 @@
 import { Router } from "express";
 import auth from "../../middlewares/auth";
-import RequestValidator from "../../middlewares/request_validator";
 import uploader from "../../middlewares/uploader";
 import { mcq_bank_controller } from "./mcq_bank.controller";
-import { mcq_validation } from "./mcq_bank.validation";
 
 const mcqBankRouter = Router();
 
@@ -20,7 +18,6 @@ mcqBankRouter.post(
         }
         next();
     },
-    RequestValidator(mcq_validation.bulk_upload),
     mcq_bank_controller.upload_bulk_mcq_bank
 );
 
@@ -29,7 +26,7 @@ mcqBankRouter.post(
 // ----------------------
 mcqBankRouter.get(
     "/",
-    auth("ADMIN", "MENTOR", "PROFESSIONAL","STUDENT"),
+    auth("ADMIN", "MENTOR", "PROFESSIONAL", "STUDENT"),
     mcq_bank_controller.get_all_mcq_banks
 );
 
@@ -38,7 +35,7 @@ mcqBankRouter.get(
 // ----------------------
 mcqBankRouter.get(
     "/:id",
-    auth("ADMIN", "MENTOR", "PROFESSIONAL","STUDENT"),
+    auth("ADMIN", "MENTOR", "PROFESSIONAL", "STUDENT"),
     mcq_bank_controller.get_single_mcq_bank
 );
 

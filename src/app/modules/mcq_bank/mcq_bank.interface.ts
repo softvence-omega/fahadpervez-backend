@@ -1,18 +1,21 @@
 export type TMcqBank = {
-    mcqBankTitle: string,
-    subjectName: string,
+    title: string,
+    subject: string,
+    system: string,
+    topic: string,
+    subtopic: string,
+    slug: string,
+    type: "exam" | "study"
     uploadedBy: string,
-    totalMcq:number,
-    mcqSets: {
-        category: string;
-        difficulty: "Easy" | "Medium" | "Hard";
+    mcqs: {
+        difficulty: "Basics" | "Intermediate" | "Advance";
         question: string;
         imageDescription?: string;
         options: {
-            option: "A" | "B" | "C" | "D";
+            option: "A" | "B" | "C" | "D" | "E" | "F";
             optionText: string;
             explanation?: string;
         }[];
-        correctOption: "A" | "B" | "C" | "D";
+        correctOption: "A" | "B" | "C" | "D" | "E" | "F";
     }[]
 };

@@ -1,117 +1,60 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose from "mongoose";
+import { TMcqBank } from "./mcq_bank.interface";
 
-interface IOption {
-    option: "A" | "B" | "C" | "D";
-    optionText: string;
-    explanation?: string;
-}
+const optionSchema = new mongoose.Schema({
+    option: {
+        type: String,
+        enum: ["A", "B", "C", "D", "E", "F"],
+        required: true,
+    },
+    optionText: {
+        type: String,
+        required: true,
+    },
+    explanation: {
+        type: String,
+    },
+}, { versionKey: false, timestamps: false, _id: false });
 
-interface IMcqSet {
-    category: string;
-    difficulty: "Easy" | "Medium" | "Hard";
-    question: string;
-    imageDescription?: string;
-    options: IOption[];
-    correctOption: "A" | "B" | "C" | "D";
-}
-
-export interface IMcqBank extends Document {
-    mcqBankTitle: string;
-    subjectName: string;
-    uploadedBy: string;
-    totalMcq: number;
-    mcqSets: IMcqSet[];
-}
-
-const OptionSchema = new Schema<IOption>(
-    {
-        option: {
-            type: String,
-            enum: ["A", "B", "C", "D"],
-            required: true,
-        },
-        optionText: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        explanation: {
-            type: String,
-            default: null,
+const mcqSchema = new mongoose.Schema({
+    difficulty: {
+        type: String,
+        enum: ["Basics", "Intermediate", "Advance"],
+        required: true,
+    },
+    question: {
+        type: String,
+        required: true,
+    },
+    imageDescription: {
+        type: String,
+    },
+    options: {
+        type: [optionSchema],
+        validate: {
+            validator: (v: any[]) => v.length >= 2,
+            message: "Each MCQ must have at least two options.",
         },
     },
-    { _id: false, versionKey: false }
-);
-
-const McqSetSchema = new Schema<IMcqSet>(
-    {
-        category: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        difficulty: {
-            type: String,
-            enum: ["Easy", "Medium", "Hard"],
-            required: true,
-        },
-        question: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        imageDescription: {
-            type: String,
-            default: null,
-        },
-        options: {
-            type: [OptionSchema],
-            validate: [
-                (val: IOption[]) => val.length === 4,
-                "Exactly four options are required.",
-            ],
-            required: true,
-        },
-        correctOption: {
-            type: String,
-            enum: ["A", "B", "C", "D"],
-            required: true,
-        },
+    correctOption: {
+        type: String,
+        enum: ["A", "B", "C", "D", "E", "F"],
+        required: true,
     },
-    { _id: false, versionKey: false }
-);
+}, { versionKey: false, timestamps: false, _id: false });
 
-const McqBankSchema = new Schema<IMcqBank>(
+const McqBankSchema = new mongoose.Schema(
     {
-        mcqBankTitle: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        subjectName: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        uploadedBy: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        totalMcq: {
-            type: Number,
-            required: true
-        },
-        mcqSets: {
-            type: [McqSetSchema],
-            required: true,
-            validate: [
-                (val: IMcqSet[]) => val.length > 0,
-                "At least one MCQ set is required.",
-            ],
-        },
+        title: { type: String, required: true },
+        subject: { type: String, required: true },
+        system: { type: String, required: true },
+        topic: { type: String, required: true },
+        subtopic: { type: String, required: true },
+        slug: { type: String },
+        type: { type: String, enum: ["exam", "study"], required: true },
+        uploadedBy: { type: String, required: true },
+        mcqs: { type: [mcqSchema], required: true },
     },
-    { timestamps: true, versionKey: false }
+    { timestamps: true }
 );
-
-export const McqBankModel = mongoose.model<IMcqBank>("mcq_bank", McqBankSchema);
+export const McqBankModel = mongoose.model<TMcqBank>("mcq_bank", McqBankSchema);

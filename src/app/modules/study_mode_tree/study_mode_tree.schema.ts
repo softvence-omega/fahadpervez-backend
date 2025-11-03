@@ -1,13 +1,11 @@
 import { Schema, model } from "mongoose";
 import { T_ContentManagementAdmin } from "./study_mode_tree.interface";
 
-const SubTopicSchema = new Schema({
-    subtopicName: { type: String, required: true },
-}, { _id: false });
+
 
 const TopicSchema = new Schema({
     topicName: { type: String, required: true },
-    subTopics: { type: [SubTopicSchema], default: [] },
+    subTopics: { type: [String], default: [] },
 }, { _id: false });
 
 const SystemSchema = new Schema({
