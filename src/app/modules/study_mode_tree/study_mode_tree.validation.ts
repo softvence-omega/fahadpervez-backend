@@ -1,12 +1,9 @@
 import { z } from "zod";
 
-export const SubTopicSchema = z.object({
-  subtopicName: z.string().min(1, "Subtopic name is required"),
-});
 
 export const TopicSchema = z.object({
   topicName: z.string().min(1, "Topic name is required"),
-  subTopics: z.array(SubTopicSchema).default([]),
+  subTopics: z.array(z.string()).default([]),
 });
 
 export const SystemSchema = z.object({

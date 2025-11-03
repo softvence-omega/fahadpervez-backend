@@ -21,15 +21,11 @@ export const studyModeTreeSwaggerDocs = {
                                         topics: [
                                             {
                                                 topicName: "Memory Management",
-                                                subTopics: [
-                                                    { subtopicName: "Paging" }
-                                                ]
+                                                subTopics: ["Paging"]
                                             },
                                             {
                                                 topicName: "Process Management",
-                                                subTopics: [
-                                                    { subtopicName: "Threads" }
-                                                ]
+                                                subTopics: ["Threads"]
                                             }
                                         ]
                                     },
@@ -38,15 +34,11 @@ export const studyModeTreeSwaggerDocs = {
                                         topics: [
                                             {
                                                 topicName: "Network Layers",
-                                                subTopics: [
-                                                    { subtopicName: "Application Layer" }
-                                                ]
+                                                subTopics: ["Application Layer"]
                                             },
                                             {
                                                 topicName: "Network Protocols",
-                                                subTopics: [
-                                                    { subtopicName: "TCP/IP" }
-                                                ]
+                                                subTopics: ["TCP/IP"]
                                             }
                                         ]
                                     }
