@@ -71,44 +71,10 @@ export const mcqBankSwaggerDoc = {
                 },
             ],
             responses: {
-                200: {
-                    description: "Paginated list of MCQ banks fetched successfully",
-                    content: {
-                        "application/json": {
-                            schema: {
-                                type: "object",
-                                properties: {
-                                    meta: {
-                                        type: "object",
-                                        properties: {
-                                            page: { type: "integer", example: 1 },
-                                            limit: { type: "integer", example: 10 },
-                                            total: { type: "integer", example: 35 },
-                                            totalPages: { type: "integer", example: 4 },
-                                        },
-                                    },
-                                    data: {
-                                        type: "array",
-                                        items: {
-                                            type: "object",
-                                            properties: {
-                                                _id: { type: "string", example: "652b47c12a9c12345abc6789" },
-                                                mcqBankTitle: { type: "string", example: "Anatomy Essentials MCQs" },
-                                                subjectName: { type: "string", example: "Neurology" },
-                                                uploadedBy: { type: "string", example: "Dr. Ahmed" },
-                                                totalMcq: { type: "integer", example: 50 },
-                                                createdAt: { type: "string", example: "2025-10-07T08:32:00Z" },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-                401: { description: "Unauthorized" },
-            },
-        },
+                200: {description: "Paginated list of MCQ banks fetched successfully"},
+                401: { description: "Unauthorized" }
+            }
+        }
     },
 
     "/api/mcq-bank/{id}": {
