@@ -14,7 +14,7 @@ export const swaggerOptions = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "Fahad Pervez API - Team Future-Stack",
+            title: "Zyura-e AI Student Portal - Team Future-Stack",
             version: "1.0.0",
             description: "Express API with auto-generated Swagger docs",
         },
