@@ -30,6 +30,13 @@ mcqBankRouter.get(
     mcq_bank_controller.get_all_mcq_banks
 );
 
+mcqBankRouter.post(
+    "/save-report",
+    auth("ADMIN", "MENTOR", "PROFESSIONAL", "STUDENT"),
+    mcq_bank_controller.save_report_for_mcq
+);
+
+
 // ----------------------
 // Get Single MCQ Bank
 // ----------------------
