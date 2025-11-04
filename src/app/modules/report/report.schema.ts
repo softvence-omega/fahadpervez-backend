@@ -1,0 +1,15 @@
+import { Schema, model } from "mongoose";
+import { T_Report } from "./report.interface";
+
+const report_schema = new Schema<T_Report>({
+    accountId: { type: String, required: true, ref: "account" },
+    name: { type: String, required: true },
+    profile_photo: { type: String, required: false },
+    report: {
+        questionBankId: { type: String, required: true },
+        questionIndex: { type: Number, required: true },
+        text: { type: String, required: true },
+    }
+}, { versionKey: false, timestamps: true });
+
+export const report_model = model("report", report_schema);

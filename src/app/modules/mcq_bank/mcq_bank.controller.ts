@@ -27,13 +27,13 @@ const get_all_mcq_banks = catchAsync(async (req, res) => {
 
 // Get Single MCQ Bank by ID
 const get_single_mcq_bank = catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const result = await mcq_bank_service.get_single_mcq_bank(id);
+    const result = await mcq_bank_service.get_single_mcq_bank(req);
     manageResponse(res, {
         statusCode: 200,
         success: true,
         message: "MCQ bank fetched successfully",
-        data: result,
+        data: result?.data,
+        meta: result?.meta,
     });
 });
 
@@ -66,6 +66,15 @@ const update_specific_question = catchAsync(async (req, res) => {
         data: result,
     });
 });
+const save_report_for_mcq = catchAsync(async (req, res) => {
+    const result = await mcq_bank_service.save_report_for_mcq_on_db(req);
+    manageResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Report saved successfully",
+        data: result,
+    });
+});
 
 export const mcq_bank_controller = {
     upload_bulk_mcq_bank,
@@ -73,4 +82,5 @@ export const mcq_bank_controller = {
     get_single_mcq_bank,
     delete_mcq_bank,
     update_specific_question,
+    save_report_for_mcq
 };

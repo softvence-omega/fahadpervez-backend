@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { excelConverter } from "../../utils/excel_converter";
 import { isAccountExist } from "../../utils/isAccountExist";
+import { report_model } from "../report/report.schema";
 import { TMcqBank } from "./mcq_bank.interface";
 import { McqBankModel } from "./mcq_bank.schema";
 import { mcq_validation } from "./mcq_bank.validation";
@@ -148,10 +149,34 @@ const get_all_mcq_banks = async (req: Request) => {
     };
 };
 
-const get_single_mcq_bank = async (id: string) => {
-    const result = await McqBankModel.findById(id).select("-__v").lean();
+const get_single_mcq_bank = async (req: Request): Promise<any> => {
+    const { id } = req.params;
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+
+    const result = await McqBankModel.findById(id).select("-__v").lean<TMcqBank>();
     if (!result) throw new Error("MCQ Bank not found");
-    return result;
+
+    const total = result.mcqs.length;
+    const skip = (page - 1) * limit;
+
+    const paginatedMcqs = result.mcqs.slice(skip, skip + limit);
+
+    const meta = {
+        page,
+        limit,
+        skip,
+        total,
+        totalPages: Math.ceil(total / limit),
+    };
+
+    return {
+        data: {
+            ...result,
+            mcqs: paginatedMcqs,
+        },
+        meta,
+    };
 };
 
 const delete_mcq_bank = async (id: string) => {
@@ -210,10 +235,32 @@ const update_specific_question = async (
     return { message: "Question updated successfully" };
 };
 
+const save_report_for_mcq_on_db = async (req: Request) => {
+    const user = req?.user;
+    const studentExist = await isAccountExist(user?.email as string, "profile_id") as any;
+    const payload = {
+        accountId: studentExist?._id,
+        name: studentExist?.profile_id?.firstName + " " + studentExist?.profile_id?.lastName,
+        profile_photo: studentExist?.profile_id?.profile_photo,
+        report: {
+            questionBankId: req?.body?.questionBankId,
+            questionIndex: req?.body?.questionIndex,
+            text: req?.body?.text
+        }
+    }
+    const res = await report_model.create(payload)
+    return res
+}
+
 export const mcq_bank_service = {
     upload_bulk_mcq_bank_into_db,
     get_all_mcq_banks,
     delete_mcq_bank,
     get_single_mcq_bank,
-    update_specific_question
+    update_specific_question,
+    save_report_for_mcq_on_db
 };
+
+
+
+// Upload Note ---> Select Template ---> Auto Generate an Inspection ----> Recommendation
