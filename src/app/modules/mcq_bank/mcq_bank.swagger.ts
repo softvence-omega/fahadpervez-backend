@@ -71,7 +71,7 @@ export const mcqBankSwaggerDoc = {
                 },
             ],
             responses: {
-                200: {description: "Paginated list of MCQ banks fetched successfully"},
+                200: { description: "Paginated list of MCQ banks fetched successfully" },
                 401: { description: "Unauthorized" }
             }
         }
@@ -90,6 +90,18 @@ export const mcqBankSwaggerDoc = {
                     description: "MCQ Bank ID",
                     schema: { type: "string" },
                 },
+                {
+                    name: "page",
+                    in: "query",
+                    required: false,
+                    schema: { type: "integer", default: 1 }
+                },
+                {
+                    name: "limit",
+                    in: "query",
+                    required: false,
+                    schema: { type: "integer", default: 10 }
+                }
             ],
             responses: {
                 200: { description: "MCQ bank fetched successfully" },
@@ -174,6 +186,43 @@ export const mcqBankSwaggerDoc = {
                         },
                     },
                 },
+            },
+            responses: {
+                200: { description: "Question updated successfully" },
+                400: { description: "Invalid question index or payload" },
+                401: { description: "Unauthorized" },
+                404: { description: "MCQ bank not found" },
+            },
+        },
+    },
+    "/api/mcq-bank/save-report": {
+        post: {
+            tags: ["MCQ Bank"],
+            summary: "Send a report for an MCQ",
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            properties: {
+                                questionBankId: {
+                                    type: "string",
+                                    example: "69086df1267c5d421266eb46"
+                                },
+                                questionIndex: {
+                                    type: "number",
+                                    example: 1,
+                                },
+                                text: {
+                                    type: "string",
+                                    example: "This option is not correct"
+                                }
+                            }
+                        }
+                    }
+                }
             },
             responses: {
                 200: { description: "Question updated successfully" },
