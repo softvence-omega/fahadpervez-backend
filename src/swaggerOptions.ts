@@ -5,11 +5,12 @@ import { authDocs } from "./app/modules/auth/auth.swagger";
 import { chatSwaggerDoc } from "./app/modules/chat/chat.swagger";
 import { clinicalCaseSwagger } from "./app/modules/clinical_case/clinical_case.swagger";
 import { examSwaggerDocs } from "./app/modules/exam/exam.swagger";
+import { flashCardSwaggerDoc } from "./app/modules/flash_card/flash_card.swagger";
 import { mcqBankSwaggerDoc } from "./app/modules/mcq_bank/mcq_bank.swagger";
+import { profile_type_constSwaggerDocs } from "./app/modules/profile_type_const/profile_type_const.swagger";
+import { reportSwaggerDocs } from "./app/modules/report/report.swagger";
 import { socialPostDocs } from "./app/modules/social_post/social_post.swagger";
 import { studyModeTreeSwaggerDocs } from "./app/modules/study_mode_tree/study_mode_tree.swagger";
-import { reportSwaggerDocs } from "./app/modules/report/report.swagger";
-import { profile_type_constSwaggerDocs } from "./app/modules/profile_type_const/profile_type_const.swagger";
 
 
 export const swaggerOptions = {
@@ -27,13 +28,12 @@ export const swaggerOptions = {
             ...socialPostDocs,
             ...chatSwaggerDoc,
             ...mcqBankSwaggerDoc,
-
+            ...flashCardSwaggerDoc,
             ...studyModeTreeSwaggerDocs,
-
             ...examSwaggerDocs,
-        
             ...reportSwaggerDocs,
-            ...profile_type_constSwaggerDocs,},
+            ...profile_type_constSwaggerDocs,
+        },
         servers: configs.env === "production" ? [
             { url: "https://api.zyura-e.com" },
             { url: "https://fahadpervez-backend.onrender.com" },

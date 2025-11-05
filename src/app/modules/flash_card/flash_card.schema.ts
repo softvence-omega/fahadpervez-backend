@@ -1,45 +1,33 @@
 import { model, Schema } from "mongoose";
 import { TFlashCard } from "./flash_card.interface";
 
-// ---------- CardCustomization Sub-Schema ----------
-const CardCustomizationSchema = new Schema(
+
+const CardSchema = new Schema(
   {
-    prompt: { type: String, required: true },
-    sectionName: { type: String, required: true },
-    maxFlash: { type: Number, default: 0 },
-    category: { type: String, required: true },
-    level: {
+    flashCardId: { type: String, required: true },
+    frontText: { type: String, required: true },
+    backText: { type: String, required: true },
+    explanation: { type: String, required: true },
+    difficulty: {
       type: String,
-      enum: ["EASY", "MEDIUM", "HARD"],
-      required: true,
-    },
-    isPublic: { type: Boolean, default: false },
-  },
-  { _id: false }
-);
+      enum: ["Basics", "Intermediate", "Advance"],
+      required: true
+    }
+  }, { versionKey: false, timestamps: false, _id: false }
+)
 
-// ---------- AiFlashCard Sub-Schema ----------
-const AiFlashCardSchema = new Schema(
-  {
-    category: { type: String, required: true },
-    topicName: { type: String, required: true },
-    level: { type: String, required: true },
-  },
-  { _id: false }
-);
-
-// ---------- FlashCard Main Schema ----------
 const FlashCardSchema = new Schema<TFlashCard>(
   {
-    postedBy: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "account", // dynamic ref
-    },
-    cardCustomization: { type: [CardCustomizationSchema], default: [] },
-    aiFlashCard: { type: [AiFlashCardSchema], default: [] },
-    uploadMedia: { type: String },
-    isDeleted: { type: Boolean, default: false },
+    title: { type: String, required: true },
+    subject: { type: String, required: true },
+    system: { type: String, required: true },
+    topic: { type: String, required: true },
+    subtopic: { type: String, required: true },
+    slug: { type: String, required: true },
+    studentType: { type: String, required: true },
+    type: { type: String, enum: ["exam", "study"], required: true },
+    uploadedBy: { type: String, required: true },
+    flashCards: [CardSchema]
   },
   {
     timestamps: true,
@@ -47,5 +35,4 @@ const FlashCardSchema = new Schema<TFlashCard>(
   }
 );
 
-// ---------- Export Model ----------
 export const FlashcardModel = model<TFlashCard>("flash_card", FlashCardSchema);

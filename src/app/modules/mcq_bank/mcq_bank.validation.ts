@@ -22,7 +22,7 @@ export const create = z.object({
     title: z.string().min(1, "Title is required"),
     subject: z.string().min(1, "Subject is required"),
     system: z.string().min(1, "System is required"),
-    studentType: z.string().min(1, "Student Type is required"),
+    studentType: z.string().optional(),
     topic: z.string().min(1, "Topic is required"),
     subtopic: z.string().min(1, "Subtopic is required"),
     type: z.enum(["exam", "study"]),

@@ -4,30 +4,28 @@ import { z } from "zod";
 
 // For create request
 const create = z.object({
-  prompt: z
-    .string({ message: "Flash card prompt is required" })
-    .min(1, "Flash card prompt cannot be empty"),
-  data: z
-    .string({ message: "Flash card data is required" })
-    .min(1, "Flash card data cannot be empty"),
-  uploadMedia: z.string().optional(), // e.g., file URL after upload
+  title: z.string().nonempty(),
+  subject: z.string().nonempty(),
+  system: z.string().nonempty(),
+  topic: z.string().nonempty(),
+  subtopic: z.string().nonempty(),
+  slug: z.string().nonempty(),
+  studentType: z.string().nonempty(),
+  type: z.enum(["exam", "study"]),
+  uploadedBy: z.string().nonempty(),
+  flashCards: z.array(
+    z.object({
+      flashCardId: z.string().nonempty(),
+      frontText: z.string().nonempty(),
+      backText: z.string().nonempty(),
+      explanation: z.string().nonempty(),
+      difficulty: z.enum(["Basics", "Intermediate", "Advance"])
+    })
+  )
 });
 
-// For update request
-const update = z.object({
-  prompt: z
-    .string({ message: "Flash card prompt is required" })
-    .min(1, "Flash card prompt cannot be empty")
-    .optional(),
-  data: z
-    .string({ message: "Flash card data is required" })
-    .min(1, "Flash card data cannot be empty")
-    .optional(),
-  uploadMedia: z.string().optional(),
-});
 
 // ---------- Export ----------
 export const flash_card_validation = {
-  create,
-  update,
+  create
 };
