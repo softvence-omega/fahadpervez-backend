@@ -1,8 +1,9 @@
 import { z } from "zod";
 
-const create = z.object({});
+const status = z.object({
+  status: z.enum(["IN_REVIEW", "RESOLVED", "REJECTED"]),
+});
 
 export const report_validations = {
-  create
+  status
 };
-  

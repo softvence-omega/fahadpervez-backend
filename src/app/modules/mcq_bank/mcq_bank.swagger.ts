@@ -21,6 +21,7 @@ export const mcqBankSwaggerDoc = {
                                         topic: "Tonatomy",
                                         subtopic: "Monatomy",
                                         type: "study",
+                                        studentType: "Nursing Student"
                                     },
                                 },
                                 file: {

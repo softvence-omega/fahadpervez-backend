@@ -9,7 +9,8 @@ const report_schema = new Schema<T_Report>({
         questionBankId: { type: String, required: true },
         mcqId: { type: String, required: true },
         text: { type: String, required: true },
-    }
+    },
+    status: { type: String, enum: ["IN_REVIEW", "RESOLVED", "REJECTED"], default: "IN_REVIEW" },
 }, { versionKey: false, timestamps: true });
 
 export const report_model = model("report", report_schema);

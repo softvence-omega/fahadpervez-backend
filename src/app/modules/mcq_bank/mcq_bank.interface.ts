@@ -5,6 +5,7 @@ export type TMcqBank = {
     topic: string,
     subtopic: string,
     slug: string,
+    studentType: string,
     type: "exam" | "study"
     uploadedBy: string,
     mcqs: {

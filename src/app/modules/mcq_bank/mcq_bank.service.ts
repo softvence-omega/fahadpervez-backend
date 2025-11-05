@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { excelConverter } from "../../utils/excel_converter";
 import { isAccountExist } from "../../utils/isAccountExist";
+import { profile_type_const_model } from "../profile_type_const/profile_type_const.schema";
 import { report_model } from "../report/report.schema";
 import { TMcqBank } from "./mcq_bank.interface";
 import { McqBankModel } from "./mcq_bank.schema";
@@ -62,6 +63,7 @@ const upload_bulk_mcq_bank_into_db = async (req: Request) => {
 
     const payload: TMcqBank = {
         title: body?.title,
+        studentType: body?.studentType,
         uploadedBy,
         mcqs: refineData,
         subject: body?.subject,
@@ -76,6 +78,7 @@ const upload_bulk_mcq_bank_into_db = async (req: Request) => {
     await mcq_validation.create.parseAsync(payload);
 
     const result = await McqBankModel.create(payload);
+    await profile_type_const_model.findOneAndUpdate({ typeName: body?.studentType }, { $inc: { totalContent: 1 } });
     return Array.isArray(result) ? result.length : 1;
 };
 
@@ -188,50 +191,50 @@ const delete_mcq_bank = async (id: string) => {
 
 // Update a specific question by its array index
 const update_specific_question = async (
-  mcqBankId: string,
-  mcqId: string,
-  updatedQuestionData: Partial<TRawMcqRow>
+    mcqBankId: string,
+    mcqId: string,
+    updatedQuestionData: Partial<TRawMcqRow>
 ) => {
-  // 1️⃣ Build the update object dynamically
-  const updateFields: Record<string, any> = {};
+    // 1️⃣ Build the update object dynamically
+    const updateFields: Record<string, any> = {};
 
-  if (updatedQuestionData.question)
-    updateFields["mcqs.$.question"] = updatedQuestionData.question;
+    if (updatedQuestionData.question)
+        updateFields["mcqs.$.question"] = updatedQuestionData.question;
 
-  if (updatedQuestionData.difficulty)
-    updateFields["mcqs.$.difficulty"] = updatedQuestionData.difficulty;
+    if (updatedQuestionData.difficulty)
+        updateFields["mcqs.$.difficulty"] = updatedQuestionData.difficulty;
 
-  if (updatedQuestionData.imageDescription)
-    updateFields["mcqs.$.imageDescription"] = updatedQuestionData.imageDescription;
+    if (updatedQuestionData.imageDescription)
+        updateFields["mcqs.$.imageDescription"] = updatedQuestionData.imageDescription;
 
-  // 2️⃣ Options (A–F)
-  const options = ["A", "B", "C", "D", "E", "F"] as const;
-  options.forEach((label, i) => {
-    const textKey = `option${label}` as keyof typeof updatedQuestionData;
-    const expKey = `explanation${label}` as keyof typeof updatedQuestionData;
+    // 2️⃣ Options (A–F)
+    const options = ["A", "B", "C", "D", "E", "F"] as const;
+    options.forEach((label, i) => {
+        const textKey = `option${label}` as keyof typeof updatedQuestionData;
+        const expKey = `explanation${label}` as keyof typeof updatedQuestionData;
 
-    if (updatedQuestionData[textKey] !== undefined)
-      updateFields[`mcqs.$.options.${i}.optionText`] = updatedQuestionData[textKey];
+        if (updatedQuestionData[textKey] !== undefined)
+            updateFields[`mcqs.$.options.${i}.optionText`] = updatedQuestionData[textKey];
 
-    if (updatedQuestionData[expKey] !== undefined)
-      updateFields[`mcqs.$.options.${i}.explanation`] = updatedQuestionData[expKey];
-  });
+        if (updatedQuestionData[expKey] !== undefined)
+            updateFields[`mcqs.$.options.${i}.explanation`] = updatedQuestionData[expKey];
+    });
 
-  // 3️⃣ Correct Option
-  if (updatedQuestionData.correctOption)
-    updateFields["mcqs.$.correctOption"] = updatedQuestionData.correctOption;
+    // 3️⃣ Correct Option
+    if (updatedQuestionData.correctOption)
+        updateFields["mcqs.$.correctOption"] = updatedQuestionData.correctOption;
 
-  // 4️⃣ Execute the update directly in MongoDB
-  const result = await McqBankModel.updateOne(
-    { _id: mcqBankId, "mcqs.mcqId": mcqId },
-    { $set: updateFields }
-  );
+    // 4️⃣ Execute the update directly in MongoDB
+    const result = await McqBankModel.updateOne(
+        { _id: mcqBankId, "mcqs.mcqId": mcqId },
+        { $set: updateFields }
+    );
 
-  if (result.matchedCount === 0) throw new Error("MCQ not found");
-  if (result.modifiedCount === 0)
-    return { message: "No changes were made (fields may be identical)" };
+    if (result.matchedCount === 0) throw new Error("MCQ not found");
+    if (result.modifiedCount === 0)
+        return { message: "No changes were made (fields may be identical)" };
 
-  return { message: "Question updated successfully" };
+    return { message: "Question updated successfully" };
 };
 
 

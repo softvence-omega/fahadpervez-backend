@@ -8,4 +8,5 @@ export type T_Report = {
     mcqId: string;
     text: string;
   };
+  status: "IN_REVIEW" | "RESOLVED" | "REJECTED"
 }

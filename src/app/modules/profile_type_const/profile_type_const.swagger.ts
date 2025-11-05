@@ -3,6 +3,7 @@ export const profile_type_constSwaggerDocs = {
     "/api/profile_type_const/create": {
         post: {
             tags: ["Student Profile Types"],
+            security: [{ bearerAuth: [] }],
             summary: "Create a new profile type - It's only accessible by admin",
             description: "Provide a valid type name for the student profile",
             requestBody: {
@@ -28,6 +29,7 @@ export const profile_type_constSwaggerDocs = {
     "/api/profile_type_const/all": {
         get: {
             tags: ["Student Profile Types"],
+            security: [{ bearerAuth: [] }],
             summary: "Get all profile types - It's accessible by all users",
             description: "",
             responses: {
@@ -39,6 +41,7 @@ export const profile_type_constSwaggerDocs = {
     "/api/profile_type_const/update/{typeId}": {
         patch: {
             tags: ["Student Profile Types"],
+            security: [{ bearerAuth: [] }],
             summary: "Update a profile type - It's only accessible by admin",
             description: "Provide a valid type name for the student profile and a valid type id",
             parameters: [
@@ -72,6 +75,7 @@ export const profile_type_constSwaggerDocs = {
     "/api/profile_type_const/delete/{typeId}": {
         delete: {
             tags: ["Student Profile Types"],
+            security: [{ bearerAuth: [] }],
             summary: "Delete a profile type - It's only accessible by admin",
             description: "Provide a valid type id",
             parameters: [
