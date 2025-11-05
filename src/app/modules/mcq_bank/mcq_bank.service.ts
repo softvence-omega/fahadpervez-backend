@@ -188,53 +188,52 @@ const delete_mcq_bank = async (id: string) => {
 
 // Update a specific question by its array index
 const update_specific_question = async (
-    mcqBankId: string,
-    questionIndex: number,
-    updatedQuestionData: Partial<TRawMcqRow>
+  mcqBankId: string,
+  mcqId: string,
+  updatedQuestionData: Partial<TRawMcqRow>
 ) => {
-    const mcqBank = await McqBankModel.findById(mcqBankId);
-    if (!mcqBank) throw new Error("MCQ Bank not found");
+  // 1️⃣ Build the update object dynamically
+  const updateFields: Record<string, any> = {};
 
-    if (!mcqBank?.mcqs || questionIndex < 0 || questionIndex >= mcqBank?.mcqs.length) {
-        throw new Error("Invalid question index");
-    }
+  if (updatedQuestionData.question)
+    updateFields["mcqs.$.question"] = updatedQuestionData.question;
 
-    const existingQuestion = mcqBank?.mcqs[questionIndex];
+  if (updatedQuestionData.difficulty)
+    updateFields["mcqs.$.difficulty"] = updatedQuestionData.difficulty;
 
-    // Merge updates
-    mcqBank.mcqs[questionIndex] = {
-        ...existingQuestion,
-        difficulty: updatedQuestionData.difficulty ?? existingQuestion.difficulty,
-        question: updatedQuestionData.question ?? existingQuestion.question,
-        imageDescription: updatedQuestionData.imageDescription ?? existingQuestion.imageDescription,
-        options: [
-            {
-                option: "A",
-                optionText: updatedQuestionData.optionA ?? existingQuestion.options[0].optionText,
-                explanation: updatedQuestionData.explanationA ?? existingQuestion.options[0].explanation,
-            },
-            {
-                option: "B",
-                optionText: updatedQuestionData.optionB ?? existingQuestion.options[1].optionText,
-                explanation: updatedQuestionData.explanationB ?? existingQuestion.options[1].explanation,
-            },
-            {
-                option: "C",
-                optionText: updatedQuestionData.optionC ?? existingQuestion.options[2].optionText,
-                explanation: updatedQuestionData.explanationC ?? existingQuestion.options[2].explanation,
-            },
-            {
-                option: "D",
-                optionText: updatedQuestionData.optionD ?? existingQuestion.options[3].optionText,
-                explanation: updatedQuestionData.explanationD ?? existingQuestion.options[3].explanation,
-            }
-        ],
-        correctOption: (updatedQuestionData.correctOption as "A" | "B" | "C" | "D") ?? existingQuestion.correctOption,
-    };
+  if (updatedQuestionData.imageDescription)
+    updateFields["mcqs.$.imageDescription"] = updatedQuestionData.imageDescription;
 
-    await mcqBank.save();
-    return { message: "Question updated successfully" };
+  // 2️⃣ Options (A–F)
+  const options = ["A", "B", "C", "D", "E", "F"] as const;
+  options.forEach((label, i) => {
+    const textKey = `option${label}` as keyof typeof updatedQuestionData;
+    const expKey = `explanation${label}` as keyof typeof updatedQuestionData;
+
+    if (updatedQuestionData[textKey] !== undefined)
+      updateFields[`mcqs.$.options.${i}.optionText`] = updatedQuestionData[textKey];
+
+    if (updatedQuestionData[expKey] !== undefined)
+      updateFields[`mcqs.$.options.${i}.explanation`] = updatedQuestionData[expKey];
+  });
+
+  // 3️⃣ Correct Option
+  if (updatedQuestionData.correctOption)
+    updateFields["mcqs.$.correctOption"] = updatedQuestionData.correctOption;
+
+  // 4️⃣ Execute the update directly in MongoDB
+  const result = await McqBankModel.updateOne(
+    { _id: mcqBankId, "mcqs.mcqId": mcqId },
+    { $set: updateFields }
+  );
+
+  if (result.matchedCount === 0) throw new Error("MCQ not found");
+  if (result.modifiedCount === 0)
+    return { message: "No changes were made (fields may be identical)" };
+
+  return { message: "Question updated successfully" };
 };
+
 
 const save_report_for_mcq_on_db = async (req: Request) => {
     const user = req?.user;
@@ -245,7 +244,7 @@ const save_report_for_mcq_on_db = async (req: Request) => {
         profile_photo: studentExist?.profile_id?.profile_photo,
         report: {
             questionBankId: req?.body?.questionBankId,
-            questionIndex: req?.body?.questionIndex,
+            mcqId: req?.body?.mcqId,
             text: req?.body?.text
         }
     }

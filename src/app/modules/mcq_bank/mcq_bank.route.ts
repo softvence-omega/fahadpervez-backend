@@ -59,7 +59,7 @@ mcqBankRouter.delete(
 // Update Specific Question by Index
 // ----------------------
 mcqBankRouter.patch(
-    "/:id/question/:questionIndex",
+    "/:id/question/:mcqId",
     auth("ADMIN", "MENTOR"),
     mcq_bank_controller.update_specific_question
 );

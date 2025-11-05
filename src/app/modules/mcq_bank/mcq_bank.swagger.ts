@@ -130,7 +130,7 @@ export const mcqBankSwaggerDoc = {
         },
     },
 
-    "/api/mcq-bank/{id}/question/{questionIndex}": {
+    "/api/mcq-bank/{id}/question/{mcqId}": {
         patch: {
             tags: ["MCQ Bank"],
             summary: "Update a specific question in an MCQ bank by index",
@@ -144,11 +144,11 @@ export const mcqBankSwaggerDoc = {
                     schema: { type: "string" },
                 },
                 {
-                    name: "questionIndex",
+                    name: "mcqId",
                     in: "path",
                     required: true,
-                    description: "Index of the question to update (0-based)",
-                    schema: { type: "integer" },
+                    description: "Unique MCQ ID - QRE-000001",
+                    schema: { type: "string" },
                 },
             ],
             requestBody: {
@@ -211,9 +211,9 @@ export const mcqBankSwaggerDoc = {
                                     type: "string",
                                     example: "69086df1267c5d421266eb46"
                                 },
-                                questionIndex: {
-                                    type: "number",
-                                    example: 1,
+                                mcqId: {
+                                    type: "string",
+                                    example: "QRE-000001",
                                 },
                                 text: {
                                     type: "string",

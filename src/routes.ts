@@ -12,11 +12,13 @@ import studentRoute from './app/modules/student/student.route';
 import study_mode_tree_router from './app/modules/study_mode_tree/study_mode_tree.route';
 import examRoute from './app/modules/exam/exam.route';
 import reportRoute from './app/modules/report/report.route';
+import profile_type_constRoute from './app/modules/profile_type_const/profile_type_const.route';
 
 
 const appRouter = Router();
 
 const moduleRoutes = [
+    { path: "/profile_type_const", route: profile_type_constRoute },
     { path: "/report", route: reportRoute },
     { path: "/exam", route: examRoute },
     { path: "/study_mode_tree", route: study_mode_tree_router },

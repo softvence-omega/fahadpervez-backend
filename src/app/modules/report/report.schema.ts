@@ -7,7 +7,7 @@ const report_schema = new Schema<T_Report>({
     profile_photo: { type: String, required: false },
     report: {
         questionBankId: { type: String, required: true },
-        questionIndex: { type: Number, required: true },
+        mcqId: { type: String, required: true },
         text: { type: String, required: true },
     }
 }, { versionKey: false, timestamps: true });
