@@ -18,9 +18,9 @@ export const mcqBankSwaggerDoc = {
                                         title: "Anatomy Essentials MCQs",
                                         subject: "Neurology",
                                         system: "Anatomy",
-                                        topic: "Anatomy",
-                                        subtopic: "Anatomy",
-                                        type: "exam",
+                                        topic: "Tonatomy",
+                                        subtopic: "Monatomy",
+                                        type: "study",
                                     },
                                 },
                                 file: {

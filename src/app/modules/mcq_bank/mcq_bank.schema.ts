@@ -17,6 +17,10 @@ const optionSchema = new mongoose.Schema({
 }, { versionKey: false, timestamps: false, _id: false });
 
 const mcqSchema = new mongoose.Schema({
+    mcqId: {
+        type: String,
+        required: true,
+    },
     difficulty: {
         type: String,
         enum: ["Basics", "Intermediate", "Advance"],

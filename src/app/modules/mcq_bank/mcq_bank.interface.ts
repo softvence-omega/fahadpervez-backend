@@ -8,6 +8,7 @@ export type TMcqBank = {
     type: "exam" | "study"
     uploadedBy: string,
     mcqs: {
+        mcqId:string,
         difficulty: "Basics" | "Intermediate" | "Advance";
         question: string;
         imageDescription?: string;

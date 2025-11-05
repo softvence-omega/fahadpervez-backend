@@ -4,6 +4,7 @@ export const optionZodSchema = z.object({
     option: z.enum(["A", "B", "C", "D", "E", "F"]),
     optionText: z.string().min(1, "Option text is required").optional(),
     explanation: z.string().optional(),
+
 });
 
 export const mcqZodSchema = z.object({
@@ -14,6 +15,7 @@ export const mcqZodSchema = z.object({
         .array(optionZodSchema)
         .min(2, "Each MCQ must have at least two options"),
     correctOption: z.enum(["A", "B", "C", "D", "E", "F"]),
+    mcqId: z.string().optional(),
 });
 
 export const create = z.object({
