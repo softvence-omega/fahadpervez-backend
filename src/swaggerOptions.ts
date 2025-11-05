@@ -9,6 +9,7 @@ import { mcqBankSwaggerDoc } from "./app/modules/mcq_bank/mcq_bank.swagger";
 import { socialPostDocs } from "./app/modules/social_post/social_post.swagger";
 import { studyModeTreeSwaggerDocs } from "./app/modules/study_mode_tree/study_mode_tree.swagger";
 import { reportSwaggerDocs } from "./app/modules/report/report.swagger";
+import { profile_type_constSwaggerDocs } from "./app/modules/profile_type_const/profile_type_const.swagger";
 
 
 export const swaggerOptions = {
@@ -31,7 +32,8 @@ export const swaggerOptions = {
 
             ...examSwaggerDocs,
         
-            ...reportSwaggerDocs,},
+            ...reportSwaggerDocs,
+            ...profile_type_constSwaggerDocs,},
         servers: configs.env === "production" ? [
             { url: "https://api.zyura-e.com" },
             { url: "https://fahadpervez-backend.onrender.com" },

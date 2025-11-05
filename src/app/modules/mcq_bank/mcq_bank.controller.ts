@@ -51,11 +51,11 @@ const delete_mcq_bank = catchAsync(async (req, res) => {
 
 // Update specific question in MCQ Bank by index
 const update_specific_question = catchAsync(async (req, res) => {
-    const { id, questionIndex } = req.params;
+    const { id, mcqId } = req.params;
     const updatedQuestionData = req.body;
     const result = await mcq_bank_service.update_specific_question(
         id,
-        Number(questionIndex),
+        mcqId,
         updatedQuestionData
     );
 
