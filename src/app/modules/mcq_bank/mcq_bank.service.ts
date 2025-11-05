@@ -32,7 +32,7 @@ const upload_bulk_mcq_bank_into_db = async (req: Request) => {
     // Parse Excel data if file exists
     const excelData: any = req.file ? excelConverter.parseFile(req.file.path) || [] : [];
 
-    const refineData = excelData.map((item: TRawMcqRow) => {
+    const refineData = excelData.map((item: TRawMcqRow, idx: number) => {
         const options = [
             { option: "A" as const, optionText: item.optionA || "", explanation: item.explanationA || undefined },
             { option: "B" as const, optionText: item.optionB || "", explanation: item.explanationB || undefined },
@@ -48,6 +48,7 @@ const upload_bulk_mcq_bank_into_db = async (req: Request) => {
             imageDescription: item.imageDescription || undefined,
             options,
             correctOption: (item.correctOption?.toUpperCase() as "A" | "B" | "C" | "D" | "E" | "F"),
+            mcqId: `QRE-${String(idx + 1).padStart(6, '0')}`,
         };
     });
 
