@@ -5,7 +5,7 @@ export type T_Report = {
   profile_photo: string;
   report: {
     questionBankId: string;
-    questionIndex: number;
+    mcqId: string;
     text: string;
   };
 }
