@@ -7,4 +7,5 @@ export type T_ContentManagementAdmin = {
       subTopics: string[],
     }[],
   }[],
+  studentType: string;
 } 

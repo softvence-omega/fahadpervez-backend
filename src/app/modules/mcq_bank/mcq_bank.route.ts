@@ -20,6 +20,11 @@ mcqBankRouter.post(
     },
     mcq_bank_controller.upload_bulk_mcq_bank
 );
+mcqBankRouter.post(
+    "/upload-manual",
+    auth("ADMIN", "MENTOR"),
+    mcq_bank_controller.save_manual_mcq_upload
+);
 
 // ----------------------
 // Get All MCQ Banks

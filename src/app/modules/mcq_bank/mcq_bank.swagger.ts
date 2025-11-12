@@ -42,6 +42,68 @@ export const mcqBankSwaggerDoc = {
             },
         },
     },
+    "/api/mcq-bank/upload-manual": {
+        post: {
+            tags: ["MCQ Bank"],
+            summary: "Upload a bulk of MCQs (Manual)",
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            example: {
+                                title: "Anatomy Essentials MCQs",
+                                subject: "Neurology",
+                                system: "Anatomy",
+                                topic: "Tonatomy",
+                                subtopic: "Monatomy",
+                                type: "study",
+                                studentType: "Nursing Student",
+                                mcqs: [
+                                    {
+                                        difficulty: "Intermediate",
+                                        question: "Which part of the brain is responsible for coordination and balance?",
+                                        imageDescription: "https://example.com/images/brain-diagram.png",
+                                        options: [
+                                            {
+                                                option: "A",
+                                                optionText: "Cerebrum",
+                                                explanation: "Responsible for higher brain functions like thought and action."
+                                            },
+                                            {
+                                                option: "B",
+                                                optionText: "Cerebellum",
+                                                explanation: "Maintains balance, posture, and coordination of voluntary movements."
+                                            },
+                                            {
+                                                option: "C",
+                                                optionText: "Medulla Oblongata",
+                                                explanation: "Controls automatic functions such as breathing and heart rate."
+                                            },
+                                            {
+                                                option: "D",
+                                                optionText: "Hypothalamus",
+                                                explanation: "Regulates body temperature, hunger, and hormonal balance."
+                                            }
+                                        ],
+                                        correctOption: "B"
+                                    }
+                                ]
+                            },
+                            required: ["data"],
+                        },
+                    },
+                },
+            },
+            responses: {
+                201: { description: "MCQ bank uploaded successfully" },
+                400: { description: "Invalid data format or missing fields" },
+                401: { description: "Unauthorized" },
+            },
+        },
+    },
 
     "/api/mcq-bank": {
         get: {
@@ -68,7 +130,7 @@ export const mcqBankSwaggerDoc = {
                     in: "query",
                     description: "Search by mcqBankTitle or category",
                     required: false,
-                    schema: { type: "string"}
+                    schema: { type: "string" }
                 },
             ],
             responses: {

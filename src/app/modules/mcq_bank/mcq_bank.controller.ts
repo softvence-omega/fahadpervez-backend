@@ -75,6 +75,15 @@ const save_report_for_mcq = catchAsync(async (req, res) => {
         data: result,
     });
 });
+const save_manual_mcq_upload = catchAsync(async (req, res) => {
+    const result = await mcq_bank_service.save_manual_mcq_upload_into_db(req);
+    manageResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "MCQ saved successfully",
+        data: result,
+    });
+});
 
 export const mcq_bank_controller = {
     upload_bulk_mcq_bank,
@@ -82,5 +91,6 @@ export const mcq_bank_controller = {
     get_single_mcq_bank,
     delete_mcq_bank,
     update_specific_question,
-    save_report_for_mcq
+    save_report_for_mcq,
+    save_manual_mcq_upload
 };

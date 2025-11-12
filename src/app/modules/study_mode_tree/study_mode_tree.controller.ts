@@ -13,7 +13,7 @@ const create_new_content_management_admin = catchAsync(async (req, res) => {
   });
 });
 const get_all_content_management_admin = catchAsync(async (req, res) => {
-  const result = await study_mode_tree_service.get_all_content_management_admin_from_db();
+  const result = await study_mode_tree_service.get_all_content_management_admin_from_db(req);
   manageResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

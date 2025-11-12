@@ -357,13 +357,32 @@ const save_report_for_mcq_on_db = async (req: Request) => {
     return res
 }
 
+const save_manual_mcq_upload_into_db = async (req: Request) => {
+    const user = req?.user;
+    const isUserExist = await isAccountExist(user?.email as string, "profile_id") as any;
+    const payload = {
+        ...req?.body,
+        uploadedBy: isUserExist?.profile_id?.firstName + " " + isUserExist?.profile_id?.lastName,
+        slug: (req?.body?.subject + req?.body?.system + req?.body?.topic + req?.body?.subtopic).toLowerCase(),
+        mcqs: req?.body?.mcqs.map((item: TRawMcqRow, idx: number) => {
+            return {
+                ...item,
+                mcqId: `QRE-${String(idx + 1).padStart(6, '0')}`
+            }
+        })
+    }
+    const res = await McqBankModel.create(payload)
+    return res
+}
+
 export const mcq_bank_service = {
     upload_bulk_mcq_bank_into_db,
     get_all_mcq_banks,
     delete_mcq_bank,
     get_single_mcq_bank,
     update_specific_question,
-    save_report_for_mcq_on_db
+    save_report_for_mcq_on_db,
+    save_manual_mcq_upload_into_db
 };
 
 

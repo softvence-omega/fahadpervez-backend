@@ -16,6 +16,7 @@ const SystemSchema = new Schema({
 const content_management_admin_schema = new Schema<T_ContentManagementAdmin>({
     subjectName: { type: String, required: true },
     systems: { type: [SystemSchema], default: [] },
+    studentType: { type: String }
 },
     {
         timestamps: true,

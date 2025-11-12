@@ -1,5 +1,6 @@
 import { Request } from "express";
 import { McqBankModel } from "../mcq_bank/mcq_bank.schema";
+import { Student_Model } from "../student/student.schema";
 import { content_management_admin_model } from './study_mode_tree.schema';
 
 const create_new_content_management_admin_into_db = async (req: Request) => {
@@ -7,8 +8,16 @@ const create_new_content_management_admin_into_db = async (req: Request) => {
   return result;;
 };
 
-const get_all_content_management_admin_from_db = async () => {
-  const result = await content_management_admin_model.find().lean();
+const get_all_content_management_admin_from_db = async (req: Request) => {
+  const role = req?.user?.role;
+  const isProfileExist = await Student_Model.findOne({ accountId: req?.user?.accountId }).lean();
+  const studentType = isProfileExist?.studentType;
+  let result;
+  if (role === "STUDENT") {
+    result = await content_management_admin_model.find({ studentType }).lean();
+  } else {
+    result = await content_management_admin_model.find().lean();
+  }
   return result;
 };
 
@@ -112,7 +121,7 @@ const get_all_content_from_tree_from_db = async (req: Request) => {
       ...r.toObject(),
       mcqs: undefined, // ensure mcqs are hidden
     })),
-    
+
   };
 };
 
