@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { commonPreferenceValidationSchema } from "../../common/common.validation";
-import { AUTH_CONSTANTS } from "./auth.constant";
 
 // Zod schema matching TAccount / authSchema
 const register_validation = z.object({
@@ -50,7 +49,7 @@ const updateProfile = z.object({
         university: z.string({ message: "University is required" }),
         country: z.string({ message: "Country is required" }),
         year_of_study: z.string({ message: "Year of Study is required" }),
-        studentType: z.enum(Object.values(AUTH_CONSTANTS.STUDENT_TYPES), { message: "Student Type is required" }),
+        studentType: z.string().optional(),
         preparingFor: z.string().optional(),
     }).optional(),
     preference: commonPreferenceValidationSchema.optional(),

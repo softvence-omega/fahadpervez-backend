@@ -21,6 +21,16 @@ const get_all_content_management_admin = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const get_all_content_from_tree = catchAsync(async (req, res) => {
+  const result = await study_mode_tree_service.get_all_content_from_tree_from_db(req);
+  manageResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Content tree fetched successfully!",
+    data: result?.data,
+    meta: result?.meta
+  });
+});
 const update_content_management_admin = catchAsync(async (req, res) => {
   const result = await study_mode_tree_service.update_content_management_admin_into_db(req);
   manageResponse(res, {
@@ -44,5 +54,6 @@ export const study_mode_tree_controller = {
   create_new_content_management_admin,
   get_all_content_management_admin,
   update_content_management_admin,
-  delete_content_management_admin
+  delete_content_management_admin,
+  get_all_content_from_tree
 };

@@ -53,7 +53,7 @@ const McqBankSchema = new mongoose.Schema(
         subject: { type: String, required: true },
         system: { type: String, required: true },
         topic: { type: String, required: true },
-        studentType: { type: String, required: false },
+        studentType: { type: String, required: true },
         subtopic: { type: String, required: true },
         slug: { type: String },
         type: { type: String, enum: ["exam", "study"], required: true },

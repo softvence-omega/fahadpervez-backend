@@ -68,7 +68,7 @@ export const mcqBankSwaggerDoc = {
                     in: "query",
                     description: "Search by mcqBankTitle or category",
                     required: false,
-                    schema: { type: "string", example: "anatomy" },
+                    schema: { type: "string"}
                 },
             ],
             responses: {

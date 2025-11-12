@@ -1,12 +1,11 @@
 import { Types } from "mongoose"
 import { TCommonPreference } from "../../types/common"
-import { AUTH_CONSTANTS } from "../auth/auth.constant"
 
 export type TStudent = {
     accountId: Types.ObjectId,
     firstName?: string,
     lastName?: string,
-    studentType?: keyof typeof AUTH_CONSTANTS.STUDENT_TYPES,
+    studentType?: string,
     phone?: string,
     country?: string,
     university?: string,

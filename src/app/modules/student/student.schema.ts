@@ -1,13 +1,12 @@
 import { model, Schema } from 'mongoose';
 import { CommonPreferenceSchema } from '../../common/common.schema';
-import { AUTH_CONSTANTS } from '../auth/auth.constant';
 import { TStudent } from './student.interface';
 
 const studentSchema = new Schema<TStudent>({
     accountId: { type: Schema.Types.ObjectId, required: true, ref: "account" },
     firstName: { type: String, required: false },
     lastName: { type: String, required: false },
-    studentType: { type: String, enum: Object.values(AUTH_CONSTANTS.STUDENT_TYPES), required: false },
+    studentType: { type: String, required: false },
     phone: { type: String, required: false },
     country: { type: String, required: false },
     university: { type: String, required: false },

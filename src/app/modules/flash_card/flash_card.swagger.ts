@@ -42,6 +42,85 @@ export const flashCardSwaggerDoc = {
                 401: { description: "Unauthorized" },
             },
         }
+    },
+    "/api/flash-card/get-all": {
+        get: {
+            tags: ["Flash Card"],
+            summary: "Get all flash cards - (For Admin)",
+            security: [{ bearerAuth: [] }],
+            responses: {
+                201: { description: "Flash card fetched successfully" },
+                401: { description: "Unauthorized" },
+            },
+        }
+    },
+    "/api/flash-card/get-all-student": {
+        get: {
+            tags: ["Flash Card"],
+            summary: "Get all flash cards - (For Student)",
+            security: [{ bearerAuth: [] }],
+            responses: {
+                201: { description: "Flash card fetched successfully" },
+                401: { description: "Unauthorized" },
+            },
+        }
+    },
+    "/api/flash-card/get-single/{flashCardId}": {
+        get: {
+            tags: ["Flash Card"],
+            summary: "Get all flash cards - (For Student)",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "flashCardId",
+                    in: "path",
+                    required: true,
+                    schema: { type: "string" }
+                }
+            ],
+            responses: {
+                201: { description: "Flash card fetched successfully" },
+                401: { description: "Unauthorized" },
+            },
+        }
+    },
+    "/api/flash-card/update/{flashCardId}": {
+        patch: {
+            tags: ["Flash Card"],
+            summary: "Update a Flash card using FlashcardId - (For Admin)",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "flashCardId",
+                    in: "path",
+                    required: true,
+                    schema: { type: "string" }
+                }
+            ],
+            responses: {
+                201: { description: "Flash card fetched successfully" },
+                401: { description: "Unauthorized" },
+            },
+        }
+    },
+    "/api/flash-card/delete/{flashCardId}": {
+        delete: {
+            tags: ["Flash Card"],
+            summary: "Delete FlashcardId - (For Admin)",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "flashCardId",
+                    in: "path",
+                    required: true,
+                    schema: { type: "string" }
+                }
+            ],
+            responses: {
+                201: { description: "Flash card fetched successfully" },
+                401: { description: "Unauthorized" },
+            },
+        }
     }
 }
 

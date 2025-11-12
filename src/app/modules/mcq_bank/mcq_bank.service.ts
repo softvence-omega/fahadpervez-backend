@@ -3,6 +3,7 @@ import { excelConverter } from "../../utils/excel_converter";
 import { isAccountExist } from "../../utils/isAccountExist";
 import { profile_type_const_model } from "../profile_type_const/profile_type_const.schema";
 import { report_model } from "../report/report.schema";
+import { Student_Model } from "../student/student.schema";
 import { TMcqBank } from "./mcq_bank.interface";
 import { McqBankModel } from "./mcq_bank.schema";
 import { mcq_validation } from "./mcq_bank.validation";
@@ -82,6 +83,89 @@ const upload_bulk_mcq_bank_into_db = async (req: Request) => {
     return Array.isArray(result) ? result.length : 1;
 };
 
+// const get_all_mcq_banks = async (req: Request) => {
+//     const {
+//         page = "1",
+//         limit = "10",
+//         searchTerm = "",
+//         subject = "",
+//         system = "",
+//         topic = "",
+//         subtopic = "",
+//     } = req.query as {
+//         page?: string;
+//         limit?: string;
+//         searchTerm?: string;
+//         subject?: string;
+//         system?: string;
+//         topic?: string;
+//         subtopic?: string;
+//     };
+//     let studentType;
+//     if (req?.user?.role == "STUDENT") {
+//         const student = await Student_Model.findOne({ accountId: req?.user?.accountId });
+//         studentType = student?.studentType;
+//     }
+//     const pageNumber = parseInt(page, 10);
+//     const limitNumber = parseInt(limit, 10);
+//     const skip = (pageNumber - 1) * limitNumber;
+
+//     const slugFilter = (subject + system + topic + subtopic).toLowerCase();
+
+//     // 🔍 Build search filter
+//     const searchFilter =
+//         searchTerm || slugFilter
+//             ? {
+//                 $and: [
+//                     { studentType: studentType },
+//                     {
+//                         $or: [
+//                             { title: { $regex: searchTerm, $options: "i" } },
+//                             { slug: { $regex: slugFilter, $options: "i" } },
+//                         ]
+//                     }
+//                 ]
+
+//             }
+//             : {};
+
+//     const result = await McqBankModel.find(searchFilter)
+//         .skip(skip)
+//         .limit(limitNumber)
+//         .sort({ createdAt: -1 })
+//         .lean();
+
+//     const total = await McqBankModel.countDocuments(searchFilter);
+//     const totalPages = Math.ceil(total / limitNumber);
+
+//     // 🧩 Transform results (map over array)
+//     const res = result.map((item: any) => ({
+//         _id: item._id,
+//         title: item.title,
+//         subject: item.subject,
+//         system: item.system,
+//         topic: item.topic,
+//         subtopic: item.subtopic,
+//         slug: item.slug,
+//         type: item.type,
+//         uploadedBy: item.uploadedBy,
+//         totalMcq: item.mcqs?.length || 0,
+//         createdAt: item?.createdAt,
+//         studentType: item?.studentType
+//     }));
+
+//     return {
+//         meta: {
+//             page: pageNumber,
+//             limit: limitNumber,
+//             total,
+//             totalPages,
+//         },
+//         data: res,
+//     };
+// };
+
+
 const get_all_mcq_banks = async (req: Request) => {
     const {
         page = "1",
@@ -101,34 +185,49 @@ const get_all_mcq_banks = async (req: Request) => {
         subtopic?: string;
     };
 
+    // 🧠 Determine studentType (only for student users)
+    let studentType: string | undefined;
+    if (req?.user?.role === "STUDENT") {
+        const student = await Student_Model.findOne({ accountId: req?.user?.accountId });
+        studentType = student?.studentType || undefined;
+    }
+
+    // 🔢 Pagination setup
     const pageNumber = parseInt(page, 10);
     const limitNumber = parseInt(limit, 10);
     const skip = (pageNumber - 1) * limitNumber;
 
+    // 🧩 Build filters dynamically
+    const filters: any = {};
+
+    // Apply studentType filter (only if exists)
+    if (studentType) {
+        filters.studentType = studentType;
+    }
+
+    // Combine subject/system/topic/subtopic into one slug string for search
     const slugFilter = (subject + system + topic + subtopic).toLowerCase();
 
-    // 🔍 Build search filter
-    const searchFilter =
-        searchTerm || slugFilter
-            ? {
-                $or: [
-                    { title: { $regex: searchTerm, $options: "i" } },
-                    { slug: { $regex: slugFilter, $options: "i" } },
-                ],
-            }
-            : {};
+    // Apply search filter if provided
+    if (searchTerm || slugFilter) {
+        filters.$or = [
+            { title: { $regex: searchTerm, $options: "i" } },
+            { slug: { $regex: slugFilter, $options: "i" } },
+        ];
+    }
 
-    const result = await McqBankModel.find(searchFilter)
+    // 🧾 Fetch results
+    const result = await McqBankModel.find(filters)
         .skip(skip)
         .limit(limitNumber)
         .sort({ createdAt: -1 })
         .lean();
 
-    const total = await McqBankModel.countDocuments(searchFilter);
+    const total = await McqBankModel.countDocuments(filters);
     const totalPages = Math.ceil(total / limitNumber);
 
-    // 🧩 Transform results (map over array)
-    const res = result.map((item: any) => ({
+    // 🧠 Transform response
+    const data = result.map((item: any) => ({
         _id: item._id,
         title: item.title,
         subject: item.subject,
@@ -139,9 +238,11 @@ const get_all_mcq_banks = async (req: Request) => {
         type: item.type,
         uploadedBy: item.uploadedBy,
         totalMcq: item.mcqs?.length || 0,
-        createdAt: item?.createdAt,
+        createdAt: item.createdAt,
+        studentType: item.studentType,
     }));
 
+    // 📦 Final return object
     return {
         meta: {
             page: pageNumber,
@@ -149,9 +250,10 @@ const get_all_mcq_banks = async (req: Request) => {
             total,
             totalPages,
         },
-        data: res,
+        data,
     };
 };
+
 
 const get_single_mcq_bank = async (req: Request): Promise<any> => {
     const { id } = req.params;

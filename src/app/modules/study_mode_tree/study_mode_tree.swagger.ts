@@ -66,6 +66,41 @@ export const studyModeTreeSwaggerDocs = {
             }
         }
     },
+    "/api/study_mode_tree/all-content": {
+        get: {
+            tags: ["Study Mode Tree -(Admin)"],
+            summary: "Get all content by tree slug",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "subject",
+                    in: "query",
+                    required: true,
+                    schema: { type: "string" }
+                },
+                {
+                    name: "system",
+                    in: "query",
+                    schema: { type: "string" }
+                },
+                {
+                    name: "topic",
+                    in: "query",
+                    schema: { type: "string" }
+                },
+                {
+                    name: "subtopic",
+                    in: "query",
+                    schema: { type: "string" }
+                }
+            ],
+            description: "Retrieves all data by tree slug",
+            responses: {
+                201: { description: "Data fetched successfully" },
+                400: { description: "Internal server error" }
+            }
+        }
+    },
     "/api/study_mode_tree/update/{treeId}": {
         patch: {
             tags: ["Study Mode Tree -(Admin)"],
