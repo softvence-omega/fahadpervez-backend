@@ -46,6 +46,11 @@ mcqBankRouter.post(
 // Get Single MCQ Bank
 // ----------------------
 mcqBankRouter.get(
+    "/single/:mcqBankId/:mcqId",
+    auth("ADMIN", "MENTOR", "PROFESSIONAL", "STUDENT"),
+    mcq_bank_controller.get_specific_mcq_bank_with_index
+);
+mcqBankRouter.get(
     "/:id",
     auth("ADMIN", "MENTOR", "PROFESSIONAL", "STUDENT"),
     mcq_bank_controller.get_single_mcq_bank
@@ -54,6 +59,11 @@ mcqBankRouter.get(
 // ----------------------
 // Delete MCQ Bank
 // ----------------------
+mcqBankRouter.delete(
+    "/single/:mcqBankId/:mcqId",
+    auth("ADMIN", "MENTOR"),
+    mcq_bank_controller.delete_single_mcq
+);
 mcqBankRouter.delete(
     "/:id",
     auth("ADMIN", "MENTOR"),

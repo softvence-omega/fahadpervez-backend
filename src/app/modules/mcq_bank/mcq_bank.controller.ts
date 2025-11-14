@@ -36,6 +36,15 @@ const get_single_mcq_bank = catchAsync(async (req, res) => {
         meta: result?.meta,
     });
 });
+const get_specific_mcq_bank_with_index = catchAsync(async (req, res) => {
+    const result = await mcq_bank_service.get_specific_mcq_bank_with_index_from_db(req);
+    manageResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "MCQ fetched successfully",
+        data: result
+    });
+});
 
 // Delete MCQ Bank by ID
 const delete_mcq_bank = catchAsync(async (req, res) => {
@@ -84,6 +93,15 @@ const save_manual_mcq_upload = catchAsync(async (req, res) => {
         data: result,
     });
 });
+const delete_single_mcq = catchAsync(async (req, res) => {
+    const result = await mcq_bank_service.delete_single_mcq_from_db(req);
+    manageResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "MCQ deleted successfully",
+        data: result,
+    });
+});
 
 export const mcq_bank_controller = {
     upload_bulk_mcq_bank,
@@ -92,5 +110,7 @@ export const mcq_bank_controller = {
     delete_mcq_bank,
     update_specific_question,
     save_report_for_mcq,
-    save_manual_mcq_upload
+    save_manual_mcq_upload,
+    delete_single_mcq,
+    get_specific_mcq_bank_with_index
 };

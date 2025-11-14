@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { AppError } from "../../utils/app_error";
 import { excelConverter } from "../../utils/excel_converter";
 import { isAccountExist } from "../../utils/isAccountExist";
 import { profile_type_const_model } from "../profile_type_const/profile_type_const.schema";
@@ -7,6 +8,7 @@ import { Student_Model } from "../student/student.schema";
 import { TMcqBank } from "./mcq_bank.interface";
 import { McqBankModel } from "./mcq_bank.schema";
 import { mcq_validation } from "./mcq_bank.validation";
+import mongoose from "mongoose";
 
 type TRawMcqRow = {
     difficulty: "Basics" | "Intermediate" | "Advance";
@@ -261,7 +263,7 @@ const get_single_mcq_bank = async (req: Request): Promise<any> => {
     const limit = parseInt(req.query.limit as string) || 10;
 
     const result = await McqBankModel.findById(id).select("-__v").lean<TMcqBank>();
-    if (!result) throw new Error("MCQ Bank not found");
+    if (!result) throw new AppError("MCQ Bank not found", 404);
 
     const total = result.mcqs.length;
     const skip = (page - 1) * limit;
@@ -283,6 +285,20 @@ const get_single_mcq_bank = async (req: Request): Promise<any> => {
         },
         meta,
     };
+};
+const get_specific_mcq_bank_with_index_from_db = async (req: Request): Promise<any> => {
+    const { mcqBankId, mcqId } = req.params;
+
+    const result = await McqBankModel.findOne(
+        {
+            _id: new mongoose.Types.ObjectId(mcqBankId),
+            "mcqs.mcqId": mcqId,
+        },
+        { "mcqs.$": 1 } // optional: return only matched MCQ
+    ).lean();
+    if (!result) throw new AppError("MCQ Bank not found", 404);
+
+    return result;
 };
 
 const delete_mcq_bank = async (id: string) => {
@@ -375,6 +391,15 @@ const save_manual_mcq_upload_into_db = async (req: Request) => {
     return res
 }
 
+const delete_single_mcq_from_db = async (req: Request) => {
+    const { mcqBankId, mcqId } = req?.params;
+    const result = await McqBankModel.updateOne(
+        { _id: mcqBankId },
+        { $pull: { mcqs: { mcqId } } }
+    );
+    return result?.modifiedCount;
+}
+
 export const mcq_bank_service = {
     upload_bulk_mcq_bank_into_db,
     get_all_mcq_banks,
@@ -382,7 +407,9 @@ export const mcq_bank_service = {
     get_single_mcq_bank,
     update_specific_question,
     save_report_for_mcq_on_db,
-    save_manual_mcq_upload_into_db
+    save_manual_mcq_upload_into_db,
+    delete_single_mcq_from_db,
+    get_specific_mcq_bank_with_index_from_db
 };
 
 

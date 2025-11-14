@@ -193,6 +193,62 @@ export const mcqBankSwaggerDoc = {
         },
     },
 
+    "/api/mcq-bank/single/{mcqBankId}/{mcqId}": {
+        get: {
+            tags: ["MCQ Bank"],
+            summary: "Get a specific question in an MCQ bank by index",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "mcqBankId",
+                    in: "path",
+                    required: true,
+                    description: "MCQ Bank ID",
+                    schema: { type: "string" },
+                },
+                {
+                    name: "mcqId",
+                    in: "path",
+                    required: true,
+                    description: "Unique MCQ ID - QRE-000001",
+                    schema: { type: "string" },
+                },
+            ],
+            responses: {
+                200: { description: "Question fetched successfully" },
+                400: { description: "Invalid question index or payload" },
+                401: { description: "Unauthorized" },
+                404: { description: "MCQ bank not found" },
+            },
+        },
+        delete: {
+            tags: ["MCQ Bank"],
+            summary: "Delete a specific question in an MCQ bank by index",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "mcqBankId",
+                    in: "path",
+                    required: true,
+                    description: "MCQ Bank ID",
+                    schema: { type: "string" },
+                },
+                {
+                    name: "mcqId",
+                    in: "path",
+                    required: true,
+                    description: "Unique MCQ ID - QRE-000001",
+                    schema: { type: "string" },
+                },
+            ],
+            responses: {
+                200: { description: "Question deleted successfully" },
+                400: { description: "Invalid question index or payload" },
+                401: { description: "Unauthorized" },
+                404: { description: "MCQ bank not found" },
+            },
+        },
+    },
     "/api/mcq-bank/{id}/question/{mcqId}": {
         patch: {
             tags: ["MCQ Bank"],
