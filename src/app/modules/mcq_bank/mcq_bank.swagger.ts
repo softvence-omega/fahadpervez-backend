@@ -104,13 +104,51 @@ export const mcqBankSwaggerDoc = {
             },
         },
     },
-
+    // subject = "",
+    //         system = "",
+    //         topic = "",
+    //         subtopic 
     "/api/mcq-bank": {
         get: {
             tags: ["MCQ Bank"],
             summary: "Get all MCQ banks with pagination and search",
             security: [{ bearerAuth: [] }],
             parameters: [
+                {
+                    name: "searchTerm",
+                    in: "query",
+                    description: "Search by mcqBankTitle",
+                    required: false,
+                    schema: { type: "string" }
+                },
+                {
+                    name: "subject",
+                    in: "query",
+                    description: "Filter by subject",
+                    required: false,
+                    schema: { type: "string" }
+                },
+                {
+                    name: "system",
+                    in: "query",
+                    description: "Filter by system",
+                    required: false,
+                    schema: { type: "string" }
+                },
+                {
+                    name: "topic",
+                    in: "query",
+                    description: "Filter by topic",
+                    required: false,
+                    schema: { type: "string" }
+                },
+                {
+                    name: "subtopic",
+                    in: "query",
+                    description: "Filter by subtopic",
+                    required: false,
+                    schema: { type: "string" }
+                },
                 {
                     name: "page",
                     in: "query",
@@ -125,13 +163,7 @@ export const mcqBankSwaggerDoc = {
                     required: false,
                     schema: { type: "integer", example: 10 },
                 },
-                {
-                    name: "searchTerm",
-                    in: "query",
-                    description: "Search by mcqBankTitle or category",
-                    required: false,
-                    schema: { type: "string" }
-                },
+
             ],
             responses: {
                 200: { description: "Paginated list of MCQ banks fetched successfully" },

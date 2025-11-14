@@ -46,7 +46,59 @@ export const flashCardSwaggerDoc = {
     "/api/flash-card/all": {
         get: {
             tags: ["Flash Card"],
-            summary: "Get all flash cards - (For Admin)",
+            summary: "Get all flash cards",
+            parameters: [
+                {
+                    name: "searchTerm",
+                    in: "query",
+                    description: "Search by title",
+                    required: false,
+                    schema: { type: "string" }
+                },
+                {
+                    name: "subject",
+                    in: "query",
+                    description: "Filter by subject",
+                    required: false,
+                    schema: { type: "string" }
+                },
+                {
+                    name: "system",
+                    in: "query",
+                    description: "Filter by system",
+                    required: false,
+                    schema: { type: "string" }
+                },
+                {
+                    name: "topic",
+                    in: "query",
+                    description: "Filter by topic",
+                    required: false,
+                    schema: { type: "string" }
+                },
+                {
+                    name: "subtopic",
+                    in: "query",
+                    description: "Filter by subtopic",
+                    required: false,
+                    schema: { type: "string" }
+                },
+                {
+                    name: "page",
+                    in: "query",
+                    description: "Page number for pagination (default: 1)",
+                    required: false,
+                    schema: { type: "integer", example: 1 },
+                },
+                {
+                    name: "limit",
+                    in: "query",
+                    description: "Number of items per page (default: 10)",
+                    required: false,
+                    schema: { type: "integer", example: 10 },
+                },
+
+            ],
             security: [{ bearerAuth: [] }],
             responses: {
                 201: { description: "Flash card fetched successfully" },
@@ -54,23 +106,49 @@ export const flashCardSwaggerDoc = {
             },
         }
     },
-    "/api/flash-card/get-all-student": {
+    "/api/flash-card/single/{flashCardId}": {
         get: {
             tags: ["Flash Card"],
-            summary: "Get all flash cards - (For Student)",
-            security: [{ bearerAuth: [] }],
-            responses: {
-                201: { description: "Flash card fetched successfully" },
-                401: { description: "Unauthorized" },
-            },
-        }
-    },
-    "/api/flash-card/get-single/{flashCardId}": {
-        get: {
-            tags: ["Flash Card"],
-            summary: "Get all flash cards - (For Student)",
+            summary: "Get Single Flash card Bank",
             security: [{ bearerAuth: [] }],
             parameters: [
+                {
+                    name: "flashCardId",
+                    in: "path",
+                    required: true,
+                    schema: { type: "string" }
+                },
+                {
+                    name: "page",
+                    in: "query",
+                    required: false,
+                    schema: { type: "integer", default: 1 }
+                },
+                {
+                    name: "limit",
+                    in: "query",
+                    required: false,
+                    schema: { type: "integer", default: 10 }
+                }
+            ],
+            responses: {
+                201: { description: "Flash card fetched successfully" },
+                401: { description: "Unauthorized" },
+            },
+        }
+    },
+    "/api/flash-card/specific/{flashCardBankId}/{flashCardId}": {
+        get: {
+            tags: ["Flash Card"],
+            summary: "Get Single Flash card Bank",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "flashCardBankId",
+                    in: "path",
+                    required: true,
+                    schema: { type: "string" }
+                },
                 {
                     name: "flashCardId",
                     in: "path",
@@ -84,31 +162,77 @@ export const flashCardSwaggerDoc = {
             },
         }
     },
-    "/api/flash-card/update/{flashCardId}": {
+    "/api/flash-card/update/{flashCardBankId}/{flashCardId}": {
         patch: {
             tags: ["Flash Card"],
             summary: "Update a Flash card using FlashcardId - (For Admin)",
             security: [{ bearerAuth: [] }],
             parameters: [
                 {
+                    name: "flashCardBankId",
+                    in: "path",
+                    required: true,
+                    schema: { type: "string" }
+                },
+                {
                     name: "flashCardId",
                     in: "path",
                     required: true,
                     schema: { type: "string" }
                 }
             ],
+            requestBody: {
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            properties: {
+                                frontText: { type: "string" },
+                                backText: { type: "string" },
+                                explanation: { type: "string" },
+                                difficulty: { type: "string" },
+                            },
+                        },
+                    },
+                },
+            },
             responses: {
-                201: { description: "Flash card fetched successfully" },
+                201: { description: "Flash card update successfully" },
                 401: { description: "Unauthorized" },
             },
         }
     },
-    "/api/flash-card/delete/{flashCardId}": {
+    "/api/flash-card/delete/{flashCardBankId}": {
         delete: {
             tags: ["Flash Card"],
             summary: "Delete FlashcardId - (For Admin)",
             security: [{ bearerAuth: [] }],
             parameters: [
+                {
+                    name: "flashCardBankId",
+                    in: "path",
+                    required: true,
+                    schema: { type: "string" }
+                }
+            ],
+            responses: {
+                201: { description: "Flash card bank delete successfully" },
+                401: { description: "Unauthorized" },
+            },
+        }
+    },
+    "/api/flash-card/delete-single/{flashCardBankId}/{flashCardId}": {
+        delete: {
+            tags: ["Flash Card"],
+            summary: "Delete FlashcardId - (For Admin)",
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "flashCardBankId",
+                    in: "path",
+                    required: true,
+                    schema: { type: "string" }
+                },
                 {
                     name: "flashCardId",
                     in: "path",
@@ -117,7 +241,7 @@ export const flashCardSwaggerDoc = {
                 }
             ],
             responses: {
-                201: { description: "Flash card fetched successfully" },
+                201: { description: "Flash card bank delete successfully" },
                 401: { description: "Unauthorized" },
             },
         }

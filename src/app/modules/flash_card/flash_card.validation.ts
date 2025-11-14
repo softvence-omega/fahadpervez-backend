@@ -23,9 +23,16 @@ const create = z.object({
     })
   )
 });
+const update = z.object({
+  frontText: z.string().optional(),
+  backText: z.string().optional(),
+  explanation: z.string().optional(),
+  difficulty: z.enum(["Basics", "Intermediate", "Advance"]).optional()
+})
 
 
 // ---------- Export ----------
 export const flash_card_validation = {
-  create
+  create,
+  update
 };
