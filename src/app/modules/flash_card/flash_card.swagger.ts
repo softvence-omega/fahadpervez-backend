@@ -56,6 +56,13 @@ export const flashCardSwaggerDoc = {
                     schema: { type: "string" }
                 },
                 {
+                    name: "type",
+                    in: "query",
+                    description: "Filter by type- exam | study",
+                    required: false,
+                    schema: { type: "string" }
+                },
+                {
                     name: "subject",
                     in: "query",
                     description: "Filter by subject",

@@ -95,6 +95,7 @@ const get_all_mcq_banks = async (req: Request) => {
         system = "",
         topic = "",
         subtopic = "",
+        type = "",
     } = req.query as {
         page?: string;
         limit?: string;
@@ -103,6 +104,7 @@ const get_all_mcq_banks = async (req: Request) => {
         system?: string;
         topic?: string;
         subtopic?: string;
+        type?: string;
     };
 
     // 🧠 Determine studentType (only for student users)
@@ -124,7 +126,9 @@ const get_all_mcq_banks = async (req: Request) => {
     if (studentType) {
         filters.studentType = studentType;
     }
-
+    if (type) {
+        filters.type = type;
+    }
     // Combine subject/system/topic/subtopic into one slug string for search
     const slugFilter = (subject + system + topic + subtopic).toLowerCase();
 

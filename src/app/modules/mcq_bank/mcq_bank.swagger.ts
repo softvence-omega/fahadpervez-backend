@@ -104,10 +104,7 @@ export const mcqBankSwaggerDoc = {
             },
         },
     },
-    // subject = "",
-    //         system = "",
-    //         topic = "",
-    //         subtopic 
+
     "/api/mcq-bank": {
         get: {
             tags: ["MCQ Bank"],
@@ -118,6 +115,13 @@ export const mcqBankSwaggerDoc = {
                     name: "searchTerm",
                     in: "query",
                     description: "Search by mcqBankTitle",
+                    required: false,
+                    schema: { type: "string" }
+                },
+                {
+                    name: "type",
+                    in: "query",
+                    description: "Filter by type - exam or study",
                     required: false,
                     schema: { type: "string" }
                 },
