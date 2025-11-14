@@ -27,8 +27,7 @@ const get_all_content_from_tree = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "Content tree fetched successfully!",
-    data: result?.data,
-    meta: result?.meta
+    data: result
   });
 });
 const update_content_management_admin = catchAsync(async (req, res) => {

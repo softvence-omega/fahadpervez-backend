@@ -261,6 +261,7 @@ const update_student_profile_into_db = async (req: Request) => {
   }
 
   let updatedResult;
+
   // update profile conditionally
   if (body.role == "STUDENT") {
     const studentPayload = {
@@ -293,6 +294,7 @@ const update_student_profile_into_db = async (req: Request) => {
   }
   await Account_Model.findOneAndUpdate({ email: isValidAccount.email }, { profile_id: updatedResult?._id })
 
+  console.log(updatedResult)
   return updatedResult
 };
 

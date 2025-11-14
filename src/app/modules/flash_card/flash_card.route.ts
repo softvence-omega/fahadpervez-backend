@@ -18,5 +18,6 @@ flash_card_router.post(
   },
   flash_card_controller.create_flash_card_post
 );
+flash_card_router.get("/all", auth("ADMIN", "STUDENT", "MENTOR", "PROFESSIONAL"), flash_card_controller.get_all_flash_cards)
 
 export default flash_card_router;

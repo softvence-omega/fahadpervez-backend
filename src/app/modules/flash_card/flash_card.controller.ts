@@ -17,7 +17,8 @@ const get_all_flash_cards = catchAsync(async (req, res) => {
     statusCode: 200,
     message: "Flash card fetch  success!",
     success: true,
-    data: result,
+    data: result?.data,
+    meta: result?.meta
   });
 });
 

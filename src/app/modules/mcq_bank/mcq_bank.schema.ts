@@ -60,6 +60,6 @@ const McqBankSchema = new mongoose.Schema(
         uploadedBy: { type: String, required: true },
         mcqs: { type: [mcqSchema], required: true },
     },
-    { timestamps: true }
+    { timestamps: true, versionKey: false }
 );
 export const McqBankModel = mongoose.model<TMcqBank>("mcq_bank", McqBankSchema);

@@ -43,7 +43,7 @@ export const flashCardSwaggerDoc = {
             },
         }
     },
-    "/api/flash-card/get-all": {
+    "/api/flash-card/all": {
         get: {
             tags: ["Flash Card"],
             summary: "Get all flash cards - (For Admin)",

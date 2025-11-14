@@ -23,7 +23,7 @@ authRoute.patch(
     auth("STUDENT", "MENTOR", "PROFESSIONAL", "ADMIN"),
     uploader.single("image"),
     (req, res, next) => {
-        if (req.body) {
+        if (req?.body) {
             req.body = JSON.parse(req?.body?.data);
         }
         next();

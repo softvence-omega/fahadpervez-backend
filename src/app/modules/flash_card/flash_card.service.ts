@@ -81,6 +81,7 @@ const get_all_flash_cards_from_db = async (req: Request) => {
     subtopic: item.subtopic,
     slug: item.slug,
     type: item.type,
+    studentType: item.studentType,
     uploadedBy: item.uploadedBy,
     totalFlashCards: item.flashCards?.length || 0,
     createdAt: item?.createdAt,

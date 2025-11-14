@@ -70,7 +70,7 @@ const get_all_content_management_admin_from_db = async (req: Request) => {
 // };
 
 const get_all_content_from_tree_from_db = async (req: Request) => {
-  const { subject, system, topic, subtopic, page = 1, limit = 10 } = req.query;
+  const { subject, system, topic, subtopic } = req.query;
 
   // Collect non-empty query values
   const parts = [subject, system, topic, subtopic].filter(
@@ -78,51 +78,11 @@ const get_all_content_from_tree_from_db = async (req: Request) => {
   );
 
   const slug = parts.join("");
-
   // Fetch all matching documents
   const result = await McqBankModel.find({
     slug: { $regex: slug, $options: "i" }
-  });
-
-  // Check if all 4 filters are present
-  const allFieldsPresent = [subject, system, topic, subtopic].every(
-    (v) => typeof v === "string" && v.trim().length > 0
-  );
-
-  // ✅ CASE 1: All fields present → merge mcqs and paginate
-  if (allFieldsPresent) {
-    const allMcqs = result.flatMap((item) => item.mcqs || []);
-
-    // Convert to numbers
-    const pageNum = Number(page) || 1;
-    const limitNum = Number(limit) || 10;
-    const skip = (pageNum - 1) * limitNum;
-
-    const paginatedMcqs = allMcqs.slice(skip, skip + limitNum);
-
-    const total = allMcqs.length;
-    const totalPages = Math.ceil(total / limitNum);
-
-    return {
-      data: paginatedMcqs,
-      meta: {
-        page: pageNum,
-        limit: limitNum,
-        skip,
-        total,
-        totalPages,
-      },
-    };
-  }
-
-  // ✅ CASE 2: Otherwise → return the content tree as before
-  return {
-    data: result.map((r) => ({
-      ...r.toObject(),
-      mcqs: undefined, // ensure mcqs are hidden
-    })),
-
-  };
+  }).select("-mcqs");
+  return result
 };
 
 
