@@ -9,13 +9,12 @@ const create = z.object({
   system: z.string().nonempty(),
   topic: z.string().nonempty(),
   subtopic: z.string().nonempty(),
-  slug: z.string().nonempty(),
+  slug: z.string().optional(),
   studentType: z.string().nonempty(),
   type: z.enum(["exam", "study"]),
-  uploadedBy: z.string().nonempty(),
+  uploadedBy: z.string().optional(),
   flashCards: z.array(
     z.object({
-      flashCardId: z.string().nonempty(),
       frontText: z.string().nonempty(),
       backText: z.string().nonempty(),
       explanation: z.string().nonempty(),

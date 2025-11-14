@@ -20,6 +20,12 @@ flash_card_router.post(
   },
   flash_card_controller.create_flash_card_post
 );
+flash_card_router.post(
+  "/manual-create",
+  auth("ADMIN"),
+  RequestValidator(flash_card_validation.create),
+  flash_card_controller.create_new_manual_flash_card
+);
 flash_card_router.get("/all", auth("ADMIN", "STUDENT", "MENTOR", "PROFESSIONAL"), flash_card_controller.get_all_flash_cards)
 flash_card_router.get("/single/:flashCardId", auth("ADMIN", "STUDENT", "MENTOR", "PROFESSIONAL"), flash_card_controller.get_single_flash_card)
 flash_card_router.get("/specific/:flashCardBankId/:flashCardId", auth("ADMIN", "STUDENT", "MENTOR", "PROFESSIONAL"), flash_card_controller.get_specific_flashcard_bank_with_index)

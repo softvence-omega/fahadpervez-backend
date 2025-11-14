@@ -28,6 +28,23 @@ const create_new_flash_card_in_db = async (req: Request) => {
   return result;
 };
 
+const create_new_manual_flash_card_in_db = async (req: Request) => {
+  const user = req?.user;
+  const body = req?.body;
+  const isUserExist = await isAccountExist(user?.email as string, "profile_id") as any;
+  const payload: TFlashCard = {
+    uploadedBy: isUserExist?.profile_id?.firstName + " " + isUserExist?.profile_id?.lastName,
+    ...body,
+    slug: (body?.subject + body?.system + body?.topic + body?.subtopic).toLowerCase(),
+    flashCards: req?.body?.flashCards.map((item: any, idx: number) => ({
+      ...item,
+      flashCardId: `FLC-${String(idx + 1).padStart(6, '0')}`
+    }))
+  }
+  const result = await FlashcardModel.create(payload);
+  return result;
+}
+
 
 const get_all_flash_cards_from_db = async (req: Request) => {
   const {
@@ -213,5 +230,6 @@ export const flash_card_services = {
   get_specific_flashcard_bank_with_index_from_db,
   update_specific_flashcard_into_db,
   delete_flashCard_bank_from_db,
-  delete_single_flashcard_from_db
+  delete_single_flashcard_from_db,
+  create_new_manual_flash_card_in_db
 };

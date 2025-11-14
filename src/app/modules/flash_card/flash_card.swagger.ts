@@ -43,6 +43,81 @@ export const flashCardSwaggerDoc = {
             },
         }
     },
+    "/api/flash-card/manual-create": {
+        post: {
+            tags: ["Flash Card"],
+            security: [{ bearerAuth: [] }],
+            summary: "Create a new Manual flash card - Only Admin can create",
+            requestBody: {
+                required: true,
+                content: {
+                    "application/json": {
+                        schema: {
+                            type: "object",
+                            properties: {
+                                title: {
+                                    type: "string",
+                                    example: "Anatomy Essentials MCQs"
+                                },
+                                subject: {
+                                    type: "string",
+                                    example: "Neurology"
+                                },
+                                system: {
+                                    type: "string",
+                                    example: "Anatomy"
+                                },
+                                topic: {
+                                    type: "string",
+                                    example: "Tonatomy"
+                                },
+                                subtopic: {
+                                    type: "string",
+                                    example: "Monatomy"
+                                },
+                                type: {
+                                    type: "string",
+                                    example: "study"
+                                },
+                                studentType: {
+                                    type: "string",
+                                    example: "Nursing Student"
+                                },
+                                flashCards: {
+                                    type: "array",
+                                    items: {
+                                        type: "object",
+                                        properties: {
+                                            frontText: {
+                                                type: "string",
+                                                example: "Question"
+                                            },
+                                            backText: {
+                                                type: "string",
+                                                example: "Answer"
+                                            },
+                                            explanation: {
+                                                type: "string",
+                                                example: "Explanation"
+                                            },
+                                            difficulty: {
+                                                type: "string",
+                                                example: "Basics"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                201: { description: "Flash card created successfully" },
+                401: { description: "Unauthorized" },
+            }
+        }
+    },
     "/api/flash-card/all": {
         get: {
             tags: ["Flash Card"],

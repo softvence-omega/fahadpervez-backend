@@ -6,7 +6,16 @@ const create_flash_card_post = catchAsync(async (req, res) => {
   const result = await flash_card_services.create_new_flash_card_in_db(req);
   manageResponse(res, {
     statusCode: 201,
-    message: "flash card post created success!",
+    message: "flash card created success!",
+    success: true,
+    data: result,
+  });
+});
+const create_new_manual_flash_card = catchAsync(async (req, res) => {
+  const result = await flash_card_services.create_new_manual_flash_card_in_db(req);
+  manageResponse(res, {
+    statusCode: 201,
+    message: "flash card created success!",
     success: true,
     data: result,
   });
@@ -79,5 +88,6 @@ export const flash_card_controller = {
   get_specific_flashcard_bank_with_index,
   update_specific_flashcard,
   delete_flashCard_bank,
-  delete_single_flashcard
+  delete_single_flashcard,
+  create_new_manual_flash_card
 };
