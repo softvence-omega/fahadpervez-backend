@@ -9,6 +9,7 @@ import { Student_Model } from "../student/student.schema";
 import { TMcqBank } from "./mcq_bank.interface";
 import { McqBankModel } from "./mcq_bank.schema";
 import { mcq_validation } from "./mcq_bank.validation";
+import uploadCloud from "../../utils/cloudinary";
 
 type TRawMcqRow = {
     difficulty: "Basics" | "Intermediate" | "Advance";

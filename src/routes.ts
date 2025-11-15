@@ -13,11 +13,15 @@ import study_mode_tree_router from './app/modules/study_mode_tree/study_mode_tre
 import examRoute from './app/modules/exam/exam.route';
 import reportRoute from './app/modules/report/report.route';
 import profile_type_constRoute from './app/modules/profile_type_const/profile_type_const.route';
+import notesRoute from './app/modules/notes/notes.route';
+import awsRoute from './app/modules/aws/aws.route';
 
 
 const appRouter = Router();
 
 const moduleRoutes = [
+    { path: "/aws", route: awsRoute },
+    { path: "/notes", route: notesRoute },
     { path: "/profile_type_const", route: profile_type_constRoute },
     { path: "/report", route: reportRoute },
     { path: "/exam", route: examRoute },

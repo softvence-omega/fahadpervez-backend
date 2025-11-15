@@ -11,6 +11,8 @@ import { profile_type_constSwaggerDocs } from "./app/modules/profile_type_const/
 import { reportSwaggerDocs } from "./app/modules/report/report.swagger";
 import { socialPostDocs } from "./app/modules/social_post/social_post.swagger";
 import { studyModeTreeSwaggerDocs } from "./app/modules/study_mode_tree/study_mode_tree.swagger";
+import { notesSwaggerDocs } from "./app/modules/notes/notes.swagger";
+import { awsSwaggerDocs } from "./app/modules/aws/aws.swagger";
 
 
 export const swaggerOptions = {
@@ -33,7 +35,9 @@ export const swaggerOptions = {
             ...examSwaggerDocs,
             ...reportSwaggerDocs,
             ...profile_type_constSwaggerDocs,
-        },
+        
+            ...notesSwaggerDocs,
+            ...awsSwaggerDocs,},
         servers: configs.env === "production" ? [
             { url: "https://api.zyura-e.com" },
             { url: "https://fahadpervez-backend.onrender.com" },
